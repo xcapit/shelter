@@ -1,0 +1,48 @@
+name: Shelter Contracts Tests
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'contracts/**'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'contracts/**'
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Run Shelter Contracts Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy, rustfmt
+
+      - name: Rust Cache
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: "contracts -> target"
+
+      - name: Check formatting
+        working-directory: ./contracts
+        run: cargo fmt --all -- --check
+
+      - name: Run clippy
+        working-directory: ./contracts
+        run: cargo clippy -- -A dead_code -A unused_variables -A unused_imports
+
+      - name: Run tests
+        working-directory: ./contracts
+        run: cargo test --all
+
