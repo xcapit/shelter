@@ -1,21 +1,16 @@
 #![cfg(test)]
 
-use super::*;
-use soroban_sdk::{vec, Env, String};
+use soroban_sdk::{testutils::Address as _, Address, Env};
+
+use crate::{shelter::Shelter, ShelterClient};
 
 #[test]
-fn test() {
+fn test_steward_set_on_deployment() {
     let env = Env::default();
-    let contract_id = env.register(Contract, ());
-    let client = ContractClient::new(&env, &contract_id);
+    let steward = Address::generate(&env);
+    let shelter_id = env.register(Shelter, (&steward,));
 
-    let words = client.hello(&String::from_str(&env, "Dev"));
-    assert_eq!(
-        words,
-        vec![
-            &env,
-            String::from_str(&env, "Hello"),
-            String::from_str(&env, "Dev"),
-        ]
-    );
+    let shelter = ShelterClient::new(&env, &shelter_id);
+
+    assert_eq!(shelter.steward(), steward)
 }
