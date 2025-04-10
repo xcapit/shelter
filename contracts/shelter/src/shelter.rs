@@ -1,4 +1,5 @@
 use crate::{
+    aid::Aid,
     steward::Steward,
     storage_types::{
         AidDataKey, AidValue, DataKey, INSTANCE_BUMP_AMOUNT, INSTANCE_LIFETIME_THRESHOLD,
@@ -25,13 +26,14 @@ impl Shelter {
     }
 
     pub fn add_aid(env: Env, recipient: Address, token: Address, amount: i128) {
-        env.storage().persistent().set(
-            &DataKey::Aid(AidDataKey { recipient, token }),
-            &AidValue {
-                amount,
-                expiration: 0,
-            },
-        );
+        Aid::new(recipient, token, amount).save_on(&env);
+        // env.storage().persistent().set(
+        //     &DataKey::Aid(AidDataKey { recipient, token }),
+        //     &AidValue {
+        //         amount,
+        //         expiration: 0,
+        //     },
+        // );
     }
 
     pub fn aid_for(env: Env, recipient: Address, token: Address) -> i128 {
