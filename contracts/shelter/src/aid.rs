@@ -56,10 +56,10 @@ impl Aid {
         }
     }
 
-    pub fn add(&self, amount: i128) -> Self {
+    pub fn add(self, amount: i128) -> Self {
         Aid {
-            recipient: self.recipient.clone(),
-            token: self.token.clone(),
+            recipient: self.recipient,
+            token: self.token,
             amount: self.amount + amount,
         }
     }
