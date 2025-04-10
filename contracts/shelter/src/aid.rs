@@ -33,6 +33,8 @@ impl Aid {
         }
     }
 
+    pub fn add(&self, amount: i128) {}
+
     pub fn save_on(&self, env: &Env) {
         env.storage()
             .persistent()
