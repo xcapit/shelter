@@ -30,6 +30,10 @@ impl AssignedAid {
             .instance()
             .set(&DataKey::AssignedAid(self.token.clone()), &self.amount);
     }
+
+    pub fn amount(&self) -> i128 {
+        self.amount
+    }
 }
 
 pub struct Aid {
