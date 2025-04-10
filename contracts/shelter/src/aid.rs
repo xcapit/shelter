@@ -27,7 +27,7 @@ impl Aid {
         );
     }
 
-    fn _aid_key(&self) {
+    fn _aid_key(&self) -> DataKey {
 DataKey::Aid(AidDataKey { recipient: self.recipient, token: self.token })
     }
 }
