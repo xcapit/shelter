@@ -7,7 +7,9 @@ pub struct AssignedAid {
     amount: i128,
 }
 impl AssignedAid {
-    fn from(env: &Env, token: Address) {}
+    fn from(env: &Env, token: Address) {
+        AssignedAid { token }
+    }
     fn algo(env: &Env) {
         // TODO: refactor...
         let total_amount = env
