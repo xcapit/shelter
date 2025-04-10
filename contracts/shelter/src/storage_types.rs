@@ -21,5 +21,6 @@ pub struct AidValue {
 #[contracttype]
 pub enum DataKey {
     Aid(AidDataKey),
+    AssignedAid(Address),
     Steward,
 }
