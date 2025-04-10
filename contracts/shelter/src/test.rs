@@ -92,6 +92,7 @@ fn test_update_shelter_steward_unauthorized() {
 // // [ ] acc amount ?
 // [ ] Steward auth
 // [ ] persistent storage ?
+// [ ] event
 // [ ] extend instance storage ?
 // [ ] check shelter balance before add aid (it's possible?)
 #[test]
@@ -101,4 +102,6 @@ fn test_add_aid() {
     let shelter = ShelterClient::new(&env, &shelter_id(&env, &steward));
 
     shelter.add_aid(recipient, token, 100);
+
+    assert_eq!()
 }
