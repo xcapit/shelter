@@ -26,11 +26,10 @@ impl AssignedAid {
         }
     }
 
-    pub fn save_on(env: &Env) {
-        env.storage().instance().set(
-            &DataKey::AssignedAid(self.token.clone()),
-            &(total_amount + self.amount),
-        );
+    pub fn save_on(&self, env: &Env) {
+        env.storage()
+            .instance()
+            .set(&DataKey::AssignedAid(self.token.clone()), &self.amount);
     }
 
     fn algo(env: &Env) {
