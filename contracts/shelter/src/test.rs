@@ -85,4 +85,7 @@ fn test_update_shelter_steward_unauthorized() {
 }
 
 #[test]
-fn test_add_aid() {}
+fn test_add_aid() {
+    let env = env_with_mock_auths();
+    let [steward] = RandomAddresses::new(env.clone()).generate::<1>();
+}
