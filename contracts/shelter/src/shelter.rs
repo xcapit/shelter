@@ -33,8 +33,10 @@ impl Shelter {
     }
 
     pub fn assigned_aid_of(env: Env, token: Address) -> i128 {
-        // Aid::from(&env, recipient, token).amount()
-        230
+        env.storage()
+            .instance()
+            .get::<_, i128>(&DataKey::AssignedAid(self.token.clone()))
+            .unwrap_or_default();
     }
 
     fn _extend_instance_ttl(env: &Env) {
