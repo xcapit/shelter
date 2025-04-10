@@ -135,7 +135,8 @@ fn test_add_aid() {
 fn test_add_multiple_tokens_aid() {
     let test_amount = 100;
     let env = env_with_mock_auths();
-    let [steward, recipient, token_1, token_2] = RandomAddresses::new(env.clone()).generate::<4>();
+    let [steward, recipient, token_1, token_2, token_3] =
+        RandomAddresses::new(env.clone()).generate::<4>();
     let shelter = ShelterClient::new(&env, &shelter_id(&env, &steward));
 
     shelter.add_aid(&recipient, &token, &test_amount);
