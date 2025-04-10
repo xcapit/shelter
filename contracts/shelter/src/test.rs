@@ -7,6 +7,7 @@ use soroban_sdk::{
 };
 
 use crate::{
+    test,
     testtools::{
         assert_auth_fn, assert_instance_ttl_extension, env_with_mock_auths, shelter_id,
         RandomAddresses,
@@ -111,7 +112,7 @@ fn test_add_aid() {
         (
             shelter.address.clone(),
             Symbol::new(&env, "add_aid"),
-            (&recipient, &token, 100).into_val(&env),
+            (&recipient, &token, &test_amount).into_val(&env),
         ),
     );
     assert_eq!(shelter.aid_for(&recipient, &token), 100);
