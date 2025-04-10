@@ -130,3 +130,15 @@ fn test_add_aid() {
     assert_eq!(shelter.aid_for(&not_recipient, &token), 0);
     assert_eq!(shelter.aid_for(&recipient, &token), test_amount);
 }
+
+#[test]
+fn test_add_multiple_tokens_aid() {
+    let test_amount = 100;
+    let env = env_with_mock_auths();
+    let add_aid_symbol = Symbol::new(&env, "add_aid");
+    let [steward, recipient, not_recipient, token] =
+        RandomAddresses::new(env.clone()).generate::<4>();
+    let shelter = ShelterClient::new(&env, &shelter_id(&env, &steward));
+
+    shelter.add_aid(&recipient, &token, &test_amount);
+}
