@@ -57,6 +57,12 @@ impl Aid {
         self.amount
     }
 
+    fn _save_assigned_aid(&self, env: &Env) {
+        AssignedAid::from(env, self.token.clone())
+            .add(self.amount)
+            .save_on(env);
+    }
+
     fn _aid_value(&self) -> AidValue {
         AidValue {
             amount: self.amount,
