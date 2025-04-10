@@ -2,7 +2,7 @@
 extern crate std;
 
 use soroban_sdk::{
-    testutils::{storage::Instance, Events, MockAuth, MockAuthInvoke},
+    testutils::{Events, MockAuth, MockAuthInvoke},
     vec, IntoVal, Symbol,
 };
 
