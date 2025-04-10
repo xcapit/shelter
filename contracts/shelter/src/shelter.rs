@@ -1,7 +1,7 @@
 use crate::{
     aid::Aid,
     steward::Steward,
-    storage_types::{INSTANCE_BUMP_AMOUNT, INSTANCE_LIFETIME_THRESHOLD},
+    storage_types::{DataKey, INSTANCE_BUMP_AMOUNT, INSTANCE_LIFETIME_THRESHOLD},
 };
 use soroban_sdk::{contract, contractimpl, Address, Env};
 
