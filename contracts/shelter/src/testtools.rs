@@ -6,7 +6,7 @@ use soroban_sdk::{
     Address, Env, Symbol, Val, Vec,
 };
 
-use crate::shelter::Shelter;
+use crate::{shelter::Shelter, storage_types::INSTANCE_BUMP_AMOUNT};
 
 pub fn assert_instance_ttl_extension(env: &Env, shelter_address: &Address) {
     env.as_contract(shelter_address, || {
