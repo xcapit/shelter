@@ -35,6 +35,7 @@ impl Shelter {
     }
 
     pub fn aid_for(env: Env, recipient: Address, token: Address) -> i128 {
+        env.storage().persistent().get<_, AidValue>(&DataKey::Aid(AidDataKey { recipient, token }))
         100
     }
 
