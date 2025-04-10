@@ -13,7 +13,7 @@ impl AssignedAid {
             amount: env
                 .storage()
                 .instance()
-                .get::<_, i128>(&DataKey::AssignedAid(self.token.clone()))
+                .get::<_, i128>(&DataKey::AssignedAid(token.clone()))
                 .unwrap_or_default(),
         }
     }
