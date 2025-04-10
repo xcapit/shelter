@@ -1,9 +1,6 @@
 use soroban_sdk::{Address, Env, Symbol};
 
-use crate::{
-    assigned_aid::AssignedAid,
-    storage_types::{AidDataKey, AidValue, DataKey},
-};
+use crate::storage_types::{AidDataKey, AidValue, DataKey};
 
 pub struct Aid {
     recipient: Address,
