@@ -115,6 +115,6 @@ fn test_add_aid() {
             (&recipient, &token, &test_amount).into_val(&env),
         ),
     );
-    assert_eq!(shelter.aid_for(&recipient, &token), 100);
+    assert_eq!(shelter.aid_for(&recipient, &token), test_amount);
     assert_eq!(shelter.aid_for(&not_recipient, &token), 0);
 }
