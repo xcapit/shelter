@@ -84,9 +84,21 @@ fn test_update_shelter_steward_unauthorized() {
     shelter.update_steward(&new_steward);
 }
 
+// TODO:
+// [ ] Add aid
+// // [ ] add recipient if not exists
+// // [ ] token ?
+// // [ ] amount ?
+// // [ ] acc amount ?
+// [ ] Steward auth
+// [ ] persistent storage ?
+// [ ] extend instance storage ?
+// [ ] check shelter balance before add aid (it's possible?)
 #[test]
 fn test_add_aid() {
     let env = env_with_mock_auths();
-    let [steward] = RandomAddresses::new(env.clone()).generate::<1>();
+    let [steward, recipient, token] = RandomAddresses::new(env.clone()).generate::<1>();
     let shelter = ShelterClient::new(&env, &shelter_id(&env, &steward));
+
+    shelter.add_aid();
 }
