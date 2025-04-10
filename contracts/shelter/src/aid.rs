@@ -1,6 +1,6 @@
 use soroban_sdk::{Address, Env};
 
-use crate::storage_types::DataKey;
+use crate::storage_types::{AidDataKey, DataKey};
 
 pub struct Aid {
     recipient: Address,
