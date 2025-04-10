@@ -2,6 +2,26 @@ use soroban_sdk::{Address, Env, Symbol};
 
 use crate::storage_types::{AidDataKey, AidValue, DataKey};
 
+pub struct AssignedAid {}
+impl AssignedAid {
+    fn algo(env: &Env) {
+        // TODO: refactor...
+        let total_amount = env
+            .storage()
+            .instance()
+            .get::<_, i128>(&DataKey::AssignedAid(self.token.clone()))
+            .unwrap_or_default();
+        env.storage().instance().set(
+            &DataKey::AssignedAid(self.token.clone()),
+            &(total_amount + self.amount),
+        );
+        env.storage()
+            .persistent()
+            .set(&self._aid_key(), &self._aid_value());
+        // -------
+    }
+}
+
 pub struct Aid {
     recipient: Address,
     token: Address,
