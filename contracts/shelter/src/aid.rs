@@ -5,3 +5,9 @@ pub struct Aid {
     token: Address,
     amount: i128,
 }
+
+impl Aid {
+    pub fn new(recipient: Address, token: Address, amount: i128) -> Self {
+        Aid {}
+    }
+}
