@@ -1,5 +1,6 @@
 #![no_std]
 
+mod aid;
 mod shelter;
 mod steward;
 mod storage_types;
