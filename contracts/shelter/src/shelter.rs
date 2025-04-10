@@ -24,6 +24,10 @@ impl Shelter {
 
     pub fn add_aid(env: Env, recipient: Address, token: Address, amount: i128) {}
 
+    pub fn aid_for(env: Env, recipient: Address, token: Address) -> i128 {
+        100
+    }
+
     fn _extend_instance_ttl(env: &Env) {
         env.storage()
             .instance()
