@@ -91,7 +91,7 @@ fn test_update_shelter_steward_unauthorized() {
 // // [x] amount ?
 // // [ ] acc amount ?
 // [x] Steward auth
-// [ ] persistent storage ?
+// [x] persistent storage ?
 // [ ] event
 // [ ] extend instance storage ?
 // [ ] check shelter balance before add aid (it's possible?)
@@ -114,6 +114,18 @@ fn test_add_aid() {
             (&recipient, &token, &test_amount).into_val(&env),
         ),
     );
+    assert_eq!(
+        env.events().all(),
+        vec![
+            &env,
+            (
+                shelter.address.clone(),
+                (update_steward_symbol, steward.clone()).into_val(&env),
+                new_steward.into_val(&env)
+            ),
+        ]
+    );
+
     assert_eq!(shelter.aid_for(&not_recipient, &token), 0);
     assert_eq!(shelter.aid_for(&recipient, &token), test_amount);
 }
