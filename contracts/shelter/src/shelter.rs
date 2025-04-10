@@ -31,11 +31,6 @@ impl Shelter {
 
     pub fn aid_for(env: Env, recipient: Address, token: Address) -> i128 {
         Aid::from(&env, recipient, token).amount()
-        // env.storage()
-        //     .persistent()
-        //     .get::<_, AidValue>(&DataKey::Aid(AidDataKey { recipient, token }))
-        //     .unwrap()
-        //     .amount
     }
 
     fn _extend_instance_ttl(env: &Env) {
