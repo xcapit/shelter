@@ -1,5 +1,5 @@
 use crate::{
-    aid::Aid,
+    aid::{Aid, AssignedAid},
     steward::Steward,
     storage_types::{DataKey, INSTANCE_BUMP_AMOUNT, INSTANCE_LIFETIME_THRESHOLD},
 };
@@ -34,10 +34,11 @@ impl Shelter {
 
     pub fn assigned_aid_of(env: Env, token: Address) -> i128 {
         // TODO: refactor
-        env.storage()
-            .instance()
-            .get::<_, i128>(&DataKey::AssignedAid(token))
-            .unwrap_or_default()
+        // env.storage()
+        //     .instance()
+        //     .get::<_, i128>(&DataKey::AssignedAid(token))
+        //     .unwrap_or_default()
+        AssignedAid::from(&env, token).amount()
     }
 
     fn _extend_instance_ttl(env: &Env) {
