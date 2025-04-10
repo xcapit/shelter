@@ -1,7 +1,7 @@
 #![cfg(test)]
 extern crate std;
 
-use soroban_sdk::{testutils::Events, IntoVal, Symbol};
+use soroban_sdk::{testutils::Events, vec, IntoVal, Symbol};
 
 use crate::{
     testtools::{
