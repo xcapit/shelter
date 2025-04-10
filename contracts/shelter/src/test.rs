@@ -125,7 +125,6 @@ fn test_add_aid() {
             ),
         ]
     );
-
     assert_eq!(shelter.aid_for(&not_recipient, &token), 0);
     assert_eq!(shelter.aid_for(&recipient, &token), test_amount);
 }
