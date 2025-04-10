@@ -27,7 +27,7 @@ impl Aid {
         );
     }
 
-    fn _aid_value(&self) {
+    fn _aid_value(&self) -> AidValue {
         AidValue {
             amount: self.amount.clone(),
             expiration: 0,
