@@ -34,6 +34,11 @@ impl Aid {
     }
 
     pub fn add(&self, amount: i128) -> Self {
+Aid {
+            recipient,
+            token,
+            amount,
+        }
         Self::new(
             self.recipient.clone(),
             self.token.clone(),
