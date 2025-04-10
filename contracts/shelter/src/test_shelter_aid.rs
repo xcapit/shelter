@@ -20,7 +20,6 @@ use crate::{
 // [x] persistent storage ?
 // [x] event
 // [x] extend instance storage ?
-// [ ] check shelter balance before add aid (it's possible?)
 // [ ] refactor the datakey on aid and assigned_aid_of ?
 #[test]
 fn test_add_aid() {
