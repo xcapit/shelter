@@ -34,9 +34,14 @@ impl Aid {
     }
 
     pub fn save_on(&self, env: &Env) {
+        let total_amount = env
+            .storage()
+            .instance()
+            .get::<_, i128>(&DataKey::AssignedAid(self.token.clone()))
+            .unwrap_or_default();
         env.storage()
             .instance()
-            .set(&DataKey::AssignedAid(self.token.clone()), val);
+            .set(&DataKey::AssignedAid(self.token.clone()), total_amount);
         env.storage()
             .persistent()
             .set(&self._aid_key(), &self._aid_value());
