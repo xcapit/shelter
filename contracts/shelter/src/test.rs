@@ -103,6 +103,15 @@ fn test_add_aid() {
     let shelter = ShelterClient::new(&env, &shelter_id(&env, &steward));
 
     shelter.add_aid(&recipient, &token, &100);
+    assert_auth_fn(
+        &env,
+        steward.clone(),
+        (
+            shelter.address.clone(),
+            Symbol::new(&env, "add_aid"),
+            (&new_steward,).into_val(&env),
+        ),
+    );
 
     assert_eq!(shelter.aid_for(&recipient, &token), 100);
     assert_eq!(shelter.aid_for(&not_recipient, &token), 0);
