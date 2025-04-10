@@ -140,5 +140,5 @@ fn test_add_multiple_tokens_aid() {
         RandomAddresses::new(env.clone()).generate::<5>();
     let shelter = ShelterClient::new(&env, &shelter_id(&env, &steward));
 
-    shelter.add_aid(&recipient, &token, &test_amount);
+    shelter.add_aid(&recipient, &token_1, &test_amount_1);
 }
