@@ -15,5 +15,13 @@ impl Aid {
         }
     }
 
-    pub fn save_on(env: &Env) {}
+    pub fn save_on(env: &Env) {
+        env.storage().persistent().set(
+            &DataKey::Aid(AidDataKey { recipient, token }),
+            &AidValue {
+                amount,
+                expiration: 0,
+            },
+        );
+    }
 }
