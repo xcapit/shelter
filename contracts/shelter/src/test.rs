@@ -109,7 +109,7 @@ fn test_add_aid() {
         (
             shelter.address.clone(),
             Symbol::new(&env, "add_aid"),
-            (&new_steward,).into_val(&env),
+            (&recipient, &token, 100).into_val(&env),
         ),
     );
 
