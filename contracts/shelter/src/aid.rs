@@ -18,6 +18,13 @@ impl AssignedAid {
         }
     }
 
+    pub fn add(&self, amount: i128) -> Self {
+        AssignedAid {
+            token: self.token,
+            amount: self.amount + amount,
+        }
+    }
+
     fn algo(env: &Env) {
         // TODO: refactor...
         let total_amount = env
