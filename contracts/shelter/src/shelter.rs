@@ -32,6 +32,10 @@ impl Shelter {
         Aid::from(&env, recipient, token).amount()
     }
 
+    pub fn total_aid_of(env: Env, , token: Address) -> i128 {
+        Aid::from(&env, recipient, token).amount()
+    }
+
     fn _extend_instance_ttl(env: &Env) {
         env.storage()
             .instance()
