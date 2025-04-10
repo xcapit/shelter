@@ -4,7 +4,7 @@ use crate::storage_types::{AidDataKey, AidValue, DataKey};
 
 pub struct AssignedAid {
     token: Address,
-    amount: i128,
+    // amount: i128,
 }
 impl AssignedAid {
     pub fn from(env: &Env, token: Address) -> Self {
