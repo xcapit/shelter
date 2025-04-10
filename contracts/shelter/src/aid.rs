@@ -38,6 +38,7 @@ impl Aid {
 
     pub fn save_on(&self, env: &Env) {
         self._save_assigned_aid(env);
+        self._save_aid(env);
         env.events().publish(
             (
                 Symbol::new(env, "add_aid"),
