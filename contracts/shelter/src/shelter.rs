@@ -28,7 +28,7 @@ impl Shelter {
         Shelter::_extend_instance_ttl(&env);
     }
 
-    pub fn aid_for(env: Env, recipient: Address, token: Address) -> i128 {
+    pub fn aid_of(env: Env, recipient: Address, token: Address) -> i128 {
         Aid::from(&env, recipient, token).amount()
     }
 
