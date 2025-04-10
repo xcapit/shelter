@@ -40,7 +40,7 @@ impl Steward {
 
     pub fn perform(&self, an_action: fn()) {
         self.address.require_auth();
-        action()
+        an_action()
     }
 
     fn _save(&self, env: &Env, address: &Address) {
