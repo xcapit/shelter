@@ -44,7 +44,6 @@ impl Steward {
     }
 
     fn _save(&self, env: &Env, address: &Address) {
-        self.address.require_auth();
-        env.storage().instance().set(&DataKey::Steward, &address);
+        self.perform(|| env.storage().instance().set(&DataKey::Steward, &address));
     }
 }
