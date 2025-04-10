@@ -101,7 +101,7 @@ fn test_add_aid() {
     let [steward, recipient, token] = RandomAddresses::new(env.clone()).generate::<3>();
     let shelter = ShelterClient::new(&env, &shelter_id(&env, &steward));
 
-    shelter.add_aid(&recipient, &token, &100);
+    shelter.add_aid(&recipient, &token, &101);
 
     assert_eq!(shelter.aid_for(&recipient, &token), 100);
 }
