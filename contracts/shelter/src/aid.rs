@@ -14,4 +14,6 @@ impl Aid {
             amount,
         }
     }
+
+    pub fn save_on(env: &Env) {}
 }
