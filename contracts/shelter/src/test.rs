@@ -197,4 +197,8 @@ fn test_total_aid() {
     let [steward, recipient_1, recipient_2, token_1, token_2] =
         RandomAddresses::new(env.clone()).generate::<5>();
     let shelter = ShelterClient::new(&env, &shelter_id(&env, &steward));
+
+    shelter.add_aid(&recipient_1, &token_1, &test_amount_1);
+    shelter.add_aid(&recipient_2, &token_1, &test_amount_2);
+    shelter.add_aid(&recipient_1, &token_2, &test_amount_2);
 }
