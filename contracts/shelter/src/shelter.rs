@@ -1,5 +1,6 @@
 use crate::{
     aid::{Aid, AssignedAid},
+    assigned_aid::AssignedAid,
     steward::Steward,
     storage_types::{INSTANCE_BUMP_AMOUNT, INSTANCE_LIFETIME_THRESHOLD},
 };
