@@ -33,6 +33,7 @@ impl Shelter {
     }
 
     pub fn assigned_aid_of(env: Env, token: Address) -> i128 {
+        // TODO: refactor
         env.storage()
             .instance()
             .get::<_, i128>(&DataKey::AssignedAid(token))
