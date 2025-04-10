@@ -19,6 +19,7 @@ impl AssignedAid {
     }
 
     pub fn add(self, amount: i128) -> Self {
+        // check this add and the others fellas
         AssignedAid {
             token: self.token,
             amount: self.amount + amount,
