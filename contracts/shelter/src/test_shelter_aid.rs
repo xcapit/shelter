@@ -21,6 +21,27 @@ use crate::{
 // [x] event
 // [x] extend instance storage ?
 // [ ] refactor the datakey on aid and assigned_aid_of ?
+//
+//
+#[test]
+#[should_panic(expected = "Unauthorized function call for address")]
+fn test_add_aid_unauthorized() {
+    let env = env_with_mock_auths();
+    let [steward, new_steward, attacker] = RandomAddresses::new(env.clone()).generate::<3>();
+    let shelter = ShelterClient::new(&env, &shelter_id(&env, &steward));
+    env.mock_auths(&[MockAuth {
+        address: &attacker,
+        invoke: &MockAuthInvoke {
+            contract: &shelter.address,
+            fn_name: "update_steward",
+            args: (&new_steward,).into_val(&env),
+            sub_invokes: &[],
+        },
+    }]);
+
+    shelter.update_steward(&new_steward);
+}
+
 #[test]
 fn test_add_aid() {
     let test_amount = 100;
