@@ -31,19 +31,6 @@ impl AssignedAid {
             .instance()
             .set(&DataKey::AssignedAid(self.token.clone()), &self.amount);
     }
-
-    fn algo(env: &Env) {
-        // TODO: refactor...
-        let total_amount = env
-            .storage()
-            .instance()
-            .get::<_, i128>(&DataKey::AssignedAid(self.token.clone()))
-            .unwrap_or_default();
-        env.storage()
-            .persistent()
-            .set(&self._aid_key(), &self._aid_value());
-        // -------
-    }
 }
 
 pub struct Aid {
