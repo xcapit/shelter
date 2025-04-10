@@ -1,8 +1,6 @@
 #![cfg(test)]
 extern crate std;
 
-use core::intrinsics::simd::simd_expose_provenance;
-
 use soroban_sdk::{
     testutils::{Events, MockAuth, MockAuthInvoke},
     vec, IntoVal, Symbol,
