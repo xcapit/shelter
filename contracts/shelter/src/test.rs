@@ -194,6 +194,7 @@ fn test_total_aid() {
     let test_amount_1 = 100;
     let test_amount_2 = 130;
     let env = env_with_mock_auths();
-    let [steward, recipient, token_1, token_2] = RandomAddresses::new(env.clone()).generate::<4>();
+    let [steward, recipient_1, recipient_2, token_1, token_2] =
+        RandomAddresses::new(env.clone()).generate::<5>();
     let shelter = ShelterClient::new(&env, &shelter_id(&env, &steward));
 }
