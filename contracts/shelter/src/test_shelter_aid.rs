@@ -37,7 +37,7 @@ fn test_add_aid_unauthorized() {
         invoke: &MockAuthInvoke {
             contract: &shelter.address,
             fn_name: "add_aid",
-            args: (&new_steward,).into_val(&env),
+            args: (&recipient, &token, 100).into_val(&env),
             sub_invokes: &[],
         },
     }]);
