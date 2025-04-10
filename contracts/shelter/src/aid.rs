@@ -33,7 +33,9 @@ impl Aid {
         }
     }
 
-    pub fn add(&self, amount: i128) {}
+    pub fn add(&mut self, amount: i128) {
+        self.amount += amount;
+    }
 
     pub fn save_on(&self, env: &Env) {
         env.storage()
