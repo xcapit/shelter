@@ -24,8 +24,6 @@ use crate::{
 // [x] event
 // [x] extend instance storage ?
 // [ ] refactor the datakey on aid and assigned_aid_of ?
-//
-//
 #[test]
 #[should_panic(expected = "Unauthorized function call for address")]
 fn test_add_aid_unauthorized() {
