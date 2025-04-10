@@ -201,4 +201,10 @@ fn test_total_aid() {
     shelter.add_aid(&recipient_1, &token_1, &test_amount_1);
     shelter.add_aid(&recipient_2, &token_1, &test_amount_2);
     shelter.add_aid(&recipient_1, &token_2, &test_amount_2);
+
+    assert_eq!(
+        shelter.total_aid_of(&token_1),
+        test_amount_1 + test_amount_2
+    );
+    assert_eq!(shelter.total_aid_of(&token_2), test_amount_2);
 }
