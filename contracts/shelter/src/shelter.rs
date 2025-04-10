@@ -35,7 +35,7 @@ impl Shelter {
     pub fn assigned_aid_of(env: Env, token: Address) -> i128 {
         env.storage()
             .instance()
-            .get::<_, i128>(&DataKey::AssignedAid(self.token.clone()))
+            .get::<_, i128>(&DataKey::AssignedAid(token))
             .unwrap_or_default();
     }
 
