@@ -39,6 +39,7 @@ impl Aid {
     pub fn save_on(&self, env: &Env) {
         self._save_assigned_aid(env);
         self._save_aid(env);
+        self._publish_event(env);
     }
 
     pub fn amount(&self) -> i128 {
