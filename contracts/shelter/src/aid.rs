@@ -19,7 +19,7 @@ impl Aid {
 
     pub fn save_on(&self, env: &Env) {
         env.storage().persistent().set(
-            &DataKey::Aid(AidDataKey { recipient, token }),
+            &DataKey::Aid(AidDataKey { self.recipient, token }),
             &AidValue {
                 amount,
                 expiration: 0,
