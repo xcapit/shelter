@@ -133,7 +133,8 @@ fn test_add_aid() {
 
 #[test]
 fn test_add_multiple_tokens_aid() {
-    let test_amount = 100;
+    let test_amount_1 = 100;
+    let test_amount_2 = 130;
     let env = env_with_mock_auths();
     let [steward, recipient, token_1, token_2, token_3] =
         RandomAddresses::new(env.clone()).generate::<4>();
