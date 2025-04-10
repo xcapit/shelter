@@ -2,7 +2,7 @@
 extern crate std;
 
 use soroban_sdk::{
-    testutils::{Address as _, AuthorizedFunction, AuthorizedInvocation},
+    testutils::{storage::Instance, Address as _, AuthorizedFunction, AuthorizedInvocation},
     Address, Env, Symbol, Val, Vec,
 };
 
