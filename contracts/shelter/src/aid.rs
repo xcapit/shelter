@@ -8,6 +8,10 @@ pub struct Aid {
 
 impl Aid {
     pub fn new(recipient: Address, token: Address, amount: i128) -> Self {
-        Aid {}
+        Aid {
+            recipient,
+            token,
+            amount,
+        }
     }
 }
