@@ -39,11 +39,6 @@ impl Aid {
             token: self.token.clone(),
             amount: self.amount + amount,
         }
-        // Self::new(
-        //     self.recipient.clone(),
-        //     self.token.clone(),
-        //     self.amount + amount,
-        // )
     }
 
     pub fn save_on(&self, env: &Env) {
