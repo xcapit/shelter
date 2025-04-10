@@ -25,6 +25,7 @@ impl Shelter {
 
     pub fn add_aid(env: Env, recipient: Address, token: Address, amount: i128) {
         Steward::from(&env).perform(|| Aid::new(recipient, token, amount).save_on(&env));
+        Shelter::spec_xdr_update_steward();
     }
 
     pub fn aid_for(env: Env, recipient: Address, token: Address) -> i128 {
