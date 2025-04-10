@@ -18,13 +18,9 @@ impl Aid {
     }
 
     pub fn save_on(&self, env: &Env) {
-        env.storage().persistent().set(
-            &self._aid_key(),
-            &AidValue {
-                amount,
-                expiration: 0,
-            },
-        );
+        env.storage()
+            .persistent()
+            .set(&self._aid_key(), &self._aid_value());
     }
 
     fn _aid_value(&self) -> AidValue {
