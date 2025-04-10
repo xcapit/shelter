@@ -1,4 +1,4 @@
-use soroban_sdk::{Address, Env};
+use soroban_sdk::{token, Address, Env};
 
 use crate::storage_types::{AidDataKey, AidValue, DataKey};
 
@@ -16,6 +16,8 @@ impl Aid {
             amount,
         }
     }
+
+    pub fn from(env: &Env, recipient: Address, token: Address) -> Self {}
 
     pub fn save_on(&self, env: &Env) {
         env.storage()
