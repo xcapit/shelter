@@ -25,7 +25,10 @@ impl Aid {
                 .storage()
                 .persistent()
                 .get::<_, AidValue>(&DataKey::Aid(AidDataKey { recipient, token }))
-                .unwrap_or(i128::MIN)
+                .unwrap_or(AidValue {
+                    amount: 0,
+                    expiration: 0,
+                })
                 .amount,
         }
     }
