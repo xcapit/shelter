@@ -103,5 +103,5 @@ fn test_add_aid() {
 
     shelter.add_aid(&recipient, &token, &100);
 
-    assert_eq!(shelter.aid_for(recipient, token), 100);
+    assert_eq!(shelter.aid_for(&recipient, &token), 100);
 }
