@@ -89,7 +89,7 @@ fn test_update_shelter_steward_unauthorized() {
 // // [x] add recipient if not exists
 // // [x] token ?
 // // [x] amount ?
-// // [ ] acc amount ?
+// // [x] acc amount ?
 // [x] Steward auth
 // [x] persistent storage ?
 // [x] event
@@ -187,4 +187,13 @@ fn test_add_multiples_aid_same_recipient() {
         shelter.aid_for(&recipient, &token_1),
         test_amount_1 + test_amount_2
     );
+}
+
+#[test]
+fn test_total_aid() {
+    let test_amount_1 = 100;
+    let test_amount_2 = 130;
+    let env = env_with_mock_auths();
+    let [steward, recipient, token_1, token_2] = RandomAddresses::new(env.clone()).generate::<4>();
+    let shelter = ShelterClient::new(&env, &shelter_id(&env, &steward));
 }
