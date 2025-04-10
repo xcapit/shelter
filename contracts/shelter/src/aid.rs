@@ -2,8 +2,11 @@ use soroban_sdk::{Address, Env, Symbol};
 
 use crate::storage_types::{AidDataKey, AidValue, DataKey};
 
-pub struct AssignedAid {}
+pub struct AssignedAid {
+    token: Address,
+}
 impl AssignedAid {
+    fn from(env: &Env, token: Address) {}
     fn algo(env: &Env) {
         // TODO: refactor...
         let total_amount = env
