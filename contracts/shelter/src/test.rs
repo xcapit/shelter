@@ -182,6 +182,7 @@ fn test_add_multiples_aid_same_recipient() {
     shelter.add_aid(&recipient, &token_1, &test_amount_2);
     shelter.add_aid(&recipient, &token_2, &test_amount_2);
 
+    assert_eq!(shelter.aid_for(&recipient, &token_2), test_amount_2);
     assert_eq!(
         shelter.aid_for(&recipient, &token_1),
         test_amount_1 + test_amount_2
