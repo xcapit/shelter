@@ -83,3 +83,6 @@ fn test_update_shelter_steward_unauthorized() {
 
     shelter.update_steward(&new_steward);
 }
+
+#[test]
+fn test_add_aid() {}
