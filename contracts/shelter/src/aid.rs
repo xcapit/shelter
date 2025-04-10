@@ -35,6 +35,9 @@ impl Aid {
 
     pub fn save_on(&self, env: &Env) {
         env.storage()
+            .instance()
+            .set(&DataKey::AssignedAid(self.token.clone()), val);
+        env.storage()
             .persistent()
             .set(&self._aid_key(), &self._aid_value());
         env.events().publish(
