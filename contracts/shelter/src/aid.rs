@@ -9,14 +9,15 @@ pub struct AssignedAid {
 impl AssignedAid {
     pub fn from(env: &Env, token: Address) -> Self {
         AssignedAid {
-            token,
+            token: token.clone(),
             amount: env
                 .storage()
                 .instance()
-                .get::<_, i128>(&DataKey::AssignedAid(token.clone()))
+                .get::<_, i128>(&DataKey::AssignedAid(token))
                 .unwrap_or_default(),
         }
     }
+
     fn algo(env: &Env) {
         // TODO: refactor...
         let total_amount = env
