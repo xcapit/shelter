@@ -21,7 +21,7 @@ impl Aid {
         env.storage().persistent().set(
             &self._aid_key(),
             &AidValue {
-                amount,
+                self.amount,
                 expiration: 0,
             },
         );
