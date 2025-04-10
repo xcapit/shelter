@@ -38,7 +38,7 @@ impl Steward {
         self.address.clone()
     }
 
-    pub fn perform(&self, an_action: impl FnOnce) {
+    pub fn perform(&self, an_action: impl FnOnce()) {
         self.address.require_auth();
         an_action()
     }
