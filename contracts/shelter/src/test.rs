@@ -206,5 +206,5 @@ fn test_total_aid() {
         shelter.assigned_aid_of(&token_1),
         test_amount_1 + test_amount_2
     );
-    // assert_eq!(shelter.assigned_aid_of(&token_2), test_amount_2);
+    assert_eq!(shelter.assigned_aid_of(&token_2), test_amount_2);
 }
