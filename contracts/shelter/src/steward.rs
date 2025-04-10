@@ -38,7 +38,7 @@ impl Steward {
         self.address.clone()
     }
 
-    pub fn do(&self, action: FnOnce) {}
+    pub fn dox(&self, action: FnOnce) {}
 
     fn _save(&self, env: &Env, address: &Address) {
         self.address.require_auth();
