@@ -36,7 +36,7 @@ impl Shelter {
         env.storage()
             .instance()
             .get::<_, i128>(&DataKey::AssignedAid(token))
-            .unwrap_or_default();
+            .unwrap_or_default()
     }
 
     fn _extend_instance_ttl(env: &Env) {
