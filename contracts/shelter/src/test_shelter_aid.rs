@@ -1,7 +1,10 @@
 #![cfg(test)]
 extern crate std;
 
-use soroban_sdk::{testutils::Events, vec, IntoVal, Symbol};
+use soroban_sdk::{
+    testutils::{Events, MockAuth, MockAuthInvoke},
+    vec, IntoVal, Symbol,
+};
 
 use crate::{
     testtools::{
