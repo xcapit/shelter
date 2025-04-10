@@ -33,7 +33,7 @@ impl Aid {
         }
     }
 
-    pub fn add(&mut self, amount: i128) -> Self {
+    pub fn add(&self, amount: i128) -> Self {
         self.amount += amount;
         Self::new(self.recipient.clone(), self.token.clone(), amount)
     }
