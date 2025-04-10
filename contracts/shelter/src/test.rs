@@ -1,6 +1,8 @@
 #![cfg(test)]
 extern crate std;
 
+use core::intrinsics::simd::simd_expose_provenance;
+
 use soroban_sdk::{
     testutils::{Events, MockAuth, MockAuthInvoke},
     vec, IntoVal, Symbol,
@@ -142,4 +144,6 @@ fn test_add_multiple_tokens_aid() {
 
     shelter.add_aid(&recipient, &token_1, &test_amount_1);
     shelter.add_aid(&recipient, &token_2, &test_amount_2);
+
+    assert_eq!(shelter.aid_for(&recipient, &token_1), &test_amount_1);
 }
