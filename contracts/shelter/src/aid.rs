@@ -9,14 +9,6 @@ pub struct Aid {
 }
 
 impl Aid {
-    pub fn new(recipient: Address, token: Address, amount: i128) -> Self {
-        Aid {
-            recipient,
-            token,
-            amount,
-        }
-    }
-
     pub fn from(env: &Env, recipient: Address, token: Address) -> Self {
         Aid {
             recipient: recipient.clone(),
