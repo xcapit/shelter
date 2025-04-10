@@ -24,6 +24,7 @@ impl Shelter {
     }
 
     pub fn add_aid(env: Env, recipient: Address, token: Address, amount: i128) {
+        Steward::from(&env).address().require_auth();
         Aid::new(recipient, token, amount).save_on(&env);
     }
 
