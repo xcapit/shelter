@@ -6,6 +6,13 @@ pub(crate) const INSTANCE_LIFETIME_THRESHOLD: u32 = INSTANCE_BUMP_AMOUNT - DAY_I
 
 #[derive(Clone)]
 #[contracttype]
+pub struct AidDataKey {
+    recipient: Address,
+    token: Address,
+}
+
+#[derive(Clone)]
+#[contracttype]
 pub enum DataKey {
     Steward,
 }
