@@ -61,9 +61,6 @@ fn test_update_shelter_steward() {
             ),
         ]
     );
-    // env.as_contract(&shelter.address, || {
-    //     assert_eq!(env.storage().instance().get_ttl(), INSTANCE_BUMP_AMOUNT);
-    // });
     assert_instance_ttl_extension(&env, &shelter.address);
     assert_eq!(shelter.steward(), new_steward.clone());
 }
