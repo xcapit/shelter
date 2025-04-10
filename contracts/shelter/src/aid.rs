@@ -34,6 +34,7 @@ impl Aid {
     }
 
     pub fn save_on(&self, env: &Env) {
+        // TODO: refactor...
         let total_amount = env
             .storage()
             .instance()
@@ -46,6 +47,7 @@ impl Aid {
         env.storage()
             .persistent()
             .set(&self._aid_key(), &self._aid_value());
+        // -------
         env.events().publish(
             (
                 Symbol::new(env, "add_aid"),
