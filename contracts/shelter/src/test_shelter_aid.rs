@@ -33,15 +33,15 @@ fn test_add_aid_unauthorized() {
     let env = env_with_mock_auths();
     let [steward, attacker, recipient, token] = RandomAddresses::new(env.clone()).generate::<4>();
     let shelter = ShelterClient::new(&env, &shelter_id(&env, &steward));
-    // env.mock_auths(&[MockAuth {
-    //     address: &attacker,
-    //     invoke: &MockAuthInvoke {
-    //         contract: &shelter.address,
-    //         fn_name: "add_aid",
-    //         args: (&recipient, &token, test_amount).into_val(&env),
-    //         sub_invokes: &[],
-    //     },
-    // }]);
+    env.mock_auths(&[MockAuth {
+        address: &attacker,
+        invoke: &MockAuthInvoke {
+            contract: &shelter.address,
+            fn_name: "add_aid",
+            args: (&recipient, &token, test_amount).into_val(&env),
+            sub_invokes: &[],
+        },
+    }]);
 
     shelter.add_aid(&recipient, &token, &test_amount);
 }
