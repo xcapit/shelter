@@ -37,9 +37,7 @@ impl Aid {
     }
 
     pub fn save_on(&self, env: &Env) {
-        AssignedAid::from(env, self.token.clone())
-            .add(self.amount)
-            .save_on(env);
+        self._save_assigned_aid(env);
         env.storage()
             .persistent()
             .set(&self._aid_key(), &self._aid_value());
