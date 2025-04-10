@@ -75,10 +75,10 @@ impl Aid {
             &DataKey::AssignedAid(self.token.clone()),
             &(total_amount + self.amount),
         );
+        // -------
         env.storage()
             .persistent()
             .set(&self._aid_key(), &self._aid_value());
-        // -------
         env.events().publish(
             (
                 Symbol::new(env, "add_aid"),
