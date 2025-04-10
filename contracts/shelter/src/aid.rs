@@ -26,6 +26,13 @@ impl AssignedAid {
         }
     }
 
+    pub fn save_on(env: &Env) {
+        env.storage().instance().set(
+            &DataKey::AssignedAid(self.token.clone()),
+            &(total_amount + self.amount),
+        );
+    }
+
     fn algo(env: &Env) {
         // TODO: refactor...
         let total_amount = env
@@ -33,10 +40,6 @@ impl AssignedAid {
             .instance()
             .get::<_, i128>(&DataKey::AssignedAid(self.token.clone()))
             .unwrap_or_default();
-        env.storage().instance().set(
-            &DataKey::AssignedAid(self.token.clone()),
-            &(total_amount + self.amount),
-        );
         env.storage()
             .persistent()
             .set(&self._aid_key(), &self._aid_value());
