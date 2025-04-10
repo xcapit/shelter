@@ -14,5 +14,6 @@ pub struct AidDataKey {
 #[derive(Clone)]
 #[contracttype]
 pub enum DataKey {
+    Aid(AidDataKey),
     Steward,
 }
