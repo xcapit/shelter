@@ -36,6 +36,10 @@ impl Aid {
             .set(&self._aid_key(), &self._aid_value());
     }
 
+    pub fn amount(&self) -> i128 {
+        self.amount
+    }
+
     fn _aid_value(&self) -> AidValue {
         AidValue {
             amount: self.amount,
