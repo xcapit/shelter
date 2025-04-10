@@ -59,10 +59,14 @@ fn test_update_shelter_steward() {
             ),
         ]
     );
-    env.as_contract(&shelter.address, || {
+    fun_name(&env, &shelter);
+    assert_eq!(shelter.steward(), new_steward.clone());
+}
+
+fn fun_name(env: &Env, shelter_address: &Address) {
+    env.as_contract(shelter_address, || {
         assert_eq!(env.storage().instance().get_ttl(), INSTANCE_BUMP_AMOUNT);
     });
-    assert_eq!(shelter.steward(), new_steward.clone());
 }
 
 #[test]
