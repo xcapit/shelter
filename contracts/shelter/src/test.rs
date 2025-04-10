@@ -111,7 +111,7 @@ fn test_add_aid() {
         steward.clone(),
         (
             shelter.address.clone(),
-            Symbol::new(&env, "add_aid"),
+            add_aid_symbol,
             (&recipient, &token, &test_amount).into_val(&env),
         ),
     );
