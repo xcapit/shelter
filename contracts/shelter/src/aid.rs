@@ -21,10 +21,17 @@ impl Aid {
         env.storage().persistent().set(
             &self._aid_key(),
             &AidValue {
-                self.amount,
+                amount,
                 expiration: 0,
             },
         );
+    }
+
+    fn _aid_value(&self) {
+        AidValue {
+            amount: self.amount.clone(),
+            expiration: 0,
+        }
     }
 
     fn _aid_key(&self) -> DataKey {
