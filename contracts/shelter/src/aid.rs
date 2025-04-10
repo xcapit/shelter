@@ -34,16 +34,16 @@ impl Aid {
     }
 
     pub fn add(&self, amount: i128) -> Self {
-Aid {
-            recipient,
-            token,
-            amount,
+        Aid {
+            recipient: self.recipient.clone(),
+            token: self.token.clone(),
+            amount: self.amount + amount,
         }
-        Self::new(
-            self.recipient.clone(),
-            self.token.clone(),
-            self.amount + amount,
-        )
+        // Self::new(
+        //     self.recipient.clone(),
+        //     self.token.clone(),
+        //     self.amount + amount,
+        // )
     }
 
     pub fn save_on(&self, env: &Env) {
