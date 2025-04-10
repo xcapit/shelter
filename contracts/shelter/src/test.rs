@@ -99,7 +99,7 @@ fn test_update_shelter_steward_unauthorized() {
 fn test_add_aid() {
     let env = env_with_mock_auths();
     let [steward, recipient, not_recipient, token] =
-        RandomAddresses::new(env.clone()).generate::<3>();
+        RandomAddresses::new(env.clone()).generate::<4>();
     let shelter = ShelterClient::new(&env, &shelter_id(&env, &steward));
 
     shelter.add_aid(&recipient, &token, &100);
