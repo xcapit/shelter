@@ -38,9 +38,6 @@ impl Aid {
 
     pub fn save_on(&self, env: &Env) {
         self._save_assigned_aid(env);
-        env.storage()
-            .persistent()
-            .set(&self._aid_key(), &self._aid_value());
         env.events().publish(
             (
                 Symbol::new(env, "add_aid"),
@@ -53,6 +50,12 @@ impl Aid {
 
     pub fn amount(&self) -> i128 {
         self.amount
+    }
+
+    fn _save_aid(&self, env: &Env) {
+        env.storage()
+            .persistent()
+            .set(&self._aid_key(), &self._aid_value());
     }
 
     fn _save_assigned_aid(&self, env: &Env) {
