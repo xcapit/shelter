@@ -41,7 +41,7 @@ impl Aid {
             .unwrap_or_default();
         env.storage().instance().set(
             &DataKey::AssignedAid(self.token.clone()),
-            &total_amount + &self.amount,
+            &(total_amount + self.amount),
         );
         env.storage()
             .persistent()
