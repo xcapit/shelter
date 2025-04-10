@@ -95,6 +95,7 @@ fn test_update_shelter_steward_unauthorized() {
 // [x] event
 // [x] extend instance storage ?
 // [ ] check shelter balance before add aid (it's possible?)
+// [ ] refactor the datakey on aid and assigned_aid_of ?
 #[test]
 fn test_add_aid() {
     let test_amount = 100;
