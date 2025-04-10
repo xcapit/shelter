@@ -8,6 +8,12 @@ use soroban_sdk::{
 
 use crate::shelter::Shelter;
 
+pub fn assert_instance_ttl_extension(env: &Env, shelter_address: &Address) {
+    env.as_contract(shelter_address, || {
+        assert_eq!(env.storage().instance().get_ttl(), INSTANCE_BUMP_AMOUNT);
+    });
+}
+
 pub fn assert_auth_fn(env: &Env, address: Address, contract_info: (Address, Symbol, Vec<Val>)) {
     assert_eq!(
         env.auths(),
