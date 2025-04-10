@@ -35,7 +35,7 @@ impl Aid {
 
     pub fn add(&mut self, amount: i128) -> Self {
         self.amount += amount;
-        Self::new(self.recipient, self.token, amount);
+        Self::new(self.recipient, self.token, amount)
     }
 
     pub fn save_on(&self, env: &Env) {
