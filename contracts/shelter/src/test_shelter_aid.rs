@@ -29,6 +29,7 @@ use crate::{
 #[test]
 #[should_panic(expected = "Unauthorized function call for address")]
 fn test_add_aid_unauthorized() {
+    let test_amount = 100;
     let env = env_with_mock_auths();
     let [steward, attacker, recipient, token] = RandomAddresses::new(env.clone()).generate::<4>();
     let shelter = ShelterClient::new(&env, &shelter_id(&env, &steward));
@@ -42,7 +43,7 @@ fn test_add_aid_unauthorized() {
         },
     }]);
 
-    shelter.update_steward(&new_steward);
+    shelter.add_aid(&recipient, &token, &test_amount);
 }
 
 #[test]
