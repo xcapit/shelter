@@ -22,6 +22,8 @@ impl Shelter {
         Shelter::_extend_instance_ttl(&env);
     }
 
+    pub fn add_aid(env: Env, recipient: Address, token: Address, amount: i128) {}
+
     fn _extend_instance_ttl(env: &Env) {
         env.storage()
             .instance()
