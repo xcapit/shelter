@@ -92,7 +92,7 @@ fn test_update_shelter_steward_unauthorized() {
 // // [ ] acc amount ?
 // [x] Steward auth
 // [x] persistent storage ?
-// [ ] event
+// [x] event
 // [ ] extend instance storage ?
 // [ ] check shelter balance before add aid (it's possible?)
 #[test]
