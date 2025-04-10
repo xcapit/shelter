@@ -1,6 +1,6 @@
 use soroban_sdk::{Address, Env, Symbol};
 
-use crate::storage_types::{AidDataKey, AidValue, DataKey};
+use crate::storage_types::DataKey;
 
 pub struct AssignedAid {
     token: Address,
