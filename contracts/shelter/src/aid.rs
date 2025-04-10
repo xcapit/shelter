@@ -28,6 +28,6 @@ impl Aid {
     }
 
     fn _aid_key(&self) -> DataKey {
-        DataKey::Aid(AidDataKey { recipient: &self.recipient, token: self.token })
+        DataKey::Aid(AidDataKey { recipient: self.recipient.clone(), token: self.token.clone() })
     }
 }
