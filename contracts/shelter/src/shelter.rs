@@ -24,7 +24,8 @@ impl Shelter {
     }
 
     pub fn add_aid(env: Env, recipient: Address, token: Address, amount: i128) {
-        Steward::from(&env).perform(|| Aid::new(recipient, token, amount).save_on(&env));
+        // Steward::from(&env).perform(|| Aid::new(recipient, token, amount).save_on(&env));
+        Steward::from(&env).perform(|| Aid::from(&env, recipient, token).add(amount).save_on(&env));
         Shelter::_extend_instance_ttl(&env);
     }
 
