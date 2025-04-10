@@ -1,6 +1,8 @@
 use crate::{
     steward::Steward,
-    storage_types::{INSTANCE_BUMP_AMOUNT, INSTANCE_LIFETIME_THRESHOLD},
+    storage_types::{
+        AidDataKey, AidValue, DataKey, INSTANCE_BUMP_AMOUNT, INSTANCE_LIFETIME_THRESHOLD,
+    },
 };
 use soroban_sdk::{contract, contractimpl, Address, Env};
 
@@ -22,7 +24,15 @@ impl Shelter {
         Shelter::_extend_instance_ttl(&env);
     }
 
-    pub fn add_aid(env: Env, recipient: Address, token: Address, amount: i128) {}
+    pub fn add_aid(env: Env, recipient: Address, token: Address, amount: i128) {
+        env.storage().persistent().set(
+            &DataKey::Aid(AidDataKey { recipient, token }),
+            &AidValue {
+                amount,
+                expiration: 0,
+            },
+        );
+    }
 
     pub fn aid_for(env: Env, recipient: Address, token: Address) -> i128 {
         100
