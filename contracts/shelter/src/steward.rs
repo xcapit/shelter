@@ -40,6 +40,7 @@ impl Steward {
 
     pub fn dox(&self, action: FnOnce) {
         self.address.require_auth();
+        action()
     }
 
     fn _save(&self, env: &Env, address: &Address) {
