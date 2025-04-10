@@ -19,7 +19,7 @@ impl Aid {
 
     pub fn save_on(&self, env: &Env) {
         env.storage().persistent().set(
-            &DataKey::Aid(AidDataKey { self.recipient, self.token }),
+            &self._aid_key(),
             &AidValue {
                 amount,
                 expiration: 0,
@@ -28,6 +28,9 @@ impl Aid {
     }
 
     fn _aid_key(&self) -> DataKey {
-        DataKey::Aid(AidDataKey { recipient: self.recipient.clone(), token: self.token.clone() })
+        DataKey::Aid(AidDataKey {
+            recipient: self.recipient.clone(),
+            token: self.token.clone(),
+        })
     }
 }
