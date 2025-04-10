@@ -85,12 +85,12 @@ fn test_update_shelter_steward_unauthorized() {
 }
 
 // TODO:
-// [ ] Add aid
-// // [ ] add recipient if not exists
-// // [ ] token ?
-// // [ ] amount ?
+// [x] Add aid
+// // [x] add recipient if not exists
+// // [x] token ?
+// // [x] amount ?
 // // [ ] acc amount ?
-// [ ] Steward auth
+// [x] Steward auth
 // [ ] persistent storage ?
 // [ ] event
 // [ ] extend instance storage ?
