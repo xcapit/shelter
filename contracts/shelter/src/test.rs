@@ -121,8 +121,8 @@ fn test_add_aid() {
             &env,
             (
                 shelter.address.clone(),
-                (update_steward_symbol, steward.clone()).into_val(&env),
-                new_steward.into_val(&env)
+                (add_aid_symbol, steward.clone()).into_val(&env),
+                test_amount.into_val(&env)
             ),
         ]
     );
