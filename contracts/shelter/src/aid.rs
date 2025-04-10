@@ -38,8 +38,12 @@ impl Aid {
             .persistent()
             .set(&self._aid_key(), &self._aid_value());
         env.events().publish(
-            (Symbol::new(env, "add_aid"), self.address()),
-            new_address.clone(),
+            (
+                Symbol::new(env, "add_aid"),
+                self.recipient.clone(),
+                self.token.clone(),
+            ),
+            self.amount,
         );
     }
 
