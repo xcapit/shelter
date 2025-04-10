@@ -2,11 +2,12 @@
 extern crate std;
 
 use soroban_sdk::{
-    testutils::{Events, MockAuth, MockAuthInvoke},
+    testutils::{storage::Instance, Events, MockAuth, MockAuthInvoke},
     vec, IntoVal, Symbol,
 };
 
 use crate::{
+    storage_types::INSTANCE_BUMP_AMOUNT,
     testtools::{assert_auth_fn, env_with_mock_auths, shelter_id, RandomAddresses},
     ShelterClient,
 };
@@ -58,6 +59,9 @@ fn test_update_shelter_steward() {
             ),
         ]
     );
+    env.as_contract(&shelter.address, || {
+        assert_eq!(env.storage().instance().get_ttl(), INSTANCE_BUMP_AMOUNT);
+    });
     assert_eq!(shelter.steward(), new_steward.clone());
 }
 
