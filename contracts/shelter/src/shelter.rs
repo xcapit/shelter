@@ -38,6 +38,7 @@ impl Shelter {
         env.storage()
             .persistent()
             .get::<_, AidValue>(&DataKey::Aid(AidDataKey { recipient, token }))
+            .unwrap()
     }
 
     fn _extend_instance_ttl(env: &Env) {
