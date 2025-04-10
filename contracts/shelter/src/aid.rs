@@ -17,7 +17,18 @@ impl Aid {
         }
     }
 
-    pub fn from(env: &Env, recipient: Address, token: Address) -> Self {}
+    pub fn from(env: &Env, recipient: Address, token: Address) -> Self {
+        Aid {
+            recipient,
+            token,
+            amount: env
+                .storage()
+                .persistent()
+                .get::<_, AidValue>(&DataKey::Aid(AidDataKey { recipient, token }))
+                .unwrap()
+                .amount,
+        }
+    }
 
     pub fn save_on(&self, env: &Env) {
         env.storage()
