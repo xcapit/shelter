@@ -19,8 +19,8 @@ impl Aid {
 
     pub fn from(env: &Env, recipient: Address, token: Address) -> Self {
         Aid {
-            recipient,
-            token,
+            recipient: recipient.clone(),
+            token: token.clone(),
             amount: env
                 .storage()
                 .persistent()
