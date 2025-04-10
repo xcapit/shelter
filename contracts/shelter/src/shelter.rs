@@ -32,7 +32,7 @@ impl Shelter {
         Aid::from(&env, recipient, token).amount()
     }
 
-    pub fn total_aid_of(env: Env, token: Address) -> i128 {
+    pub fn aid_reserve_of(env: Env, token: Address) -> i128 {
         Aid::from(&env, recipient, token).amount()
     }
 
