@@ -127,8 +127,8 @@ fn test_add_aid() {
         ]
     );
     assert_instance_ttl_extension(&env, &shelter.address);
-    assert_eq!(shelter.aid_for(&not_recipient, &token), 0);
-    assert_eq!(shelter.aid_for(&recipient, &token), test_amount);
+    assert_eq!(shelter.aid_of(&not_recipient, &token), 0);
+    assert_eq!(shelter.aid_of(&recipient, &token), test_amount);
 }
 
 #[test]
@@ -143,9 +143,9 @@ fn test_add_multiple_tokens_aid() {
     shelter.add_aid(&recipient, &token_1, &test_amount_1);
     shelter.add_aid(&recipient, &token_2, &test_amount_2);
 
-    assert_eq!(shelter.aid_for(&recipient, &token_3), 0);
-    assert_eq!(shelter.aid_for(&recipient, &token_1), test_amount_1);
-    assert_eq!(shelter.aid_for(&recipient, &token_2), test_amount_2);
+    assert_eq!(shelter.aid_of(&recipient, &token_3), 0);
+    assert_eq!(shelter.aid_of(&recipient, &token_1), test_amount_1);
+    assert_eq!(shelter.aid_of(&recipient, &token_2), test_amount_2);
 }
 
 #[test]
@@ -162,12 +162,12 @@ fn test_add_multiples_aid() {
     shelter.add_aid(&recipient_2, &token_2, &test_amount_2);
     shelter.add_aid(&recipient_1, &token_3, &test_amount_3);
 
-    assert_eq!(shelter.aid_for(&recipient_1, &token_2), 0);
-    assert_eq!(shelter.aid_for(&recipient_2, &token_1), 0);
-    assert_eq!(shelter.aid_for(&recipient_2, &token_3), 0);
-    assert_eq!(shelter.aid_for(&recipient_1, &token_3), test_amount_3);
-    assert_eq!(shelter.aid_for(&recipient_2, &token_2), test_amount_2);
-    assert_eq!(shelter.aid_for(&recipient_1, &token_1), test_amount_1);
+    assert_eq!(shelter.aid_of(&recipient_1, &token_2), 0);
+    assert_eq!(shelter.aid_of(&recipient_2, &token_1), 0);
+    assert_eq!(shelter.aid_of(&recipient_2, &token_3), 0);
+    assert_eq!(shelter.aid_of(&recipient_1, &token_3), test_amount_3);
+    assert_eq!(shelter.aid_of(&recipient_2, &token_2), test_amount_2);
+    assert_eq!(shelter.aid_of(&recipient_1, &token_1), test_amount_1);
 }
 
 #[test]
@@ -182,9 +182,9 @@ fn test_add_multiples_aid_same_recipient() {
     shelter.add_aid(&recipient, &token_1, &test_amount_2);
     shelter.add_aid(&recipient, &token_2, &test_amount_2);
 
-    assert_eq!(shelter.aid_for(&recipient, &token_2), test_amount_2);
+    assert_eq!(shelter.aid_of(&recipient, &token_2), test_amount_2);
     assert_eq!(
-        shelter.aid_for(&recipient, &token_1),
+        shelter.aid_of(&recipient, &token_1),
         test_amount_1 + test_amount_2
     );
 }
@@ -203,8 +203,8 @@ fn test_total_aid() {
     shelter.add_aid(&recipient_1, &token_2, &test_amount_2);
 
     assert_eq!(
-        shelter.total_aid_of(&token_1),
+        shelter.assigned_aid_of(&token_1),
         test_amount_1 + test_amount_2
     );
-    assert_eq!(shelter.total_aid_of(&token_2), test_amount_2);
+    assert_eq!(shelter.assigned_aid_of(&token_2), test_amount_2);
 }
