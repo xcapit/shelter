@@ -2,6 +2,7 @@
 
 mod aid;
 mod assigned_aid;
+mod available_aid;
 mod shelter;
 mod steward;
 mod storage_types;
