@@ -9,6 +9,7 @@ pub struct Aid {
     recipient: Address,
     token: Address,
     amount: i128,
+    new_amount: i128,
 }
 
 impl Aid {
@@ -25,6 +26,7 @@ impl Aid {
                     expiration: 0,
                 })
                 .amount,
+            new_amount: 0,
         }
     }
 
@@ -32,7 +34,8 @@ impl Aid {
         Aid {
             recipient: self.recipient,
             token: self.token,
-            amount: self.amount + amount,
+            amount: self.amount,
+            new_amount: amount,
         }
     }
 
@@ -43,7 +46,7 @@ impl Aid {
     }
 
     pub fn amount(&self) -> i128 {
-        self.amount
+        self.amount + self.new_amount
     }
 
     fn _publish_event(&self, env: &Env) {
@@ -53,7 +56,7 @@ impl Aid {
                 self.recipient.clone(),
                 self.token.clone(),
             ),
-            self.amount,
+            self.new_amount,
         );
     }
 
@@ -65,13 +68,13 @@ impl Aid {
 
     fn _save_assigned_aid(&self, env: &Env) {
         AssignedAid::from(env, self.token.clone())
-            .add(self.amount)
+            .add(self.new_amount)
             .save_on(env);
     }
 
     fn _aid_value(&self) -> AidValue {
         AidValue {
-            amount: self.amount,
+            amount: self.amount(),
             expiration: 0,
         }
     }
