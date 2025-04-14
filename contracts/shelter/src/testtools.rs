@@ -2,11 +2,17 @@
 extern crate std;
 
 use soroban_sdk::{
-    testutils::{Address as _, AuthorizedFunction, AuthorizedInvocation},
+    testutils::{storage::Instance, Address as _, AuthorizedFunction, AuthorizedInvocation},
     Address, Env, Symbol, Val, Vec,
 };
 
-use crate::shelter::Shelter;
+use crate::{shelter::Shelter, storage_types::INSTANCE_BUMP_AMOUNT};
+
+pub fn assert_instance_ttl_extension(env: &Env, shelter_address: &Address) {
+    env.as_contract(shelter_address, || {
+        assert_eq!(env.storage().instance().get_ttl(), INSTANCE_BUMP_AMOUNT);
+    });
+}
 
 pub fn assert_auth_fn(env: &Env, address: Address, contract_info: (Address, Symbol, Vec<Val>)) {
     assert_eq!(

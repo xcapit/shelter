@@ -38,8 +38,12 @@ impl Steward {
         self.address.clone()
     }
 
-    fn _save(&self, env: &Env, address: &Address) {
+    pub fn perform(&self, an_action: impl FnOnce()) {
         self.address.require_auth();
-        env.storage().instance().set(&DataKey::Steward, &address);
+        an_action()
+    }
+
+    fn _save(&self, env: &Env, address: &Address) {
+        self.perform(|| env.storage().instance().set(&DataKey::Steward, &address));
     }
 }
