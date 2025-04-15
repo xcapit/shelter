@@ -1,6 +1,7 @@
 use crate::{
     aid::Aid,
     assigned_aid::AssignedAid,
+    available_aid::AvailableAid,
     steward::Steward,
     storage_types::{INSTANCE_BUMP_AMOUNT, INSTANCE_LIFETIME_THRESHOLD},
 };
@@ -24,7 +25,7 @@ impl Shelter {
         Shelter::_extend_instance_ttl(&env);
     }
 
-    pub fn add_aid(env: Env, recipient: Address, token: Address, amount: i128) {
+    pub fn bound_aid(env: Env, recipient: Address, token: Address, amount: i128) {
         Steward::from(&env).perform(|| Aid::from(&env, recipient, token).add(amount).save_on(&env));
         Shelter::_extend_instance_ttl(&env);
     }
@@ -35,6 +36,10 @@ impl Shelter {
 
     pub fn assigned_aid_of(env: Env, token: Address) -> i128 {
         AssignedAid::from(&env, token).amount()
+    }
+
+    pub fn available_aid_of(env: Env, token: Address) -> i128 {
+        AvailableAid::from(&env, &token).amount()
     }
 
     fn _extend_instance_ttl(env: &Env) {

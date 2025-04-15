@@ -52,7 +52,7 @@ impl Aid {
     fn _publish_event(&self, env: &Env) {
         env.events().publish(
             (
-                Symbol::new(env, "add_aid"),
+                Symbol::new(env, "bound_aid"),
                 self.recipient.clone(),
                 self.token.clone(),
             ),
