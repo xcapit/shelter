@@ -1,6 +1,6 @@
 use soroban_sdk::{Address, Env};
 
-use crate::storage_types::DataKey;
+use crate::{available_aid::AvailableAid, storage_types::DataKey};
 
 pub struct AssignedAid {
     token: Address,
@@ -26,6 +26,7 @@ impl AssignedAid {
     }
 
     pub fn save_on(&self, env: &Env) {
+        self._validate_enough_balance(env);
         env.storage()
             .instance()
             .set(&self._assigned_aid_key(), &self.amount);
@@ -33,6 +34,10 @@ impl AssignedAid {
 
     pub fn amount(&self) -> i128 {
         self.amount
+    }
+
+    fn _validate_enough_balance(&self, env: &Env) {
+        AvailableAid::from(env, &self.token).validate(self.amount());
     }
 
     fn _assigned_aid_key(&self) -> DataKey {
