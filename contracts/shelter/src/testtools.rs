@@ -84,6 +84,10 @@ impl TestToken<'_> {
         self.token_sac.mint(to, amount);
     }
 
+    pub fn transfer(&self, from: &Address, to: &Address, amount: &i128) {
+        self.token.transfer(from, to, amount);
+    }
+
     pub fn balance(&self, id: &Address) -> i128 {
         self.token.balance(id)
     }

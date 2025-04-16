@@ -3,9 +3,16 @@ use crate::{
     assigned_aid::AssignedAid,
     available_aid::AvailableAid,
     steward::Steward,
-    storage_types::{INSTANCE_BUMP_AMOUNT, INSTANCE_LIFETIME_THRESHOLD},
+    storage_types::{
+        RecipientSignature, ShelterError, INSTANCE_BUMP_AMOUNT, INSTANCE_LIFETIME_THRESHOLD,
+    },
 };
-use soroban_sdk::{contract, contractimpl, Address, Env};
+use soroban_sdk::{
+    auth::{Context, CustomAccountInterface},
+    contract, contractimpl,
+    crypto::Hash,
+    Address, Env, TryIntoVal, Vec,
+};
 
 #[contract]
 pub struct Shelter;
@@ -47,4 +54,32 @@ impl Shelter {
             .instance()
             .extend_ttl(INSTANCE_LIFETIME_THRESHOLD, INSTANCE_BUMP_AMOUNT);
     }
+}
+
+#[contractimpl]
+impl CustomAccountInterface for Shelter {
+    type Signature = RecipientSignature;
+    type Error = ShelterError;
+
+    #[allow(non_snake_case)]
+    fn __check_auth(
+        env: Env,
+        signature_payload: Hash<32>,
+        signatures: Self::Signature,
+        auth_contexts: Vec<Context>,
+    ) -> Result<(), ShelterError> {
+        let current_contract = env.current_contract_address();
+        for context in auth_contexts.iter() {
+            verify_authorization_policy(&env, &context, &current_contract)?;
+        }
+        Ok(())
+    }
+}
+
+fn verify_authorization_policy(
+    env: &Env,
+    context: &Context,
+    curr_contract: &Address,
+) -> Result<(), ShelterError> {
+    Ok(())
 }
