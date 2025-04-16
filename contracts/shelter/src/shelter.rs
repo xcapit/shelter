@@ -92,13 +92,6 @@ fn authenticate(
                 return Err(ShelterError::AuthError);
             }
         }
-        // if !env
-        //     .storage()
-        //     .instance()
-        //     .has(&DataKey::Signer(signature.public_key.clone()))
-        // {
-        //     return Err(AccError::UnknownSigner);
-        // }
         env.crypto().ed25519_verify(
             &signature.public_key,
             &signature_payload.clone().into(),
@@ -113,17 +106,17 @@ fn verify_authorization_policy(
     context: &Context,
     curr_contract: &Address,
 ) -> Result<(), ShelterError> {
-    // let contract_context = match context {
-    //     Context::Contract(c) => {
-    //         if &c.contract == curr_contract {
-    //             return Err(ShelterError::AuthError);
-    //         }
-    //         c
-    //     }
-    //     Context::CreateContractHostFn(_) | Context::CreateContractWithCtorHostFn(_) => {
-    //         return Err(ShelterError::AuthError);
-    //     }
-    // };
+    let contract_context = match context {
+        Context::Contract(c) => {
+            if &c.contract == curr_contract {
+                return Err(ShelterError::AuthError);
+            }
+            c
+        }
+        Context::CreateContractHostFn(_) | Context::CreateContractWithCtorHostFn(_) => {
+            return Err(ShelterError::AuthError);
+        }
+    };
     //
     // let recipient_address: Address = contract_context
     //     .args
