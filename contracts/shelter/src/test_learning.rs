@@ -19,16 +19,6 @@ fn test_address_and_public_key() {
         String::from_str(&env, "asdf") // String::from_bytes(&env, &keypair.public.to_bytes())
     );
 
-    let public_key_from_address: [u8] = user
-        .to_string()
-        .try_into()
-        .expect("nop public key from address :(");
-
-    assert_eq!(
-        keypair.public,
-        PublicKey::from_bytes(&keypair.public.to_bytes()).expect("not ok")
-    );
-
     assert_eq!(
         keypair.public,
         PublicKey::from_bytes(&keypair.public.to_bytes()).expect("not ok")
