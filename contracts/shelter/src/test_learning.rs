@@ -3,7 +3,7 @@ extern crate std;
 
 use ed25519_dalek::Keypair;
 use rand::thread_rng;
-use soroban_sdk::{Address, BytesN, Env, String};
+use soroban_sdk::{Env, String};
 
 use crate::testtools::RandomAddresses;
 
