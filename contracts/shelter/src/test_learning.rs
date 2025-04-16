@@ -13,5 +13,8 @@ fn test_address_and_public_key() {
     let keypair = Keypair::generate(&mut thread_rng());
     let [user] = RandomAddresses::new(env.clone()).generate::<1>();
 
-    assert_eq!(user.to_string(), keypair.public.to_bytes());
+    assert_eq!(
+        user.to_string(),
+        String::from_bytes(env, keypair.public.to_bytes())
+    );
 }
