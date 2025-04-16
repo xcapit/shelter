@@ -1,7 +1,7 @@
 #![cfg(test)]
 extern crate std;
 
-use ed25519_dalek::Keypair;
+use ed25519_dalek::{Keypair, PublicKey};
 use rand::thread_rng;
 use soroban_sdk::{Env, String};
 
@@ -18,5 +18,8 @@ fn test_address_and_public_key() {
         String::from_str(&env, "asdf") // String::from_bytes(&env, &keypair.public.to_bytes())
     );
 
-    assert_eq!(keypair.public, "asdf");
+    assert_eq!(
+        keypair.public,
+        PublicKey::from_bytes(&keypair.public.to_bytes())
+    );
 }
