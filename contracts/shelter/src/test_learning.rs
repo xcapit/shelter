@@ -3,7 +3,7 @@ extern crate std;
 
 use ed25519_dalek::{Keypair, PublicKey};
 use rand::thread_rng;
-use soroban_sdk::{Env, String};
+use soroban_sdk::{BytesN, Env, FromVal, String};
 
 use crate::testtools::RandomAddresses;
 
@@ -13,6 +13,7 @@ fn test_address_and_public_key() {
     let keypair = Keypair::generate(&mut thread_rng());
     let [user] = RandomAddresses::new(env.clone()).generate::<1>();
 
+    BytesN::from_val(&env, &user);
     assert_eq!(
         user.to_string(),
         String::from_str(&env, "asdf") // String::from_bytes(&env, &keypair.public.to_bytes())
