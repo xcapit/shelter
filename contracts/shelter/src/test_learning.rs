@@ -20,6 +20,6 @@ fn test_address_and_public_key() {
 
     assert_eq!(
         keypair.public,
-        PublicKey::from_bytes(&keypair.public.to_bytes())
+        PublicKey::from_bytes(keypair.public.to_bytes())
     );
 }
