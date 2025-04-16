@@ -1,6 +1,8 @@
 #![cfg(test)]
 extern crate std;
 
+use ed25519_dalek::Keypair;
+use rand::thread_rng;
 use soroban_sdk::{BytesN, Env};
 
 use crate::testtools::RandomAddresses;
