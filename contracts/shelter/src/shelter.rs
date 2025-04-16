@@ -3,9 +3,16 @@ use crate::{
     assigned_aid::AssignedAid,
     available_aid::AvailableAid,
     steward::Steward,
-    storage_types::{INSTANCE_BUMP_AMOUNT, INSTANCE_LIFETIME_THRESHOLD},
+    storage_types::{
+        AccSignature, ShelterError, INSTANCE_BUMP_AMOUNT, INSTANCE_LIFETIME_THRESHOLD,
+    },
 };
-use soroban_sdk::{contract, contractimpl, Address, Env};
+use soroban_sdk::{
+    auth::{Context, CustomAccountInterface},
+    contract, contractimpl,
+    crypto::Hash,
+    Address, Env, Vec,
+};
 
 #[contract]
 pub struct Shelter;
@@ -47,4 +54,82 @@ impl Shelter {
             .instance()
             .extend_ttl(INSTANCE_LIFETIME_THRESHOLD, INSTANCE_BUMP_AMOUNT);
     }
+}
+
+#[contractimpl]
+impl CustomAccountInterface for Shelter {
+    type Signature = Vec<AccSignature>;
+    type Error = ShelterError;
+
+    #[allow(non_snake_case)]
+    fn __check_auth(
+        env: Env,
+        signature_payload: Hash<32>,
+        signatures: Self::Signature,
+        auth_contexts: Vec<Context>,
+    ) -> Result<(), ShelterError> {
+        authenticate(&env, &signature_payload, &signatures)?;
+        let current_contract = env.current_contract_address();
+
+        // TODO: error on deploy here!
+        for context in auth_contexts.iter() {
+            verify_authorization_policy(&env, &context, &current_contract)?;
+        }
+        Ok(())
+    }
+}
+
+fn authenticate(
+    env: &Env,
+    signature_payload: &Hash<32>,
+    signatures: &Vec<AccSignature>,
+) -> Result<(), ShelterError> {
+    for i in 0..signatures.len() {
+        let signature = signatures.get_unchecked(i);
+        if i > 0 {
+            let prev_signature = signatures.get_unchecked(i - 1);
+            if prev_signature.public_key >= signature.public_key {
+                return Err(ShelterError::AuthError);
+            }
+        }
+        // if !env
+        //     .storage()
+        //     .instance()
+        //     .has(&DataKey::Signer(signature.public_key.clone()))
+        // {
+        //     return Err(AccError::UnknownSigner);
+        // }
+        env.crypto().ed25519_verify(
+            &signature.public_key,
+            &signature_payload.clone().into(),
+            &signature.signature,
+        );
+    }
+    Ok(())
+}
+
+fn verify_authorization_policy(
+    env: &Env,
+    context: &Context,
+    curr_contract: &Address,
+) -> Result<(), ShelterError> {
+    // let contract_context = match context {
+    //     Context::Contract(c) => {
+    //         if &c.contract == curr_contract {
+    //             return Err(ShelterError::AuthError);
+    //         }
+    //         c
+    //     }
+    //     Context::CreateContractHostFn(_) | Context::CreateContractWithCtorHostFn(_) => {
+    //         return Err(ShelterError::AuthError);
+    //     }
+    // };
+    //
+    // let recipient_address: Address = contract_context
+    //     .args
+    //     .get(0)
+    //     .unwrap()
+    //     .try_into_val(env)
+    //     .unwrap();
+    Ok(())
 }
