@@ -27,4 +27,9 @@ fn test_address_and_public_key() {
         keypair.public,
         PublicKey::from_bytes(&keypair.public.to_bytes()).expect("not ok")
     );
+
+    assert_eq!(
+        keypair.public,
+        PublicKey::from_bytes(&keypair.public.to_bytes()).expect("not ok")
+    );
 }
