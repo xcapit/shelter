@@ -15,6 +15,6 @@ fn test_address_and_public_key() {
 
     assert_eq!(
         user.to_string(),
-        String::from_bytes(&env, keypair.public.to_bytes())
+        String::from_bytes(&env, &keypair.public.to_bytes())
     );
 }
