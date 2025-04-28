@@ -7,7 +7,7 @@ pub(crate) const INSTANCE_LIFETIME_THRESHOLD: u32 = INSTANCE_BUMP_AMOUNT - DAY_I
 #[derive(Clone)]
 #[contracttype]
 pub struct AidDataKey {
-    pub recipient: Address,
+    pub recipient: BytesN<32>,
     pub token: Address,
 }
 
@@ -39,4 +39,6 @@ pub enum ShelterError {
     AuthError = 1,
     NotEnoughBalance = 2,
     InvalidAction = 3,
+    NotEnoughAid = 4,
+    InvalidContext = 5,
 }

@@ -6,12 +6,13 @@ use crate::{
     storage_types::{
         RecipientSignature, ShelterError, INSTANCE_BUMP_AMOUNT, INSTANCE_LIFETIME_THRESHOLD,
     },
+    transfer::Transfer,
 };
 use soroban_sdk::{
     auth::{Context, CustomAccountInterface},
     contract, contractimpl,
     crypto::Hash,
-    Address, Env, TryIntoVal, Vec,
+    Address, BytesN, Env, Vec,
 };
 
 #[contract]
@@ -32,12 +33,12 @@ impl Shelter {
         Shelter::_extend_instance_ttl(&env);
     }
 
-    pub fn bound_aid(env: Env, recipient: Address, token: Address, amount: i128) {
+    pub fn bound_aid(env: Env, recipient: BytesN<32>, token: Address, amount: i128) {
         Steward::from(&env).perform(|| Aid::from(&env, recipient, token).add(amount).save_on(&env));
         Shelter::_extend_instance_ttl(&env);
     }
 
-    pub fn aid_of(env: Env, recipient: Address, token: Address) -> i128 {
+    pub fn aid_of(env: Env, recipient: BytesN<32>, token: Address) -> i128 {
         Aid::from(&env, recipient, token).amount()
     }
 
@@ -70,16 +71,19 @@ impl CustomAccountInterface for Shelter {
     ) -> Result<(), ShelterError> {
         let current_contract = env.current_contract_address();
         for context in auth_contexts.iter() {
-            verify_authorization_policy(&env, &context, &current_contract)?;
+            match context {
+                Context::Contract(contract_context) => Transfer::new(
+                    Aid::from(
+                        &env,
+                        signatures.public_key.clone(),
+                        contract_context.contract.clone(),
+                    ),
+                    contract_context,
+                )
+                .validate(),
+                _ => Err(ShelterError::InvalidContext),
+            }?
         }
         Ok(())
     }
-}
-
-fn verify_authorization_policy(
-    env: &Env,
-    context: &Context,
-    curr_contract: &Address,
-) -> Result<(), ShelterError> {
-    Ok(())
 }
