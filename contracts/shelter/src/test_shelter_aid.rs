@@ -9,7 +9,7 @@ use soroban_sdk::{
 use crate::{
     testtools::{
         assert_assigned_aid, assert_auth_fn, assert_instance_ttl_extension, env_with_mock_auths,
-        shelter_id, RandomAddresses, TestToken,
+        shelter_id, RandomAddresses, RandomKeypair, TestBucket, TestToken,
     },
     ShelterClient,
 };
@@ -17,56 +17,52 @@ use crate::{
 #[test]
 #[should_panic(expected = "Unauthorized function call for address")]
 fn test_bound_aid_unauthorized() {
-    let test_amount = 100;
     let env = env_with_mock_auths();
-    let [steward, attacker, recipient] = RandomAddresses::new(env.clone()).generate::<3>();
-    let shelter = ShelterClient::new(&env, &shelter_id(&env, &steward));
-    let token = TestToken::new(&env);
-    token.mint(&shelter.address, &test_amount);
+    let [attacker] = RandomAddresses::new(env.clone()).generate::<1>();
+    let tb = TestBucket::default(env.clone());
+    tb.token.mint(&tb.shelter.address, &tb.amount);
     env.mock_auths(&[MockAuth {
         address: &attacker,
         invoke: &MockAuthInvoke {
-            contract: &shelter.address,
+            contract: &tb.shelter.address,
             fn_name: "bound_aid",
-            args: (&recipient, &token.address(), test_amount).into_val(&env),
+            args: (&tb.recipient.public_key(), &tb.token.address(), tb.amount).into_val(&env),
             sub_invokes: &[],
         },
     }]);
 
-    shelter.bound_aid(&recipient, &token.address(), &test_amount);
+    tb.shelter
+        .bound_aid(&tb.recipient.public_key(), &tb.token.address(), &tb.amount);
 }
 
 #[test]
 #[should_panic(expected = "Not enough balance")]
 fn test_bound_aid_when_not_enough_balance() {
-    let test_amount = 100;
     let env = env_with_mock_auths();
-    let [steward, recipient] = RandomAddresses::new(env.clone()).generate::<2>();
-    let shelter = ShelterClient::new(&env, &shelter_id(&env, &steward));
-    let token = TestToken::new(&env);
+    let tb = TestBucket::default(env.clone());
 
-    shelter.bound_aid(&recipient, &token.address(), &test_amount);
+    tb.shelter
+        .bound_aid(&tb.recipient.public_key(), &tb.token.address(), &tb.amount);
 }
 
 #[test]
 fn test_bound_aid() {
-    let test_amount = 100;
     let env = env_with_mock_auths();
     let bound_aid_symbol = Symbol::new(&env, "bound_aid");
-    let [steward, recipient, not_recipient] = RandomAddresses::new(env.clone()).generate::<3>();
-    let shelter = ShelterClient::new(&env, &shelter_id(&env, &steward));
-    let token = TestToken::new(&env);
-    token.mint(&shelter.address, &test_amount);
+    let tb = TestBucket::default(env.clone());
+    let not_recipient = RandomKeypair::new(env.clone());
+    tb.token.mint(&tb.shelter.address, &tb.amount);
 
-    shelter.bound_aid(&recipient, &token.address(), &test_amount);
+    tb.shelter
+        .bound_aid(&tb.recipient.public_key(), &tb.token.address(), &tb.amount);
 
     assert_auth_fn(
         &env,
-        steward.clone(),
+        tb.steward.clone(),
         (
-            shelter.address.clone(),
+            tb.shelter.address.clone(),
             bound_aid_symbol.clone(),
-            (&recipient, &token.address(), &test_amount).into_val(&env),
+            (&tb.recipient.public_key(), &tb.token.address(), &tb.amount).into_val(&env),
         ),
     );
     assert_eq!(
@@ -74,15 +70,28 @@ fn test_bound_aid() {
         vec![
             &env,
             (
-                shelter.address.clone(),
-                (bound_aid_symbol, recipient.clone(), token.address(),).into_val(&env),
-                test_amount.into_val(&env)
+                tb.shelter.address.clone(),
+                (
+                    bound_aid_symbol,
+                    tb.recipient.public_key(),
+                    tb.token.address(),
+                )
+                    .into_val(&env),
+                tb.amount.into_val(&env)
             ),
         ]
     );
-    assert_instance_ttl_extension(&env, &shelter.address);
-    assert_eq!(shelter.aid_of(&not_recipient, &token.address()), 0);
-    assert_eq!(shelter.aid_of(&recipient, &token.address()), test_amount);
+    assert_instance_ttl_extension(&env, &tb.shelter.address);
+    assert_eq!(
+        tb.shelter
+            .aid_of(&not_recipient.public_key(), &tb.token.address()),
+        0
+    );
+    assert_eq!(
+        tb.shelter
+            .aid_of(&tb.recipient.public_key(), &tb.token.address()),
+        tb.amount
+    );
 }
 
 #[test]
@@ -90,7 +99,8 @@ fn test_bound_multiple_tokens_aid() {
     let test_amount_1 = 100;
     let test_amount_2 = 130;
     let env = env_with_mock_auths();
-    let [steward, recipient] = RandomAddresses::new(env.clone()).generate::<2>();
+    let [steward] = RandomAddresses::new(env.clone()).generate::<1>();
+    let recipient = RandomKeypair::new(env.clone());
     let shelter = ShelterClient::new(&env, &shelter_id(&env, &steward));
     let token_1 = TestToken::new(&env);
     let token_2 = TestToken::new(&env);
@@ -99,16 +109,19 @@ fn test_bound_multiple_tokens_aid() {
     token_2.mint(&shelter.address, &test_amount_2);
     token_3.mint(&shelter.address, &test_amount_2);
 
-    shelter.bound_aid(&recipient, &token_1.address(), &test_amount_1);
-    shelter.bound_aid(&recipient, &token_2.address(), &test_amount_2);
+    shelter.bound_aid(&recipient.public_key(), &token_1.address(), &test_amount_1);
+    shelter.bound_aid(&recipient.public_key(), &token_2.address(), &test_amount_2);
 
-    assert_eq!(shelter.aid_of(&recipient, &token_3.address()), 0);
     assert_eq!(
-        shelter.aid_of(&recipient, &token_1.address()),
+        shelter.aid_of(&recipient.public_key(), &token_3.address()),
+        0
+    );
+    assert_eq!(
+        shelter.aid_of(&recipient.public_key(), &token_1.address()),
         test_amount_1
     );
     assert_eq!(
-        shelter.aid_of(&recipient, &token_2.address()),
+        shelter.aid_of(&recipient.public_key(), &token_2.address()),
         test_amount_2
     );
     assert_assigned_aid(&shelter, &token_1);
@@ -121,7 +134,9 @@ fn test_bound_multiples_aid() {
     let test_amount_2 = 130;
     let test_amount_3 = 131;
     let env = env_with_mock_auths();
-    let [steward, recipient_1, recipient_2] = RandomAddresses::new(env.clone()).generate::<3>();
+    let [steward] = RandomAddresses::new(env.clone()).generate::<1>();
+    let recipient_1 = RandomKeypair::new(env.clone());
+    let recipient_2 = RandomKeypair::new(env.clone());
     let shelter = ShelterClient::new(&env, &shelter_id(&env, &steward));
     let token_1 = TestToken::new(&env);
     let token_2 = TestToken::new(&env);
@@ -130,23 +145,44 @@ fn test_bound_multiples_aid() {
     token_2.mint(&shelter.address, &test_amount_2);
     token_3.mint(&shelter.address, &test_amount_3);
 
-    shelter.bound_aid(&recipient_1, &token_1.address(), &test_amount_1);
-    shelter.bound_aid(&recipient_2, &token_2.address(), &test_amount_2);
-    shelter.bound_aid(&recipient_1, &token_3.address(), &test_amount_3);
+    shelter.bound_aid(
+        &recipient_1.public_key(),
+        &token_1.address(),
+        &test_amount_1,
+    );
+    shelter.bound_aid(
+        &recipient_2.public_key(),
+        &token_2.address(),
+        &test_amount_2,
+    );
+    shelter.bound_aid(
+        &recipient_1.public_key(),
+        &token_3.address(),
+        &test_amount_3,
+    );
 
-    assert_eq!(shelter.aid_of(&recipient_1, &token_2.address()), 0);
-    assert_eq!(shelter.aid_of(&recipient_2, &token_1.address()), 0);
-    assert_eq!(shelter.aid_of(&recipient_2, &token_3.address()), 0);
     assert_eq!(
-        shelter.aid_of(&recipient_1, &token_3.address()),
+        shelter.aid_of(&recipient_1.public_key(), &token_2.address()),
+        0
+    );
+    assert_eq!(
+        shelter.aid_of(&recipient_2.public_key(), &token_1.address()),
+        0
+    );
+    assert_eq!(
+        shelter.aid_of(&recipient_2.public_key(), &token_3.address()),
+        0
+    );
+    assert_eq!(
+        shelter.aid_of(&recipient_1.public_key(), &token_3.address()),
         test_amount_3
     );
     assert_eq!(
-        shelter.aid_of(&recipient_2, &token_2.address()),
+        shelter.aid_of(&recipient_2.public_key(), &token_2.address()),
         test_amount_2
     );
     assert_eq!(
-        shelter.aid_of(&recipient_1, &token_1.address()),
+        shelter.aid_of(&recipient_1.public_key(), &token_1.address()),
         test_amount_1
     );
     assert_assigned_aid(&shelter, &token_1);
@@ -159,23 +195,24 @@ fn test_bound_multiples_aid_same_recipient() {
     let test_amount_1 = 100;
     let test_amount_2 = 130;
     let env = env_with_mock_auths();
-    let [steward, recipient] = RandomAddresses::new(env.clone()).generate::<2>();
+    let [steward] = RandomAddresses::new(env.clone()).generate::<1>();
+    let recipient = RandomKeypair::new(env.clone());
     let shelter = ShelterClient::new(&env, &shelter_id(&env, &steward));
     let token_1 = TestToken::new(&env);
     let token_2 = TestToken::new(&env);
     token_1.mint(&shelter.address, &(test_amount_1 + test_amount_2));
     token_2.mint(&shelter.address, &test_amount_2);
 
-    shelter.bound_aid(&recipient, &token_1.address(), &test_amount_1);
-    shelter.bound_aid(&recipient, &token_1.address(), &test_amount_2);
-    shelter.bound_aid(&recipient, &token_2.address(), &test_amount_2);
+    shelter.bound_aid(&recipient.public_key(), &token_1.address(), &test_amount_1);
+    shelter.bound_aid(&recipient.public_key(), &token_1.address(), &test_amount_2);
+    shelter.bound_aid(&recipient.public_key(), &token_2.address(), &test_amount_2);
 
     assert_eq!(
-        shelter.aid_of(&recipient, &token_2.address()),
+        shelter.aid_of(&recipient.public_key(), &token_2.address()),
         test_amount_2
     );
     assert_eq!(
-        shelter.aid_of(&recipient, &token_1.address()),
+        shelter.aid_of(&recipient.public_key(), &token_1.address()),
         test_amount_1 + test_amount_2
     );
     assert_assigned_aid(&shelter, &token_1);
@@ -187,7 +224,9 @@ fn test_total_aid() {
     let test_amount_1 = 100;
     let test_amount_2 = 130;
     let env = env_with_mock_auths();
-    let [steward, recipient_1, recipient_2] = RandomAddresses::new(env.clone()).generate::<3>();
+    let [steward] = RandomAddresses::new(env.clone()).generate::<1>();
+    let recipient_1 = RandomKeypair::new(env.clone());
+    let recipient_2 = RandomKeypair::new(env.clone());
     let shelter = ShelterClient::new(&env, &shelter_id(&env, &steward));
     let token_1 = TestToken::new(&env);
     let token_2 = TestToken::new(&env);
@@ -197,10 +236,26 @@ fn test_total_aid() {
     );
     token_2.mint(&shelter.address, &test_amount_2);
 
-    shelter.bound_aid(&recipient_1, &token_1.address(), &test_amount_1);
-    shelter.bound_aid(&recipient_2, &token_1.address(), &test_amount_2);
-    shelter.bound_aid(&recipient_1, &token_2.address(), &test_amount_2);
-    shelter.bound_aid(&recipient_1, &token_1.address(), &test_amount_1);
+    shelter.bound_aid(
+        &recipient_1.public_key(),
+        &token_1.address(),
+        &test_amount_1,
+    );
+    shelter.bound_aid(
+        &recipient_2.public_key(),
+        &token_1.address(),
+        &test_amount_2,
+    );
+    shelter.bound_aid(
+        &recipient_1.public_key(),
+        &token_2.address(),
+        &test_amount_2,
+    );
+    shelter.bound_aid(
+        &recipient_1.public_key(),
+        &token_1.address(),
+        &test_amount_1,
+    );
 
     assert_eq!(
         shelter.assigned_aid_of(&token_1.address()),
@@ -216,15 +271,20 @@ fn test_available_aid() {
     let test_amount = 100;
     let test_half_amount = test_amount / 2;
     let env = env_with_mock_auths();
-    let [steward, recipient] = RandomAddresses::new(env.clone()).generate::<2>();
+    let [steward] = RandomAddresses::new(env.clone()).generate::<1>();
+    let recipient = RandomKeypair::new(env.clone());
     let shelter = ShelterClient::new(&env, &shelter_id(&env, &steward));
     let token_1 = TestToken::new(&env);
     let token_2 = TestToken::new(&env);
     token_1.mint(&shelter.address, &(test_amount * 3));
     token_2.mint(&shelter.address, &test_amount);
 
-    shelter.bound_aid(&recipient, &token_1.address(), &test_amount);
-    shelter.bound_aid(&recipient, &token_2.address(), &test_half_amount);
+    shelter.bound_aid(&recipient.public_key(), &token_1.address(), &test_amount);
+    shelter.bound_aid(
+        &recipient.public_key(),
+        &token_2.address(),
+        &test_half_amount,
+    );
 
     assert_eq!(shelter.assigned_aid_of(&token_1.address()), test_amount);
     assert_eq!(

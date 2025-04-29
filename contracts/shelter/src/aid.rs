@@ -1,4 +1,4 @@
-use soroban_sdk::{Address, Env, Symbol};
+use soroban_sdk::{Address, BytesN, Env, Symbol};
 
 use crate::{
     assigned_aid::AssignedAid,
@@ -6,14 +6,14 @@ use crate::{
 };
 
 pub struct Aid {
-    recipient: Address,
+    recipient: BytesN<32>,
     token: Address,
     amount: i128,
     new_amount: i128,
 }
 
 impl Aid {
-    pub fn from(env: &Env, recipient: Address, token: Address) -> Self {
+    pub fn from(env: &Env, recipient: BytesN<32>, token: Address) -> Self {
         Aid {
             recipient: recipient.clone(),
             token: token.clone(),
@@ -83,7 +83,7 @@ impl Aid {
         Aid::_aid_key_of(self.recipient.clone(), self.token.clone())
     }
 
-    fn _aid_key_of(recipient: Address, token: Address) -> DataKey {
+    fn _aid_key_of(recipient: BytesN<32>, token: Address) -> DataKey {
         DataKey::Aid(AidDataKey { recipient, token })
     }
 }

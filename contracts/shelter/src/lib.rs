@@ -10,5 +10,6 @@ mod test_shelter_aid;
 mod test_shelter_auth;
 mod test_shelter_steward;
 mod testtools;
+mod transfer;
 
 pub use crate::shelter::ShelterClient;
