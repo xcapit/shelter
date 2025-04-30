@@ -11,11 +11,8 @@ use soroban_sdk::{
     Address, BytesN, Env, IntoVal, Symbol, Val, Vec,
 };
 
-use crate::{
-    shelter::Shelter,
-    storage_types::{RecipientSignature, INSTANCE_BUMP_AMOUNT},
-    ShelterClient,
-};
+use crate::shelter_pass::ShelterPass;
+use crate::{shelter::Shelter, storage_types::INSTANCE_BUMP_AMOUNT, ShelterClient};
 
 pub fn assert_instance_ttl_extension(env: &Env, shelter_address: &Address) {
     env.as_contract(shelter_address, || {
@@ -72,8 +69,8 @@ impl RandomKeypair {
             .into_val(&self.env)
     }
 
-    pub fn sign(&self, payload: &BytesN<32>) -> Val {
-        RecipientSignature {
+    pub fn shlter_pass(&self, payload: &BytesN<32>) -> Val {
+        ShelterPass {
             public_key: self.public_key(),
             signature: self
                 .signing_key
@@ -82,6 +79,13 @@ impl RandomKeypair {
                 .into_val(&self.env),
         }
         .into_val(&self.env)
+    }
+
+    pub fn signature_of(&self, payload: &BytesN<32>) -> BytesN<64> {
+        self.signing_key
+            .sign(payload.to_array().as_slice())
+            .to_bytes()
+            .into_val(&self.env)
     }
 }
 

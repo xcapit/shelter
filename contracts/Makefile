@@ -7,6 +7,9 @@ all: test
 test: build
 	cargo test
 
+coverage: build
+	cargo llvm-cov test --html --open
+
 build:
 	stellar contract build
 	@ls -l target/wasm32-unknown-unknown/release/*.wasm
