@@ -25,13 +25,6 @@ pub enum DataKey {
     Steward,
 }
 
-#[contracttype]
-#[derive(Clone)]
-pub struct RecipientSignature {
-    pub public_key: BytesN<32>,
-    pub signature: BytesN<64>,
-}
-
 #[contracterror]
 #[derive(Copy, Clone, Debug, Eq, PartialEq, PartialOrd, Ord)]
 #[repr(u32)]

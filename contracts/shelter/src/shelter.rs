@@ -2,10 +2,9 @@ use crate::{
     aid::Aid,
     assigned_aid::AssignedAid,
     available_aid::AvailableAid,
+    shelter_pass::ShelterPass,
     steward::Steward,
-    storage_types::{
-        RecipientSignature, ShelterError, INSTANCE_BUMP_AMOUNT, INSTANCE_LIFETIME_THRESHOLD,
-    },
+    storage_types::{ShelterError, INSTANCE_BUMP_AMOUNT, INSTANCE_LIFETIME_THRESHOLD},
     transfer::Transfer,
 };
 use soroban_sdk::{
@@ -59,7 +58,7 @@ impl Shelter {
 
 #[contractimpl]
 impl CustomAccountInterface for Shelter {
-    type Signature = RecipientSignature;
+    type Signature = ShelterPass;
     type Error = ShelterError;
 
     #[allow(non_snake_case)]
@@ -69,7 +68,7 @@ impl CustomAccountInterface for Shelter {
         signatures: Self::Signature,
         auth_contexts: Vec<Context>,
     ) -> Result<(), ShelterError> {
-        let current_contract = env.current_contract_address();
+        signatures.verify(&env, signature_payload.clone());
         for context in auth_contexts.iter() {
             match context {
                 Context::Contract(contract_context) => Transfer::new(
