@@ -1,6 +1,6 @@
-use soroban_sdk::{auth::ContractContext, symbol_short, Symbol, TryIntoVal};
+use soroban_sdk::{auth::ContractContext, symbol_short, Env, Symbol, TryIntoVal};
 
-use crate::{aid::Aid, storage_types::ShelterError};
+use crate::{aid::Aid, storage_types::Error};
 
 pub struct Transfer {
     aid: Aid,
@@ -17,23 +17,27 @@ impl Transfer {
         }
     }
 
-    pub fn validate(&self) -> Result<(), ShelterError> {
+    fn _validate(&self) -> Result<(), Error> {
         self._validate_action()
             .and_then(|_| self._validate_amount())
     }
 
-    fn _validate_action(&self) -> Result<(), ShelterError> {
+    pub fn validate(&mut self, env: &Env) -> Result<(), Error> {
+        let result = self._validate();
+        self.aid = self.aid.add(-self._amount_to_transfer());
+        self.aid.expect_save_on(env);
+        result
+    }
+
+    fn _validate_action(&self) -> Result<(), Error> {
         match self.fn_name == self.contract_context.fn_name {
             true => Ok(()),
-            false => Err(ShelterError::InvalidAction),
+            false => Err(Error::InvalidAction),
         }
     }
 
-    fn _validate_amount(&self) -> Result<(), ShelterError> {
-        match self._amount_to_transfer() <= self.aid.amount() {
-            true => Ok(()),
-            false => Err(ShelterError::NotEnoughAid),
-        }
+    fn _validate_amount(&self) -> Result<(), Error> {
+        self.aid.enough_for(self._amount_to_transfer())
     }
 
     fn _amount_to_transfer(&self) -> i128 {

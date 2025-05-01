@@ -7,6 +7,7 @@ use soroban_sdk::{
 };
 
 use crate::{
+    storage_types::Error,
     testtools::{
         assert_assigned_aid, assert_auth_fn, assert_instance_ttl_extension, env_with_mock_auths,
         shelter_id, RandomAddresses, RandomKeypair, TestBucket, TestToken,
@@ -36,13 +37,18 @@ fn test_bound_aid_unauthorized() {
 }
 
 #[test]
-#[should_panic(expected = "Not enough balance")]
 fn test_bound_aid_when_not_enough_balance() {
     let env = env_with_mock_auths();
     let tb = TestBucket::default(env.clone());
 
-    tb.shelter
-        .bound_aid(&tb.recipient.public_key(), &tb.token.address(), &tb.amount);
+    assert_eq!(
+        tb.shelter
+            .try_bound_aid(&tb.recipient.public_key(), &tb.token.address(), &tb.amount)
+            .err()
+            .unwrap()
+            .unwrap(),
+        Error::NotEnoughBalance.into()
+    )
 }
 
 #[test]

@@ -77,7 +77,7 @@
               "function_name": "bound_aid",
               "args": [
                 {
-                  "bytes": "0e3497026f937c68a26b1cbce1946c788199aa0dff7ad17f31df1e4960c33115"
+                  "bytes": "1c574e17c27e840c38017165f05352462df16617495b574117c47269cae03654"
                 },
                 {
                   "address": "CCABDO7UZXYE4W6GVSEGSNNZTKSLFQGKXXQTH6OX7M7GKZ4Z6CUJNGZN"
@@ -283,7 +283,7 @@
                         "symbol": "recipient"
                       },
                       "val": {
-                        "bytes": "0e3497026f937c68a26b1cbce1946c788199aa0dff7ad17f31df1e4960c33115"
+                        "bytes": "1c574e17c27e840c38017165f05352462df16617495b574117c47269cae03654"
                       }
                     },
                     {
@@ -320,7 +320,7 @@
                             "symbol": "recipient"
                           },
                           "val": {
-                            "bytes": "0e3497026f937c68a26b1cbce1946c788199aa0dff7ad17f31df1e4960c33115"
+                            "bytes": "1c574e17c27e840c38017165f05352462df16617495b574117c47269cae03654"
                           }
                         },
                         {
@@ -345,7 +345,7 @@
                       "val": {
                         "i128": {
                           "hi": 0,
-                          "lo": 100
+                          "lo": 0
                         }
                       }
                     },
@@ -406,7 +406,7 @@
                         "val": {
                           "i128": {
                             "hi": 0,
-                            "lo": 100
+                            "lo": 0
                           }
                         }
                       },
@@ -640,5 +640,35 @@
       ]
     ]
   },
-  "events": []
+  "events": [
+    {
+      "event": {
+        "ext": "v0",
+        "contract_id": "0000000000000000000000000000000000000000000000000000000000000005",
+        "type_": "contract",
+        "body": {
+          "v0": {
+            "topics": [
+              {
+                "symbol": "bound_aid"
+              },
+              {
+                "bytes": "1c574e17c27e840c38017165f05352462df16617495b574117c47269cae03654"
+              },
+              {
+                "address": "CCABDO7UZXYE4W6GVSEGSNNZTKSLFQGKXXQTH6OX7M7GKZ4Z6CUJNGZN"
+              }
+            ],
+            "data": {
+              "i128": {
+                "hi": -1,
+                "lo": 18446744073709551516
+              }
+            }
+          }
+        }
+      },
+      "failed_call": false
+    }
+  ]
 }

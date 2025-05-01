@@ -1,6 +1,6 @@
-use soroban_sdk::{token::TokenClient, Address, Env};
+use soroban_sdk::{panic_with_error, token::TokenClient, Address, Env};
 
-use crate::assigned_aid::AssignedAid;
+use crate::{assigned_aid::AssignedAid, storage_types::Error};
 
 pub struct AvailableAid<'a> {
     token: TokenClient<'a>,
@@ -12,9 +12,9 @@ impl AvailableAid<'_> {
         }
     }
 
-    pub fn validate(&self, amount_to_cover: i128) {
+    pub fn expect_enough_balance(&self, amount_to_cover: i128) {
         if amount_to_cover > self._balance() {
-            panic!("Not enough balance");
+            panic_with_error!(self.token.env, Error::NotEnoughBalance);
         }
     }
 

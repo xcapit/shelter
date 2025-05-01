@@ -28,10 +28,9 @@ pub enum DataKey {
 #[contracterror]
 #[derive(Copy, Clone, Debug, Eq, PartialEq, PartialOrd, Ord)]
 #[repr(u32)]
-pub enum ShelterError {
-    AuthError = 1,
-    NotEnoughBalance = 2,
-    InvalidAction = 3,
-    NotEnoughAid = 4,
-    InvalidContext = 5,
+pub enum Error {
+    NotEnoughBalance = 1,
+    InvalidAction = 2,
+    NotEnoughAid = 3,
+    InvalidContext = 4,
 }

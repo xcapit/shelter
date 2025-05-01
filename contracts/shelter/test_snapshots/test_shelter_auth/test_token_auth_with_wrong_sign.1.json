@@ -77,7 +77,7 @@
               "function_name": "bound_aid",
               "args": [
                 {
-                  "bytes": "31f973a2b003296d9ce48cd3d726a8c8f3b7936bacff397b9d7d36e196bea36b"
+                  "bytes": "2fb1cad1f0f577e027fba855bd508e21071bed028737cb1ad70ddd8d1ca373b0"
                 },
                 {
                   "address": "CCABDO7UZXYE4W6GVSEGSNNZTKSLFQGKXXQTH6OX7M7GKZ4Z6CUJNGZN"
@@ -283,7 +283,7 @@
                         "symbol": "recipient"
                       },
                       "val": {
-                        "bytes": "31f973a2b003296d9ce48cd3d726a8c8f3b7936bacff397b9d7d36e196bea36b"
+                        "bytes": "2fb1cad1f0f577e027fba855bd508e21071bed028737cb1ad70ddd8d1ca373b0"
                       }
                     },
                     {
@@ -320,7 +320,7 @@
                             "symbol": "recipient"
                           },
                           "val": {
-                            "bytes": "31f973a2b003296d9ce48cd3d726a8c8f3b7936bacff397b9d7d36e196bea36b"
+                            "bytes": "2fb1cad1f0f577e027fba855bd508e21071bed028737cb1ad70ddd8d1ca373b0"
                           }
                         },
                         {
