@@ -25,8 +25,8 @@ impl AssignedAid {
         }
     }
 
-    pub fn save_on(&self, env: &Env) {
-        self._validate_enough_balance(env);
+    pub fn expect_save_on(&self, env: &Env) {
+        AvailableAid::from(env, &self.token).expect_enough_balance(self.amount());
         env.storage()
             .instance()
             .set(&self._assigned_aid_key(), &self.amount);
@@ -34,10 +34,6 @@ impl AssignedAid {
 
     pub fn amount(&self) -> i128 {
         self.amount
-    }
-
-    fn _validate_enough_balance(&self, env: &Env) {
-        AvailableAid::from(env, &self.token).validate(self.amount());
     }
 
     fn _assigned_aid_key(&self) -> DataKey {

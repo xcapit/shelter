@@ -11,7 +11,7 @@ use soroban_sdk::{
     Address, BytesN, Env, IntoVal, Symbol, Val, Vec,
 };
 
-use crate::shelter_pass::ShelterPass;
+use crate::pass::Pass;
 use crate::{shelter::Shelter, storage_types::INSTANCE_BUMP_AMOUNT, ShelterClient};
 
 pub fn assert_instance_ttl_extension(env: &Env, shelter_address: &Address) {
@@ -70,7 +70,7 @@ impl RandomKeypair {
     }
 
     pub fn shlter_pass(&self, payload: &BytesN<32>) -> Val {
-        ShelterPass {
+        Pass {
             public_key: self.public_key(),
             signature: self
                 .signing_key

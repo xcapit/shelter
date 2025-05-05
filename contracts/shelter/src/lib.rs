@@ -3,10 +3,11 @@
 mod aid;
 mod assigned_aid;
 mod available_aid;
+mod pass;
 mod shelter;
-mod shelter_pass;
 mod steward;
 mod storage_types;
+mod test_aid_transfer;
 mod test_shelter_aid;
 mod test_shelter_auth;
 mod test_shelter_steward;

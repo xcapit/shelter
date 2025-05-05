@@ -328,5 +328,35 @@
       ]
     ]
   },
-  "events": []
+  "events": [
+    {
+      "event": {
+        "ext": "v0",
+        "contract_id": "0000000000000000000000000000000000000000000000000000000000000005",
+        "type_": "contract",
+        "body": {
+          "v0": {
+            "topics": [
+              {
+                "symbol": "bound_aid"
+              },
+              {
+                "bytes": "dab6db56eb0ff266b2956583b3a60e50c46e8d1e989d71ff83a5050d59e55044"
+              },
+              {
+                "address": "CCABDO7UZXYE4W6GVSEGSNNZTKSLFQGKXXQTH6OX7M7GKZ4Z6CUJNGZN"
+              }
+            ],
+            "data": {
+              "i128": {
+                "hi": -1,
+                "lo": 18446744073709551516
+              }
+            }
+          }
+        }
+      },
+      "failed_call": true
+    }
+  ]
 }

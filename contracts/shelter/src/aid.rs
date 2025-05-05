@@ -2,7 +2,7 @@ use soroban_sdk::{Address, BytesN, Env, Symbol};
 
 use crate::{
     assigned_aid::AssignedAid,
-    storage_types::{AidDataKey, AidValue, DataKey},
+    storage_types::{AidDataKey, AidValue, DataKey, Error},
 };
 
 pub struct Aid {
@@ -30,19 +30,26 @@ impl Aid {
         }
     }
 
-    pub fn add(self, amount: i128) -> Self {
+    pub fn add(&self, amount: i128) -> Self {
         Aid {
-            recipient: self.recipient,
-            token: self.token,
+            recipient: self.recipient.clone(),
+            token: self.token.clone(),
             amount: self.amount,
             new_amount: amount,
         }
     }
 
-    pub fn save_on(&self, env: &Env) {
-        self._save_assigned_aid(env);
+    pub fn expect_save_on(&self, env: &Env) {
+        self._expect_save_assigned_aid(env);
         self._save_aid(env);
         self._publish_event(env);
+    }
+
+    pub fn enough_for(&self, transfer_amount: i128) -> Result<(), Error> {
+        match transfer_amount <= self.amount() {
+            true => Ok(()),
+            false => Err(Error::NotEnoughAid),
+        }
     }
 
     pub fn amount(&self) -> i128 {
@@ -66,10 +73,10 @@ impl Aid {
             .set(&self._aid_key(), &self._aid_value());
     }
 
-    fn _save_assigned_aid(&self, env: &Env) {
+    fn _expect_save_assigned_aid(&self, env: &Env) {
         AssignedAid::from(env, self.token.clone())
             .add(self.new_amount)
-            .save_on(env);
+            .expect_save_on(env);
     }
 
     fn _aid_value(&self) -> AidValue {

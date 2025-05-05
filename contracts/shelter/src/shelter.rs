@@ -2,9 +2,9 @@ use crate::{
     aid::Aid,
     assigned_aid::AssignedAid,
     available_aid::AvailableAid,
-    shelter_pass::ShelterPass,
+    pass::Pass,
     steward::Steward,
-    storage_types::{ShelterError, INSTANCE_BUMP_AMOUNT, INSTANCE_LIFETIME_THRESHOLD},
+    storage_types::{Error, INSTANCE_BUMP_AMOUNT, INSTANCE_LIFETIME_THRESHOLD},
     transfer::Transfer,
 };
 use soroban_sdk::{
@@ -33,7 +33,11 @@ impl Shelter {
     }
 
     pub fn bound_aid(env: Env, recipient: BytesN<32>, token: Address, amount: i128) {
-        Steward::from(&env).perform(|| Aid::from(&env, recipient, token).add(amount).save_on(&env));
+        Steward::from(&env).perform(|| {
+            Aid::from(&env, recipient, token)
+                .add(amount)
+                .expect_save_on(&env)
+        });
         Shelter::_extend_instance_ttl(&env);
     }
 
@@ -58,8 +62,8 @@ impl Shelter {
 
 #[contractimpl]
 impl CustomAccountInterface for Shelter {
-    type Signature = ShelterPass;
-    type Error = ShelterError;
+    type Signature = Pass;
+    type Error = Error;
 
     #[allow(non_snake_case)]
     fn __check_auth(
@@ -67,7 +71,7 @@ impl CustomAccountInterface for Shelter {
         signature_payload: Hash<32>,
         signatures: Self::Signature,
         auth_contexts: Vec<Context>,
-    ) -> Result<(), ShelterError> {
+    ) -> Result<(), Error> {
         signatures.verify(&env, signature_payload.clone());
         for context in auth_contexts.iter() {
             match context {
@@ -79,9 +83,9 @@ impl CustomAccountInterface for Shelter {
                     ),
                     contract_context,
                 )
-                .validate(),
-                _ => Err(ShelterError::InvalidContext),
-            }?
+                .validate(&env),
+                _ => Err(Error::InvalidContext),
+            }?;
         }
         Ok(())
     }
