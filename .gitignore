@@ -18,3 +18,5 @@ lib
 .idea
 .DS_Store
 .aider*
+
+contracts/shelter/test_snapshots

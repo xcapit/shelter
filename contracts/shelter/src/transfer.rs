@@ -19,14 +19,18 @@ impl Transfer {
 
     fn _validate(&self) -> Result<(), Error> {
         self._validate_action()
-            .and_then(|_| self._validate_amount())
     }
 
     pub fn validate(&mut self, env: &Env) -> Result<(), Error> {
         let result = self._validate();
-        self.aid = self.aid.add(-self._amount_to_transfer());
-        self.aid.expect_save_on(env);
-        result
+        match result {
+            Ok(_) => {
+                self.aid = self.aid.add(-self._amount_to_transfer());
+                self.aid.expect_update_on(env);
+                result
+            }
+            Err(_) => result,
+        }
     }
 
     fn _validate_action(&self) -> Result<(), Error> {
@@ -34,10 +38,6 @@ impl Transfer {
             true => Ok(()),
             false => Err(Error::InvalidAction),
         }
-    }
-
-    fn _validate_amount(&self) -> Result<(), Error> {
-        self.aid.enough_for(self._amount_to_transfer())
     }
 
     fn _amount_to_transfer(&self) -> i128 {
