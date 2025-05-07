@@ -1,4 +1,4 @@
-use soroban_sdk::{Address, BytesN, Env, Symbol};
+use soroban_sdk::{panic_with_error, Address, BytesN, Env, Symbol};
 
 use crate::{
     assigned_aid::AssignedAid,
@@ -41,19 +41,25 @@ impl Aid {
 
     pub fn expect_save_on(&self, env: &Env) {
         self._expect_save_assigned_aid(env);
-        self._save_aid(env);
-        self._publish_event(env);
+        self._save(env);
     }
 
-    pub fn enough_for(&self, transfer_amount: i128) -> Result<(), Error> {
-        match transfer_amount <= self.amount() {
-            true => Ok(()),
-            false => Err(Error::NotEnoughAid),
+    pub fn expect_update_on(&self, env: &Env) {
+        self._update_assigned_aid(env);
+        self._save(env);
+    }
+
+    pub fn expect_amount(&self) -> i128 {
+        let amount = self.amount + self.new_amount;
+        match amount < 0 {
+            true => panic_with_error!(self.token.env(), Error::NotEnoughAid),
+            false => amount,
         }
     }
 
-    pub fn amount(&self) -> i128 {
-        self.amount + self.new_amount
+    fn _save(&self, env: &Env) {
+        self._save_aid(env);
+        self._publish_event(env);
     }
 
     fn _publish_event(&self, env: &Env) {
@@ -73,6 +79,12 @@ impl Aid {
             .set(&self._aid_key(), &self._aid_value());
     }
 
+    fn _update_assigned_aid(&self, env: &Env) {
+        AssignedAid::from(env, self.token.clone())
+            .add(self.new_amount)
+            .update_on(env);
+    }
+
     fn _expect_save_assigned_aid(&self, env: &Env) {
         AssignedAid::from(env, self.token.clone())
             .add(self.new_amount)
@@ -81,7 +93,7 @@ impl Aid {
 
     fn _aid_value(&self) -> AidValue {
         AidValue {
-            amount: self.amount(),
+            amount: self.expect_amount(),
             expiration: 0,
         }
     }

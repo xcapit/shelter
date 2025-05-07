@@ -42,7 +42,7 @@ impl Shelter {
     }
 
     pub fn aid_of(env: Env, recipient: BytesN<32>, token: Address) -> i128 {
-        Aid::from(&env, recipient, token).amount()
+        Aid::from(&env, recipient, token).expect_amount()
     }
 
     pub fn assigned_aid_of(env: Env, token: Address) -> i128 {
