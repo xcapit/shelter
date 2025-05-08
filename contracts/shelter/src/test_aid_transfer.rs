@@ -3,7 +3,7 @@ extern crate std;
 
 use soroban_sdk::{
     auth::{Context, ContractContext},
-    testutils::Address as _,
+    testutils::{Address as _, Ledger},
     vec, Address, Env, IntoVal, Symbol,
 };
 
@@ -37,15 +37,20 @@ fn test_total_aid_transfer() {
     let env = env_with_mock_auths();
     let tb = TestBucket::default(env.clone());
     tb.token.mint(&tb.shelter.address, &tb.amount);
-    tb.shelter
-        .bound_aid(&tb.recipient.public_key(), &tb.token.address(), &tb.amount);
+    tb.shelter.bound_aid(
+        &tb.recipient.public_key(),
+        &tb.token.address(),
+        &tb.amount,
+        &tb.expiration,
+    );
 
     _try_check_auth(&tb, tb.amount, &env).unwrap();
 
     assert_eq!(tb.shelter.assigned_aid_of(&tb.token.address()), 0);
     assert_eq!(
         tb.shelter
-            .aid_of(&tb.recipient.public_key(), &tb.token.address()),
+            .aid_of(&tb.recipient.public_key(), &tb.token.address())
+            .amount,
         0
     );
 }
@@ -56,9 +61,14 @@ fn test_partial_aid_transfer() {
     let tb = TestBucket::default(env.clone());
     let amount_after_transfer = 30;
     let amount_to_transfer = tb.amount - amount_after_transfer;
+
     tb.token.mint(&tb.shelter.address, &tb.amount);
-    tb.shelter
-        .bound_aid(&tb.recipient.public_key(), &tb.token.address(), &tb.amount);
+    tb.shelter.bound_aid(
+        &tb.recipient.public_key(),
+        &tb.token.address(),
+        &tb.amount,
+        &tb.expiration,
+    );
 
     _try_check_auth(&tb, amount_to_transfer, &env).unwrap();
 
@@ -68,7 +78,8 @@ fn test_partial_aid_transfer() {
     );
     assert_eq!(
         tb.shelter
-            .aid_of(&tb.recipient.public_key(), &tb.token.address()),
+            .aid_of(&tb.recipient.public_key(), &tb.token.address())
+            .amount,
         amount_after_transfer
     );
 }
@@ -83,6 +94,7 @@ fn test_not_enough_aid_transfer() {
         &tb.recipient.public_key(),
         &tb.token.address(),
         &amount_to_bound,
+        &tb.expiration,
     );
 
     assert_eq!(
@@ -95,5 +107,33 @@ fn test_not_enough_aid_transfer() {
     assert_eq!(
         &tb.shelter.assigned_aid_of(&tb.token.address()),
         &amount_to_bound
+    );
+}
+
+#[test]
+fn test_expired_aid_transfer() {
+    let env = env_with_mock_auths();
+    let tb = TestBucket::default(env.clone());
+    env.ledger().set_timestamp(tb.expiration + 1);
+    tb.token.mint(&tb.shelter.address, &tb.amount);
+    tb.shelter.bound_aid(
+        &tb.recipient.public_key(),
+        &tb.token.address(),
+        &tb.amount,
+        &tb.expiration,
+    );
+
+    assert_eq!(
+        _try_check_auth(&tb, tb.amount, &env)
+            .err()
+            .unwrap()
+            .unwrap(),
+        Error::ExpiredAid
+    );
+    assert_eq!(
+        tb.shelter
+            .aid_of(&tb.recipient.public_key(), &tb.token.address())
+            .amount,
+        tb.amount
     );
 }

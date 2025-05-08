@@ -14,7 +14,7 @@ pub struct AidDataKey {
 #[contracttype]
 pub struct AidValue {
     pub amount: i128,
-    pub expiration: i128,
+    pub expiration: u64,
 }
 
 #[derive(Clone)]
@@ -33,4 +33,5 @@ pub enum Error {
     InvalidAction = 2,
     NotEnoughAid = 3,
     InvalidContext = 4,
+    ExpiredAid = 5,
 }

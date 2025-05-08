@@ -10,37 +10,40 @@ pub struct Aid {
     token: Address,
     amount: i128,
     new_amount: i128,
+    expiration: u64,
 }
 
 impl Aid {
     pub fn from(env: &Env, recipient: BytesN<32>, token: Address) -> Self {
+        let aid_value = env
+            .storage()
+            .persistent()
+            .get::<_, AidValue>(&Aid::_aid_key_of(recipient.clone(), token.clone()))
+            .unwrap_or(AidValue {
+                amount: 0,
+                expiration: 0,
+            });
         Aid {
-            recipient: recipient.clone(),
-            token: token.clone(),
-            amount: env
-                .storage()
-                .persistent()
-                .get::<_, AidValue>(&Aid::_aid_key_of(recipient, token))
-                .unwrap_or(AidValue {
-                    amount: 0,
-                    expiration: 0,
-                })
-                .amount,
+            recipient,
+            token,
+            amount: aid_value.amount,
             new_amount: 0,
+            expiration: aid_value.expiration,
         }
     }
 
-    pub fn bound(&self, amount: i128) -> Self {
+    pub fn bound(&self, amount: i128, expiration: u64) -> Self {
         Aid {
             recipient: self.recipient.clone(),
             token: self.token.clone(),
             amount: self.amount,
             new_amount: amount,
+            expiration,
         }
     }
 
     pub fn unbound(&self) -> Self {
-        self.bound(-self.expect_amount())
+        self.bound(-self.expect_amount(), 0u64)
     }
 
     pub fn expect_save_on(&self, env: &Env) {
@@ -58,6 +61,24 @@ impl Aid {
         match amount < 0 {
             true => panic_with_error!(self.token.env(), Error::NotEnoughAid),
             false => amount,
+        }
+    }
+
+    pub fn expiration(&self) -> u64 {
+        self.expiration
+    }
+
+    pub fn validate_expiration(&self, current_timestamp: u64) -> Result<(), Error> {
+        match current_timestamp > self.expiration() {
+            true => Err(Error::ExpiredAid),
+            false => Ok(()),
+        }
+    }
+
+    pub fn value(&self) -> AidValue {
+        AidValue {
+            amount: self.expect_amount(),
+            expiration: self.expiration(),
         }
     }
 
@@ -79,7 +100,7 @@ impl Aid {
     fn _save_aid(&self, env: &Env) {
         env.storage()
             .persistent()
-            .set(&self._aid_key(), &self._aid_value());
+            .set(&self._aid_key(), &self.value());
     }
 
     fn _update_assigned_aid(&self, env: &Env) {
@@ -92,13 +113,6 @@ impl Aid {
         AssignedAid::from(env, self.token.clone())
             .add(self.new_amount)
             .expect_save_on(env);
-    }
-
-    fn _aid_value(&self) -> AidValue {
-        AidValue {
-            amount: self.expect_amount(),
-            expiration: 0,
-        }
     }
 
     fn _aid_key(&self) -> DataKey {
