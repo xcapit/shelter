@@ -30,13 +30,17 @@ impl Aid {
         }
     }
 
-    pub fn add(&self, amount: i128) -> Self {
+    pub fn bound(&self, amount: i128) -> Self {
         Aid {
             recipient: self.recipient.clone(),
             token: self.token.clone(),
             amount: self.amount,
             new_amount: amount,
         }
+    }
+
+    pub fn unbound(&self) -> Self {
+        self.bound(-self.expect_amount())
     }
 
     pub fn expect_save_on(&self, env: &Env) {
@@ -59,17 +63,16 @@ impl Aid {
 
     fn _save(&self, env: &Env) {
         self._save_aid(env);
-        self._publish_event(env);
+        match self.expect_amount() {
+            0 => self._publish_event(env, Symbol::new(env, "unbound_aid"), 0),
+            _ => self._publish_event(env, Symbol::new(env, "bound_aid"), self.new_amount),
+        }
     }
 
-    fn _publish_event(&self, env: &Env) {
+    fn _publish_event(&self, env: &Env, event_name: Symbol, amount: i128) {
         env.events().publish(
-            (
-                Symbol::new(env, "bound_aid"),
-                self.recipient.clone(),
-                self.token.clone(),
-            ),
-            self.new_amount,
+            (event_name, self.recipient.clone(), self.token.clone()),
+            amount,
         );
     }
 

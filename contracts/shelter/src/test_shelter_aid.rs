@@ -306,3 +306,48 @@ fn test_available_aid() {
         test_half_amount
     );
 }
+
+#[test]
+fn test_unbound_aid() {
+    let env = env_with_mock_auths();
+    let unbound_aid_symbol = Symbol::new(&env, "unbound_aid");
+    let tb = TestBucket::default(env.clone());
+    tb.token.mint(&tb.shelter.address, &tb.amount);
+    tb.shelter
+        .bound_aid(&tb.recipient.public_key(), &tb.token.address(), &tb.amount);
+
+    tb.shelter
+        .unbound_aid(&tb.recipient.public_key(), &tb.token.address());
+
+    assert_auth_fn(
+        &env,
+        tb.steward.clone(),
+        (
+            tb.shelter.address.clone(),
+            unbound_aid_symbol.clone(),
+            (&tb.recipient.public_key(), &tb.token.address()).into_val(&env),
+        ),
+    );
+    assert_eq!(
+        env.events().all(),
+        vec![
+            &env,
+            (
+                tb.shelter.address.clone(),
+                (
+                    unbound_aid_symbol,
+                    tb.recipient.public_key(),
+                    tb.token.address(),
+                )
+                    .into_val(&env),
+                0i128.into_val(&env)
+            ),
+        ]
+    );
+    assert_instance_ttl_extension(&env, &tb.shelter.address);
+    assert_eq!(
+        tb.shelter
+            .aid_of(&tb.recipient.public_key(), &tb.token.address()),
+        0
+    );
+}

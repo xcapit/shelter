@@ -35,8 +35,17 @@ impl Shelter {
     pub fn bound_aid(env: Env, recipient: BytesN<32>, token: Address, amount: i128) {
         Steward::from(&env).perform(|| {
             Aid::from(&env, recipient, token)
-                .add(amount)
+                .bound(amount)
                 .expect_save_on(&env)
+        });
+        Shelter::_extend_instance_ttl(&env);
+    }
+
+    pub fn unbound_aid(env: Env, recipient: BytesN<32>, token: Address) {
+        Steward::from(&env).perform(|| {
+            Aid::from(&env, recipient, token)
+                .unbound()
+                .expect_save_on(&env);
         });
         Shelter::_extend_instance_ttl(&env);
     }

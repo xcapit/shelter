@@ -25,7 +25,7 @@ impl Transfer {
         let result = self._validate();
         match result {
             Ok(_) => {
-                self.aid = self.aid.add(-self._amount_to_transfer());
+                self.aid = self.aid.bound(-self._amount_to_transfer());
                 self.aid.expect_update_on(env);
                 result
             }
