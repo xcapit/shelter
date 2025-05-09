@@ -17,20 +17,23 @@ impl Transfer {
         }
     }
 
-    fn _validate(&self) -> Result<(), Error> {
-        self._validate_action()
-    }
-
     pub fn validate(&mut self, env: &Env) -> Result<(), Error> {
-        let result = self._validate();
+        let result: Result<(), Error> = self._validate(env);
         match result {
             Ok(_) => {
-                self.aid = self.aid.bound(-self._amount_to_transfer());
+                self.aid = self
+                    .aid
+                    .bound(-self._amount_to_transfer(), self.aid.expiration());
                 self.aid.expect_update_on(env);
                 result
             }
             Err(_) => result,
         }
+    }
+
+    fn _validate(&self, env: &Env) -> Result<(), Error> {
+        self._validate_action()
+            .and_then(|_| self.aid.validate_expiration(env.ledger().timestamp()))
     }
 
     fn _validate_action(&self) -> Result<(), Error> {

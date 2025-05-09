@@ -4,7 +4,7 @@ use crate::{
     available_aid::AvailableAid,
     pass::Pass,
     steward::Steward,
-    storage_types::{Error, INSTANCE_BUMP_AMOUNT, INSTANCE_LIFETIME_THRESHOLD},
+    storage_types::{AidValue, Error, INSTANCE_BUMP_AMOUNT, INSTANCE_LIFETIME_THRESHOLD},
     transfer::Transfer,
 };
 use soroban_sdk::{
@@ -32,10 +32,16 @@ impl Shelter {
         Shelter::_extend_instance_ttl(&env);
     }
 
-    pub fn bound_aid(env: Env, recipient: BytesN<32>, token: Address, amount: i128) {
+    pub fn bound_aid(
+        env: Env,
+        recipient: BytesN<32>,
+        token: Address,
+        amount: i128,
+        expiration: u64,
+    ) {
         Steward::from(&env).perform(|| {
             Aid::from(&env, recipient, token)
-                .bound(amount)
+                .bound(amount, expiration)
                 .expect_save_on(&env)
         });
         Shelter::_extend_instance_ttl(&env);
@@ -50,8 +56,8 @@ impl Shelter {
         Shelter::_extend_instance_ttl(&env);
     }
 
-    pub fn aid_of(env: Env, recipient: BytesN<32>, token: Address) -> i128 {
-        Aid::from(&env, recipient, token).expect_amount()
+    pub fn aid_of(env: Env, recipient: BytesN<32>, token: Address) -> AidValue {
+        Aid::from(&env, recipient, token).value()
     }
 
     pub fn assigned_aid_of(env: Env, token: Address) -> i128 {

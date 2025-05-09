@@ -144,6 +144,7 @@ pub struct TestBucket<'a> {
     pub recipient: RandomKeypair,
     pub payload: BytesN<32>,
     pub steward: Address,
+    pub expiration: u64,
 }
 
 impl TestBucket<'_> {
@@ -156,6 +157,7 @@ impl TestBucket<'_> {
             recipient: RandomKeypair::new(env.clone()),
             payload: BytesN::random(&env),
             steward,
+            expiration: 100,
         }
     }
 

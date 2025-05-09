@@ -18,8 +18,12 @@ fn test_token_auth() {
     let [merch] = RandomAddresses::new(env.clone()).generate::<1>();
     let tb = TestBucket::default(env.clone());
     tb.token.mint(&tb.shelter.address, &tb.amount);
-    tb.shelter
-        .bound_aid(&tb.recipient.public_key(), &tb.token.address(), &tb.amount);
+    tb.shelter.bound_aid(
+        &tb.recipient.public_key(),
+        &tb.token.address(),
+        &tb.amount,
+        &tb.expiration,
+    );
 
     env.try_invoke_contract_check_auth::<Error>(
         &tb.shelter.address,
@@ -49,8 +53,12 @@ fn test_token_auth_with_wrong_sign() {
         signature: attacker.signature_of(&tb.payload),
     };
     tb.token.mint(&tb.shelter.address, &tb.amount);
-    tb.shelter
-        .bound_aid(&tb.recipient.public_key(), &tb.token.address(), &tb.amount);
+    tb.shelter.bound_aid(
+        &tb.recipient.public_key(),
+        &tb.token.address(),
+        &tb.amount,
+        &tb.expiration,
+    );
 
     env.try_invoke_contract_check_auth::<Error>(
         &tb.shelter.address,
