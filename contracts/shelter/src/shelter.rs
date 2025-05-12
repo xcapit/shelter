@@ -4,7 +4,7 @@ use crate::{
     available_aid::AvailableAid,
     pass::Pass,
     steward::Steward,
-    storage_types::{AidValue, Error, INSTANCE_BUMP_AMOUNT, INSTANCE_LIFETIME_THRESHOLD},
+    storage_types::{AidValue, DataKey, Error, INSTANCE_BUMP_AMOUNT, INSTANCE_LIFETIME_THRESHOLD},
     transfer::Transfer,
 };
 use soroban_sdk::{
@@ -21,6 +21,19 @@ pub struct Shelter;
 impl Shelter {
     pub fn __constructor(env: Env, steward: Address) {
         Steward::new(steward).save_on(&env);
+    }
+
+    pub fn init(env: Env, steward_key: BytesN<32>) {
+        Steward::from(&env).perform(|| {
+            env.storage()
+                .instance()
+                .set(&DataKey::StewardKey, &steward_key);
+        });
+        Shelter::_extend_instance_ttl(&env);
+    }
+
+    pub fn steward_key(env: Env) -> BytesN<32> {
+        env.storage().instance().get(&DataKey::StewardKey).unwrap()
     }
 
     pub fn steward(env: Env) -> Address {

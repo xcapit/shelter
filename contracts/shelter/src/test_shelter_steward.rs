@@ -1,18 +1,51 @@
 #![cfg(test)]
 extern crate std;
 
+use ed25519_dalek::ed25519::signature::SignerMut;
 use soroban_sdk::{
-    testutils::{Events, MockAuth, MockAuthInvoke},
-    vec, IntoVal, Symbol,
+    auth::{Context, ContractContext},
+    testutils::{Address as _, Events, MockAuth, MockAuthInvoke},
+    vec, Address, Env, IntoVal, Symbol,
 };
 
 use crate::{
+    pass::Pass,
+    storage_types::Error,
     testtools::{
         assert_auth_fn, assert_instance_ttl_extension, env_with_mock_auths, shelter_id,
-        RandomAddresses,
+        RandomAddresses, TestBucket,
     },
     ShelterClient,
 };
+
+fn _try_check_auth(
+    tb: &TestBucket,
+    amount: i128,
+    env: &Env,
+) -> Result<(), Result<Error, soroban_sdk::InvokeError>> {
+    env.try_invoke_contract_check_auth::<Error>(
+        &tb.shelter.address,
+        &tb.payload,
+        Pass {
+            public_key: tb.steward_key.clone(),
+            signature: tb
+                .steward_signing_key
+                .clone()
+                .sign(tb.payload.to_array().as_slice())
+                .to_bytes()
+                .into_val(env),
+        }
+        .into_val(env),
+        &vec![
+            env,
+            Context::Contract(ContractContext {
+                contract: tb.token.address().clone(),
+                fn_name: Symbol::new(env, "transfer"),
+                args: (&tb.shelter.address, Address::generate(env), amount).into_val(env),
+            }),
+        ],
+    )
+}
 
 #[test]
 fn test_steward_set_on_shelter_deployment() {
@@ -82,4 +115,49 @@ fn test_update_shelter_steward_unauthorized() {
     }]);
 
     shelter.update_steward(&new_steward);
+}
+
+#[test]
+fn test_init_shelter_steward() {
+    let env = env_with_mock_auths();
+    let init_symbol = Symbol::new(&env, "init");
+    let tb = TestBucket::default(env.clone());
+
+    tb.shelter.init(&tb.steward_key);
+
+    assert_auth_fn(
+        &env,
+        tb.steward.clone(),
+        (
+            tb.shelter.address.clone(),
+            init_symbol.clone(),
+            (&tb.steward_key,).into_val(&env),
+        ),
+    );
+    assert_eq!(&tb.steward_key, &tb.shelter.steward_key());
+    assert_instance_ttl_extension(&env, &tb.shelter.address);
+}
+
+#[test]
+fn test_transfer_available_aid() {
+    let env = env_with_mock_auths();
+    let tb = TestBucket::default(env.clone());
+    tb.token.mint(&tb.shelter.address, &(tb.amount * 2));
+    tb.shelter.init(&tb.steward_key);
+    tb.shelter.bound_aid(
+        &tb.recipient.public_key(),
+        &tb.token.address(),
+        &tb.amount,
+        &tb.expiration,
+    );
+    tb.shelter.bound_aid(
+        &tb.steward_key,
+        &tb.token.address(),
+        &tb.shelter.available_aid_of(&tb.token.address()),
+        &tb.expiration,
+    );
+
+    _try_check_auth(&tb, tb.amount, &env).unwrap();
+
+    assert_eq!(tb.shelter.assigned_aid_of(&tb.token.address()), 100);
 }
