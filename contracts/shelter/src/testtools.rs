@@ -5,6 +5,10 @@ use ed25519_dalek::Signer;
 use ed25519_dalek::SigningKey;
 use rand::rngs::OsRng;
 use soroban_sdk::testutils::BytesN as _;
+use soroban_sdk::xdr::AccountId;
+use soroban_sdk::xdr::PublicKey;
+use soroban_sdk::xdr::ScAddress;
+use soroban_sdk::TryFromVal;
 use soroban_sdk::{
     testutils::{storage::Instance, Address as _, AuthorizedFunction, AuthorizedInvocation},
     token::{StellarAssetClient, TokenClient},
@@ -67,6 +71,10 @@ impl RandomKeypair {
             .verifying_key()
             .to_bytes()
             .into_val(&self.env)
+    }
+
+    pub fn signing_key(&self) -> SigningKey {
+        self.signing_key.clone()
     }
 
     pub fn shlter_pass(&self, payload: &BytesN<32>) -> Val {
@@ -137,26 +145,37 @@ impl TestToken<'_> {
     }
 }
 
+pub fn address_from_signing_key(env: &Env, signing_key: &SigningKey) -> Address {
+    let public_key_bytes = signing_key.verifying_key().to_bytes(); // [u8; 32]
+    let account_id = AccountId(PublicKey::PublicKeyTypeEd25519(public_key_bytes.into()));
+    let sc_address = ScAddress::Account(account_id);
+    Address::try_from_val(env, &sc_address).unwrap()
+}
 pub struct TestBucket<'a> {
     pub amount: i128,
     pub token: TestToken<'a>,
     pub shelter: ShelterClient<'a>,
     pub recipient: RandomKeypair,
     pub payload: BytesN<32>,
+    pub steward_key: BytesN<32>,
+    pub steward_signing_key: SigningKey,
     pub steward: Address,
     pub expiration: u64,
 }
 
 impl TestBucket<'_> {
     pub fn new(env: Env, amount: i128) -> Self {
-        let [steward] = RandomAddresses::new(env.clone()).generate::<1>();
+        let steward = RandomKeypair::new(env.clone());
+        let steward_address = address_from_signing_key(&env, &steward.signing_key());
         Self {
             amount,
             token: TestToken::new(&env),
-            shelter: ShelterClient::new(&env, &shelter_id(&env, &steward)),
+            shelter: ShelterClient::new(&env, &shelter_id(&env, &steward_address)),
             recipient: RandomKeypair::new(env.clone()),
             payload: BytesN::random(&env),
-            steward,
+            steward: steward_address,
+            steward_key: steward.public_key(),
+            steward_signing_key: steward.signing_key(),
             expiration: 100,
         }
     }
