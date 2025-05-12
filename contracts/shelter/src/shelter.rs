@@ -2,6 +2,7 @@ use crate::{
     aid::Aid,
     assigned_aid::AssignedAid,
     available_aid::AvailableAid,
+    gate::Gate,
     pass::Pass,
     steward::Steward,
     storage_types::{AidValue, DataKey, Error, INSTANCE_BUMP_AMOUNT, INSTANCE_LIFETIME_THRESHOLD},
@@ -21,6 +22,7 @@ pub struct Shelter;
 impl Shelter {
     pub fn __constructor(env: Env, steward: Address) {
         Steward::new(steward).save_on(&env);
+        Gate::open().save_on(&env);
     }
 
     pub fn init(env: Env, steward_key: BytesN<32>) {
@@ -30,6 +32,10 @@ impl Shelter {
                 .set(&DataKey::StewardKey, &steward_key);
         });
         Shelter::_extend_instance_ttl(&env);
+    }
+
+    pub fn guard(env: Env) {
+        Steward::from(&env).perform(|| Gate::guard().save_on(&env));
     }
 
     pub fn steward_key(env: Env) -> BytesN<32> {
@@ -52,10 +58,12 @@ impl Shelter {
         amount: i128,
         expiration: u64,
     ) {
-        Steward::from(&env).perform(|| {
-            Aid::from(&env, recipient, token)
-                .bound(amount, expiration)
-                .expect_save_on(&env)
+        Gate::from(&env).expect_perform(&env, || {
+            Steward::from(&env).perform(|| {
+                Aid::from(&env, recipient, token)
+                    .bound(amount, expiration)
+                    .expect_save_on(&env)
+            })
         });
         Shelter::_extend_instance_ttl(&env);
     }
@@ -103,15 +111,19 @@ impl CustomAccountInterface for Shelter {
         signatures.verify(&env, signature_payload.clone());
         for context in auth_contexts.iter() {
             match context {
-                Context::Contract(contract_context) => Transfer::new(
-                    Aid::from(
-                        &env,
-                        signatures.public_key.clone(),
-                        contract_context.contract.clone(),
-                    ),
-                    contract_context,
-                )
-                .validate(&env),
+                Context::Contract(contract_context) => {
+                    Gate::from(&env).expect_perform(&env, || {
+                        Transfer::new(
+                            Aid::from(
+                                &env,
+                                signatures.public_key.clone(),
+                                contract_context.contract.clone(),
+                            ),
+                            contract_context,
+                        )
+                        .validate(&env)
+                    })
+                }
                 _ => Err(Error::InvalidContext),
             }?;
         }

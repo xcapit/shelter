@@ -1,36 +1,12 @@
 #![cfg(test)]
 extern crate std;
 
-use soroban_sdk::{
-    auth::{Context, ContractContext},
-    testutils::{Address as _, Ledger},
-    vec, Address, Env, IntoVal, Symbol,
-};
+use soroban_sdk::testutils::Ledger;
 
 use crate::{
     storage_types::Error,
     testtools::{env_with_mock_auths, TestBucket},
 };
-
-fn _try_check_auth(
-    tb: &TestBucket,
-    amount: i128,
-    env: &Env,
-) -> Result<(), Result<Error, soroban_sdk::InvokeError>> {
-    env.try_invoke_contract_check_auth::<Error>(
-        &tb.shelter.address,
-        &tb.payload,
-        tb.recipient.shlter_pass(&tb.payload),
-        &vec![
-            env,
-            Context::Contract(ContractContext {
-                contract: tb.token.address().clone(),
-                fn_name: Symbol::new(env, "transfer"),
-                args: (&tb.shelter.address, Address::generate(env), amount).into_val(env),
-            }),
-        ],
-    )
-}
 
 #[test]
 fn test_total_aid_transfer() {
@@ -44,7 +20,7 @@ fn test_total_aid_transfer() {
         &tb.expiration,
     );
 
-    _try_check_auth(&tb, tb.amount, &env).unwrap();
+    tb.try_check_auth(tb.amount, &env).unwrap();
 
     assert_eq!(tb.shelter.assigned_aid_of(&tb.token.address()), 0);
     assert_eq!(
@@ -70,7 +46,7 @@ fn test_partial_aid_transfer() {
         &tb.expiration,
     );
 
-    _try_check_auth(&tb, amount_to_transfer, &env).unwrap();
+    tb.try_check_auth(amount_to_transfer, &env).unwrap();
 
     assert_eq!(
         tb.shelter.assigned_aid_of(&tb.token.address()),
@@ -98,10 +74,7 @@ fn test_not_enough_aid_transfer() {
     );
 
     assert_eq!(
-        _try_check_auth(&tb, tb.amount, &env)
-            .err()
-            .unwrap()
-            .unwrap(),
+        tb.try_check_auth(tb.amount, &env).err().unwrap().unwrap(),
         Error::NotEnoughAid
     );
     assert_eq!(
@@ -124,10 +97,7 @@ fn test_expired_aid_transfer() {
     );
 
     assert_eq!(
-        _try_check_auth(&tb, tb.amount, &env)
-            .err()
-            .unwrap()
-            .unwrap(),
+        tb.try_check_auth(tb.amount, &env).err().unwrap().unwrap(),
         Error::ExpiredAid
     );
     assert_eq!(

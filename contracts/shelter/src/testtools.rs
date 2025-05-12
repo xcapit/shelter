@@ -5,17 +5,20 @@ use ed25519_dalek::Signer;
 use ed25519_dalek::SigningKey;
 use rand::rngs::OsRng;
 use soroban_sdk::testutils::BytesN as _;
+use soroban_sdk::vec;
 use soroban_sdk::xdr::AccountId;
 use soroban_sdk::xdr::PublicKey;
 use soroban_sdk::xdr::ScAddress;
 use soroban_sdk::TryFromVal;
 use soroban_sdk::{
+    auth::{Context, ContractContext},
     testutils::{storage::Instance, Address as _, AuthorizedFunction, AuthorizedInvocation},
     token::{StellarAssetClient, TokenClient},
     Address, BytesN, Env, IntoVal, Symbol, Val, Vec,
 };
 
 use crate::pass::Pass;
+use crate::storage_types::Error;
 use crate::{shelter::Shelter, storage_types::INSTANCE_BUMP_AMOUNT, ShelterClient};
 
 pub fn assert_instance_ttl_extension(env: &Env, shelter_address: &Address) {
@@ -77,7 +80,7 @@ impl RandomKeypair {
         self.signing_key.clone()
     }
 
-    pub fn shlter_pass(&self, payload: &BytesN<32>) -> Val {
+    pub fn shelter_pass(&self, payload: &BytesN<32>) -> Val {
         Pass {
             public_key: self.public_key(),
             signature: self
@@ -182,5 +185,25 @@ impl TestBucket<'_> {
 
     pub fn default(env: Env) -> Self {
         Self::new(env, 100)
+    }
+
+    pub fn try_check_auth(
+        &self,
+        amount: i128,
+        env: &Env,
+    ) -> Result<(), Result<Error, soroban_sdk::InvokeError>> {
+        env.try_invoke_contract_check_auth::<Error>(
+            &self.shelter.address,
+            &self.payload,
+            self.recipient.shelter_pass(&self.payload),
+            &vec![
+                env,
+                Context::Contract(ContractContext {
+                    contract: self.token.address().clone(),
+                    fn_name: Symbol::new(env, "transfer"),
+                    args: (&self.shelter.address, Address::generate(env), amount).into_val(env),
+                }),
+            ],
+        )
     }
 }
