@@ -37,4 +37,5 @@ pub enum Error {
     InvalidContext = 4,
     ExpiredAid = 5,
     ShelterGuarded = 6,
+    ShelterSealed = 7,
 }

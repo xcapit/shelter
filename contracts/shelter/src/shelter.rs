@@ -22,7 +22,7 @@ pub struct Shelter;
 impl Shelter {
     pub fn __constructor(env: Env, steward: Address) {
         Steward::new(steward).save_on(&env);
-        Gate::open().save_on(&env);
+        Gate::from(&env).open(&env);
     }
 
     pub fn init(env: Env, steward_key: BytesN<32>) {
@@ -34,8 +34,16 @@ impl Shelter {
         Shelter::_extend_instance_ttl(&env);
     }
 
+    pub fn open(env: Env) {
+        Steward::from(&env).perform(|| Gate::from(&env).open(&env));
+    }
+
     pub fn guard(env: Env) {
-        Steward::from(&env).perform(|| Gate::guard().save_on(&env));
+        Steward::from(&env).perform(|| Gate::from(&env).guard(&env));
+    }
+
+    pub fn seal(env: Env) {
+        Steward::from(&env).perform(|| Gate::from(&env).seal(&env));
     }
 
     pub fn steward_key(env: Env) -> BytesN<32> {
