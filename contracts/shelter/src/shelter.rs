@@ -5,7 +5,8 @@ use crate::{
     gate::Gate,
     pass::Pass,
     steward::Steward,
-    storage_types::{AidValue, DataKey, Error, INSTANCE_BUMP_AMOUNT, INSTANCE_LIFETIME_THRESHOLD},
+    steward_key::StewardKey,
+    storage_types::{AidValue, Error, INSTANCE_BUMP_AMOUNT, INSTANCE_LIFETIME_THRESHOLD},
     transfer::Transfer,
 };
 use soroban_sdk::{
@@ -27,27 +28,28 @@ impl Shelter {
 
     pub fn init(env: Env, steward_key: BytesN<32>) {
         Steward::from(&env).perform(|| {
-            env.storage()
-                .instance()
-                .set(&DataKey::StewardKey, &steward_key);
+            StewardKey::new(steward_key).save_on(&env);
         });
         Shelter::_extend_instance_ttl(&env);
     }
 
     pub fn open(env: Env) {
         Steward::from(&env).perform(|| Gate::from(&env).open(&env));
+        Shelter::_extend_instance_ttl(&env);
     }
 
     pub fn guard(env: Env) {
         Steward::from(&env).perform(|| Gate::from(&env).guard(&env));
+        Shelter::_extend_instance_ttl(&env);
     }
 
     pub fn seal(env: Env) {
         Steward::from(&env).perform(|| Gate::from(&env).seal(&env));
+        Shelter::_extend_instance_ttl(&env);
     }
 
     pub fn steward_key(env: Env) -> BytesN<32> {
-        env.storage().instance().get(&DataKey::StewardKey).unwrap()
+        StewardKey::from(&env).value()
     }
 
     pub fn steward(env: Env) -> Address {
@@ -120,17 +122,26 @@ impl CustomAccountInterface for Shelter {
         for context in auth_contexts.iter() {
             match context {
                 Context::Contract(contract_context) => {
-                    Gate::from(&env).expect_perform(&env, || {
-                        Transfer::new(
-                            Aid::from(
-                                &env,
-                                signatures.public_key.clone(),
-                                contract_context.contract.clone(),
-                            ),
-                            contract_context,
-                        )
-                        .validate(&env)
-                    })
+                    let gate = Gate::from(&env);
+                    match gate {
+                        Gate::Sealed => {
+                            match StewardKey::from(&env).equals(signatures.public_key.clone()) {
+                                true => Ok(()),
+                                false => Err(Error::ShelterSealed),
+                            }
+                        }
+                        _ => gate.expect_perform(&env, || {
+                            Transfer::new(
+                                Aid::from(
+                                    &env,
+                                    signatures.public_key.clone(),
+                                    contract_context.contract.clone(),
+                                ),
+                                contract_context,
+                            )
+                            .validate(&env)
+                        }),
+                    }
                 }
                 _ => Err(Error::InvalidContext),
             }?;
