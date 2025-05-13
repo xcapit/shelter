@@ -24,6 +24,7 @@ pub enum DataKey {
     AssignedAid(Address),
     Steward,
     StewardKey,
+    GateState,
 }
 
 #[contracterror]
@@ -35,4 +36,5 @@ pub enum Error {
     NotEnoughAid = 3,
     InvalidContext = 4,
     ExpiredAid = 5,
+    ShelterGuarded = 6,
 }

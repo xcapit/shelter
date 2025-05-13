@@ -28,7 +28,7 @@ fn test_token_auth() {
     env.try_invoke_contract_check_auth::<Error>(
         &tb.shelter.address,
         &tb.payload,
-        tb.recipient.shlter_pass(&tb.payload),
+        tb.recipient.shelter_pass(&tb.payload),
         &vec![
             &env,
             Context::Contract(ContractContext {
@@ -86,7 +86,7 @@ fn test_token_auth_with_wrong_function() {
         env.try_invoke_contract_check_auth::<Error>(
             &tb.shelter.address,
             &tb.payload,
-            tb.recipient.shlter_pass(&tb.payload),
+            tb.recipient.shelter_pass(&tb.payload),
             &vec![
                 &env,
                 Context::Contract(ContractContext {
@@ -112,7 +112,7 @@ fn test_token_auth_with_wrong_context() {
         env.try_invoke_contract_check_auth::<Error>(
             &tb.shelter.address,
             &tb.payload,
-            tb.recipient.shlter_pass(&tb.payload),
+            tb.recipient.shelter_pass(&tb.payload),
             &vec![
                 &env,
                 Context::CreateContractHostFn(CreateContractHostFnContext {
