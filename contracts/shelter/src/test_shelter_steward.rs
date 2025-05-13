@@ -161,3 +161,20 @@ fn test_transfer_available_aid() {
 
     assert_eq!(tb.shelter.assigned_aid_of(&tb.token.address()), 100);
 }
+
+#[test]
+fn test_withdraw_on_sealed_shelter() {
+    let env = env_with_mock_auths();
+    let tb = TestBucket::default(env.clone());
+    tb.token.mint(&tb.shelter.address, &tb.amount);
+    tb.shelter.init(&tb.steward_key);
+    tb.shelter.bound_aid(
+        &tb.recipient.public_key(),
+        &tb.token.address(),
+        &tb.amount,
+        &tb.expiration,
+    );
+    tb.shelter.seal();
+
+    assert_eq!(_try_check_auth(&tb, tb.amount, &env).unwrap(), ());
+}

@@ -7,6 +7,7 @@ mod gate;
 mod pass;
 mod shelter;
 mod steward;
+mod steward_key;
 mod storage_types;
 mod test_aid_transfer;
 mod test_gate;
