@@ -1,4 +1,4 @@
-use soroban_sdk::{contracttype, panic_with_error, Env};
+use soroban_sdk::{contracttype, panic_with_error, Env, Symbol};
 
 use crate::storage_types::{DataKey, Error};
 
@@ -27,7 +27,7 @@ impl Gate {
     }
 
     pub fn seal(&self, env: &Env) {
-        self._to(env, Gate::Sealed)
+        self._to(env, Gate::Sealed);
     }
 
     pub fn expect_perform<F, R>(&self, env: &Env, action: F) -> R
@@ -44,7 +44,11 @@ impl Gate {
     fn _to(&self, env: &Env, state: Gate) {
         match self {
             Gate::Sealed => panic_with_error!(env, Error::ShelterSealed),
-            _ => env.storage().instance().set(&DataKey::GateState, &state),
+            _ => {
+                env.storage().instance().set(&DataKey::GateState, &state);
+                env.events()
+                    .publish((Symbol::new(&env, "gate_changed"),), state);
+            }
         }
     }
 }
