@@ -1,6 +1,9 @@
 #![cfg(test)]
 
+use soroban_sdk::{testutils::Events, vec, IntoVal, Symbol};
+
 use crate::{
+    gate::Gate,
     storage_types::Error,
     testtools::{assert_instance_ttl_extension, env_with_mock_auths, TestBucket},
 };
@@ -109,9 +112,21 @@ fn test_panic_on_guard_when_sealed_shelter() {
 #[test]
 fn test_panic_on_open_when_sealed_shelter() {
     let env = env_with_mock_auths();
+    let seal_symbol = Symbol::new(&env, "gate_changed");
     let tb = TestBucket::default(env.clone());
     tb.shelter.seal();
 
+    assert_eq!(
+        env.events().all(),
+        vec![
+            &env,
+            (
+                tb.shelter.address.clone(),
+                (seal_symbol.clone(),).into_val(&env),
+                Gate::Sealed.into_val(&env)
+            )
+        ]
+    );
     assert_instance_ttl_extension(&env, &tb.shelter.address);
     assert_eq!(
         tb.shelter.try_open().err().unwrap().unwrap(),
@@ -123,18 +138,43 @@ fn test_panic_on_open_when_sealed_shelter() {
 fn test_open_when_guarded_shelter() {
     let env = env_with_mock_auths();
     let tb = TestBucket::default(env.clone());
+    let open_symbol = Symbol::new(&env, "gate_changed");
+
     tb.shelter.guard();
 
     assert_instance_ttl_extension(&env, &tb.shelter.address);
-    assert_eq!(tb.shelter.try_open().unwrap().unwrap(), ())
+    assert_eq!(tb.shelter.try_open().unwrap().unwrap(), ());
+    assert_eq!(
+        env.events().all(),
+        vec![
+            &env,
+            (
+                tb.shelter.address.clone(),
+                (open_symbol.clone(),).into_val(&env),
+                Gate::Open.into_val(&env)
+            )
+        ]
+    );
 }
 
 #[test]
 fn test_seal_when_guarded_shelter() {
     let env = env_with_mock_auths();
+    let guard_symbol = Symbol::new(&env, "gate_changed");
     let tb = TestBucket::default(env.clone());
     tb.shelter.guard();
 
+    assert_eq!(
+        env.events().all(),
+        vec![
+            &env,
+            (
+                tb.shelter.address.clone(),
+                (guard_symbol.clone(),).into_val(&env),
+                Gate::Guarded.into_val(&env)
+            )
+        ]
+    );
     assert_instance_ttl_extension(&env, &tb.shelter.address);
     assert_eq!(tb.shelter.try_seal().unwrap().unwrap(), ())
 }
