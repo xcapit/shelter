@@ -2,18 +2,18 @@ use soroban_sdk::{BytesN, Env};
 
 use crate::storage_types::DataKey;
 
-pub struct StewardKey {
+pub struct ReleaseKey {
     value: BytesN<32>,
 }
 
-impl StewardKey {
+impl ReleaseKey {
     pub fn new(key: BytesN<32>) -> Self {
-        StewardKey { value: key }
+        ReleaseKey { value: key }
     }
 
     pub fn from(env: &Env) -> Self {
-        StewardKey {
-            value: env.storage().instance().get(&DataKey::StewardKey).unwrap(),
+        ReleaseKey {
+            value: env.storage().instance().get(&DataKey::ReleaseKey).unwrap(),
         }
     }
 
@@ -28,6 +28,6 @@ impl StewardKey {
     pub fn save_on(&self, env: &Env) {
         env.storage()
             .instance()
-            .set(&DataKey::StewardKey, &self.value);
+            .set(&DataKey::ReleaseKey, &self.value);
     }
 }

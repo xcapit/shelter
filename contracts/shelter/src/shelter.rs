@@ -5,7 +5,7 @@ use crate::{
     gate::Gate,
     pass::Pass,
     steward::Steward,
-    steward_key::StewardKey,
+    steward_key::ReleaseKey,
     storage_types::{AidValue, Error, INSTANCE_BUMP_AMOUNT, INSTANCE_LIFETIME_THRESHOLD},
     transfer::Transfer,
 };
@@ -26,9 +26,9 @@ impl Shelter {
         Gate::from(&env).open(&env);
     }
 
-    pub fn init(env: Env, steward_key: BytesN<32>) {
+    pub fn update_release_key(env: Env, steward_key: BytesN<32>) {
         Steward::from(&env).perform(|| {
-            StewardKey::new(steward_key).save_on(&env);
+            ReleaseKey::new(steward_key).save_on(&env);
         });
         Shelter::_extend_instance_ttl(&env);
     }
@@ -49,7 +49,7 @@ impl Shelter {
     }
 
     pub fn steward_key(env: Env) -> BytesN<32> {
-        StewardKey::from(&env).value()
+        ReleaseKey::from(&env).value()
     }
 
     pub fn steward(env: Env) -> Address {
@@ -126,7 +126,7 @@ impl CustomAccountInterface for Shelter {
                     let gate = Gate::from(&env);
                     match gate {
                         Gate::Sealed => {
-                            match StewardKey::from(&env).equals(signatures.public_key.clone()) {
+                            match ReleaseKey::from(&env).equals(signatures.public_key.clone()) {
                                 true => Ok(()),
                                 false => Err(Error::ShelterSealed),
                             }

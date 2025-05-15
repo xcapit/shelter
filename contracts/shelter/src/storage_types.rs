@@ -23,7 +23,7 @@ pub enum DataKey {
     Aid(AidDataKey),
     AssignedAid(Address),
     Steward,
-    StewardKey,
+    ReleaseKey,
     GateState,
 }
 
