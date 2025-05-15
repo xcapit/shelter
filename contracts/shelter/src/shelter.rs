@@ -48,7 +48,7 @@ impl Shelter {
         Shelter::_extend_instance_ttl(&env);
     }
 
-    pub fn steward_key(env: Env) -> BytesN<32> {
+    pub fn release_key(env: Env) -> BytesN<32> {
         ReleaseKey::from(&env).value()
     }
 

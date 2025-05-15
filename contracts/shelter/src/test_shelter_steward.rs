@@ -134,7 +134,7 @@ fn test_shelter_update_release_key() {
             (&tb.steward_key,).into_val(&env),
         ),
     );
-    assert_eq!(&tb.steward_key, &tb.shelter.steward_key());
+    assert_eq!(&tb.steward_key, &tb.shelter.release_key());
     assert_instance_ttl_extension(&env, &tb.shelter.address);
 }
 
