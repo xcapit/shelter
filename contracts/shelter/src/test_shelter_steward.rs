@@ -118,12 +118,12 @@ fn test_update_shelter_steward_unauthorized() {
 }
 
 #[test]
-fn test_init_shelter_steward() {
+fn test_shelter_update_release_key() {
     let env = env_with_mock_auths();
-    let init_symbol = Symbol::new(&env, "init");
+    let init_symbol = Symbol::new(&env, "update_release_key");
     let tb = TestBucket::default(env.clone());
 
-    tb.shelter.init(&tb.steward_key);
+    tb.shelter.update_release_key(&tb.steward_key);
 
     assert_auth_fn(
         &env,
@@ -143,7 +143,7 @@ fn test_transfer_available_aid() {
     let env = env_with_mock_auths();
     let tb = TestBucket::default(env.clone());
     tb.token.mint(&tb.shelter.address, &(tb.amount * 2));
-    tb.shelter.init(&tb.steward_key);
+    tb.shelter.update_release_key(&tb.steward_key);
     tb.shelter.bound_aid(
         &tb.recipient.public_key(),
         &tb.token.address(),
@@ -167,7 +167,7 @@ fn test_withdraw_on_sealed_shelter() {
     let env = env_with_mock_auths();
     let tb = TestBucket::default(env.clone());
     tb.token.mint(&tb.shelter.address, &tb.amount);
-    tb.shelter.init(&tb.steward_key);
+    tb.shelter.update_release_key(&tb.steward_key);
     tb.shelter.bound_aid(
         &tb.recipient.public_key(),
         &tb.token.address(),

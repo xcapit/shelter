@@ -80,7 +80,7 @@ fn test_panic_on_transfer_with_sealed_shelter() {
     let env = env_with_mock_auths();
     let tb = TestBucket::default(env.clone());
     tb.token.mint(&tb.shelter.address, &tb.amount);
-    tb.shelter.init(&tb.steward_key);
+    tb.shelter.update_release_key(&tb.steward_key);
     tb.shelter.bound_aid(
         &tb.recipient.public_key(),
         &tb.token.address(),
