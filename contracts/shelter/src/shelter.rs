@@ -118,6 +118,7 @@ impl CustomAccountInterface for Shelter {
         signatures: Self::Signature,
         auth_contexts: Vec<Context>,
     ) -> Result<(), Error> {
+        Shelter::_extend_instance_ttl(&env);
         signatures.verify(&env, signature_payload.clone());
         for context in auth_contexts.iter() {
             match context {
