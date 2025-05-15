@@ -1,4 +1,4 @@
-# 🛖 Shelter
+![Shelter](./shelter_ascii.png)
 
 > ⚠️ **Work in Progress**  
 > Shelter is in active development. Many features are experimental or incomplete.  
