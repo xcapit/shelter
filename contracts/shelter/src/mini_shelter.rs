@@ -64,8 +64,6 @@ impl MiniShelter {
     }
 }
 
-
-
 #[contractimpl]
 impl CustomAccountInterface for MiniShelter {
     type Signature = Pass;
