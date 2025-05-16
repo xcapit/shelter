@@ -107,7 +107,7 @@ fn test_steward_set_on_shelter_deployment() {
     let env = env_with_mock_auths();
     let [steward] = RandomAddresses::new(env.clone()).generate::<1>();
     let recipient = RandomKeypair::new(env.clone());
-    let expiration_date = 100;
+    let expiration_date = 101;
     let mini_shelter = MiniShelterClient::new(
         &env,
         &mini_shelter_id(&env, &steward, recipient.public_key(), expiration_date),
@@ -126,4 +126,3 @@ fn test_steward_set_on_shelter_deployment() {
     assert_eq!(mini_shelter.expiration_date(), expiration_date);
     assert_eq!(mini_shelter.recipient(), recipient.public_key());
 }
-
