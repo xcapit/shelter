@@ -62,3 +62,50 @@ impl MiniShelter {
             .extend_ttl(INSTANCE_LIFETIME_THRESHOLD, INSTANCE_BUMP_AMOUNT);
     }
 }
+
+
+
+#[contractimpl]
+impl CustomAccountInterface for Shelter {
+    type Signature = Pass;
+    type Error = Error;
+
+    #[allow(non_snake_case)]
+    fn __check_auth(
+        env: Env,
+        signature_payload: Hash<32>,
+        signatures: Self::Signature,
+        auth_contexts: Vec<Context>,
+    ) -> Result<(), Error> {
+        Shelter::_extend_instance_ttl(&env);
+        signatures.verify(&env, signature_payload.clone());
+        for context in auth_contexts.iter() {
+            match context {
+                Context::Contract(contract_context) => {
+                    let gate = Gate::from(&env);
+                    match gate {
+                        Gate::Sealed => {
+                            match ReleaseKey::from(&env).equals(signatures.public_key.clone()) {
+                                true => Ok(()),
+                                false => Err(Error::ShelterSealed),
+                            }
+                        }
+                        _ => gate.expect_perform(&env, || {
+                            Transfer::new(
+                                Aid::from(
+                                    &env,
+                                    signatures.public_key.clone(),
+                                    contract_context.contract.clone(),
+                                ),
+                                contract_context,
+                            )
+                            .validate(&env)
+                        }),
+                    }
+                }
+                _ => Err(Error::InvalidContext),
+            }?;
+        }
+        Ok(())
+    }
+}
