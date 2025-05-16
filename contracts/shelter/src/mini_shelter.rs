@@ -37,7 +37,7 @@ impl MiniShelter {
         Steward::from(&env).perform(|| {
             ReleaseKey::new(steward_key).save_on(&env);
         });
-        Mini::_extend_instance_ttl(&env);
+        MiniShelter::_extend_instance_ttl(&env);
     }
 
     pub fn open(env: Env) {
