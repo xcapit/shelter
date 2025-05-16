@@ -10,7 +10,7 @@ impl Shelter {
     pub fn __constructor(env: Env, steward: Address, recipient: BytesN<32>, expiration_date: u64) {
         Steward::new(steward).save_on(&env);
         Gate::from(&env).open(&env);
-        env.storage().instance().set(DataKey::Recipient, recipient);
+        env.storage().instance().set(&DataKey::Recipient, &recipient);
     }
 
     pub fn steward(env: Env) -> Address {
