@@ -1,4 +1,4 @@
-use soroban_sdk::{contract, contractimpl, testutils::BytesN, Address, Env};
+use soroban_sdk::{contract, contractimpl, Address, Env};
 
 use crate::{gate::Gate, steward::Steward};
 
