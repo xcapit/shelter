@@ -24,7 +24,10 @@ impl MiniShelter {
 
     pub fn expiration_date(env: Env) -> u64 {
         // TODO: Implement
-        100
+        env.storage()
+            .instance()
+            .get(&DataKey::ExpirationDate)
+            .unwrap()
     }
 
     pub fn recipient(env: Env) -> BytesN<32> {
