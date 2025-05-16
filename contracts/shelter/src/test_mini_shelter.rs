@@ -106,7 +106,7 @@ fn test_steward_set_on_shelter_deployment() {
     let [steward] = RandomAddresses::new(env.clone()).generate::<1>();
     let recipient = RandomKeypair::new(env.clone());
     let expiration_date = 100;
-    let shelter = MiniShelterClient::new(
+    let mini_shelter = MiniShelterClient::new(
         &env,
         &mini_shelter_id(&env, &steward, recipient.public_key(), expiration_date),
     );
@@ -115,11 +115,13 @@ fn test_steward_set_on_shelter_deployment() {
         &env,
         steward.clone(),
         (
-            shelter.address.clone(),
+            mini_shelter.address.clone(),
             Symbol::new(&env, "__constructor"),
             (&steward, recipient.public_key(), expiration_date).into_val(&env),
         ),
     );
-    assert_eq!(shelter.steward(), steward);
+    assert_eq!(mini_shelter.steward(), steward);
+    assert_eq!(mini_shelter.recipient(), recipient);
+    assert_eq!(mini_shelter.expiration_date(), expiration_date);
 }
 
