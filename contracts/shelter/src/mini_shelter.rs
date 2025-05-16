@@ -1,5 +1,5 @@
    
-use soroban_sdk::{contract, contractimpl, Address, BytesN, Env, auth::{Context, CustomAccountInterface}, crypto::Hash };
+use soroban_sdk::{auth::{Context, CustomAccountInterface}, contract, contractimpl, crypto::Hash, Address, BytesN, Env, Vec };
 
 use crate::{available_aid::AvailableAid, gate::Gate, pass::Pass, steward::Steward, steward_key::ReleaseKey, storage_types::{DataKey, Error, INSTANCE_BUMP_AMOUNT, INSTANCE_LIFETIME_THRESHOLD}};
 
@@ -78,7 +78,7 @@ impl CustomAccountInterface for MiniShelter {
         signatures: Self::Signature,
         auth_contexts: Vec<Context>,
     ) -> Result<(), Error> {
-        Shelter::_extend_instance_ttl(&env);
+        MiniShelter::_extend_instance_ttl(&env);
         signatures.verify(&env, signature_payload.clone());
         for context in auth_contexts.iter() {
             match context {
