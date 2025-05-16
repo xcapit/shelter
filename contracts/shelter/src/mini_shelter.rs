@@ -23,7 +23,7 @@ impl MiniShelter {
     }
 
     pub fn recipient(env: Env) -> BytesN<32> {
-        env.storage().instance().get(&DataKey::Recipient);
+        env.storage().instance().get(&DataKey::Recipient)
     }
 
     // pub fn init(env: Env, steward_key: BytesN<32>) {
