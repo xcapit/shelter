@@ -40,4 +40,5 @@ pub enum Error {
     ExpiredAid = 5,
     ShelterGuarded = 6,
     ShelterSealed = 7,
+    InvalidRecipient = 8
 }
