@@ -90,15 +90,16 @@ impl CustomAccountInterface for MiniShelter {
                             }
                         }
                         _ => gate.expect_perform(&env, || {
-                            Transfer::new(
-                                Aid::from(
-                                    &env,
-                                    signatures.public_key.clone(),
-                                    contract_context.contract.clone(),
-                                ),
-                                contract_context,
-                            )
-                            .validate(&env)
+                            let recipient = env.storage().instance().get(&DataKey::Recipient).unwrap();
+                            // Transfer::new(
+                            //     Aid::from(
+                            //         &env,
+                            //         signatures.public_key.clone(),
+                            //         contract_context.contract.clone(),
+                            //     ),
+                            //     contract_context,
+                            // )
+                            // .validate(&env)
                         }),
                     }
                 }
