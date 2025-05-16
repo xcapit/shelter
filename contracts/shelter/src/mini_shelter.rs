@@ -53,7 +53,7 @@ impl MiniShelter {
     }
 
     pub fn aid_of(env: Env, token: Address) -> i128 {
-        AvailableAid::from(&env, token).amount()
+        AvailableAid::from(&env, &token).amount()
     }
 
     fn _extend_instance_ttl(env: &Env) {
