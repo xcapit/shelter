@@ -1,5 +1,5 @@
    
-use soroban_sdk::{contract, contractimpl, Address, BytesN, Env, auth::{Context, CustomAccountInterface} };
+use soroban_sdk::{contract, contractimpl, Address, BytesN, Env, auth::{Context, CustomAccountInterface}, crypto::Hash };
 
 use crate::{available_aid::AvailableAid, gate::Gate, pass::Pass, steward::Steward, steward_key::ReleaseKey, storage_types::{DataKey, Error, INSTANCE_BUMP_AMOUNT, INSTANCE_LIFETIME_THRESHOLD}};
 
