@@ -17,7 +17,7 @@ impl Shelter {
     }
 
     pub fn expiration_date(env: Env) -> u64 {
-        // TODO: 
+        // TODO: Implement
         100
     }
 
