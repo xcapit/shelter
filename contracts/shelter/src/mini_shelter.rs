@@ -1,4 +1,4 @@
-use soroban_sdk::{contract, contractimpl, Address, Env};
+use soroban_sdk::{contract, contractimpl, testutils::BytesN, Address, Env};
 
 use crate::{gate::Gate, steward::Steward};
 
@@ -7,7 +7,7 @@ pub struct Shelter;
 
 #[contractimpl]
 impl Shelter {
-    pub fn __constructor(env: Env, steward: Address) {
+    pub fn __constructor(env: Env, steward: Address, recipient: BytesN<32>, expiration_date: u64) {
         Steward::new(steward).save_on(&env);
         Gate::from(&env).open(&env);
     }
