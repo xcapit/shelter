@@ -122,7 +122,7 @@ fn test_steward_set_on_shelter_deployment() {
         ),
     );
     assert_eq!(mini_shelter.steward(), steward);
-    assert_eq!(mini_shelter.recipient(), recipient);
     assert_eq!(mini_shelter.expiration_date(), expiration_date);
+    assert_eq!(mini_shelter.recipient(), recipient);
 }
 
