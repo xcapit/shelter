@@ -3,7 +3,10 @@ extern crate std;
 use ed25519_dalek::Signer;
 use ed25519_dalek::SigningKey;
 use rand::rngs::OsRng;
-use soroban_sdk::{testutils::{Address as _, AuthorizedFunction, AuthorizedInvocation}, Address, BytesN, Env, IntoVal, Symbol, Val, Vec};
+use soroban_sdk::{
+    testutils::{Address as _, AuthorizedFunction, AuthorizedInvocation},
+    Address, BytesN, Env, IntoVal, Symbol, Val, Vec,
+};
 
 use crate::pass::Pass;
 
@@ -32,10 +35,14 @@ pub fn env_with_mock_auths() -> Env {
     env
 }
 
-pub fn mini_shelter_id(env: &Env, steward: &Address, recipient: BytesN<32>, expiration_date: u64) -> Address {
+pub fn mini_shelter_id(
+    env: &Env,
+    steward: &Address,
+    recipient: BytesN<32>,
+    expiration_date: u64,
+) -> Address {
     env.register(MiniShelter, (steward, recipient, expiration_date))
 }
-
 
 pub fn assert_auth_fn(env: &Env, address: Address, contract_info: (Address, Symbol, Vec<Val>)) {
     assert_eq!(
@@ -93,11 +100,11 @@ impl RandomKeypair {
     }
 }
 
-
 #[test]
 fn test_steward_set_on_shelter_deployment() {
     let env = env_with_mock_auths();
     let [steward] = RandomAddresses::new(env.clone()).generate::<1>();
+    let recipient = RandomKeypair::new(env.clone());
     let shelter = MiniShelterClient::new(&env, &mini_shelter_id(&env, &steward));
 
     assert_auth_fn(
@@ -111,3 +118,4 @@ fn test_steward_set_on_shelter_deployment() {
     );
     assert_eq!(shelter.steward(), steward);
 }
+
