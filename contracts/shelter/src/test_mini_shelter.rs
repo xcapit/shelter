@@ -8,6 +8,7 @@ use soroban_sdk::{
     Address, BytesN, Env, IntoVal, Symbol, Val, Vec,
 };
 
+use crate::mini_shelter::MiniShelter;
 use crate::mini_shelter::MiniShelterClient;
 use crate::pass::Pass;
 
