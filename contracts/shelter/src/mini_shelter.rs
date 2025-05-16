@@ -12,6 +12,15 @@ impl Shelter {
         Gate::from(&env).open(&env);
     }
 
+    pub fn steward(env: Env) -> Address {
+        Steward::from(&env).address()
+    }
+
+    pub fn expiration_date(env: Env) -> u64 {
+        // TODO: 
+        100
+    }
+
     // pub fn init(env: Env, steward_key: BytesN<32>) {
     //     Steward::from(&env).perform(|| {
     //         StewardKey::new(steward_key).save_on(&env);
@@ -38,9 +47,7 @@ impl Shelter {
     //     StewardKey::from(&env).value()
     // }
     //
-    pub fn steward(env: Env) -> Address {
-        Steward::from(&env).address()
-    }
+
     //
     // pub fn update_steward(env: Env, new_steward: Address) {
     //     Steward::from(&env).update_on(&env, &new_steward);
