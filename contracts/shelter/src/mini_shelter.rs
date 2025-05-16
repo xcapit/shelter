@@ -52,9 +52,9 @@ impl MiniShelter {
         Steward::from(&env).perform(|| Gate::from(&env).seal(&env));
     }
 
-    // pub fn assigned_aid_of(env: Env, token: Address) -> i128 {
-    //     AssignedAid::from(&env, token).amount()
-    // }
+    pub fn assigned_aid_of(env: Env, token: Address) -> i128 {
+        AssignedAid::from(&env, token).amount()
+    }
 
     fn _extend_instance_ttl(env: &Env) {
         env.storage()
