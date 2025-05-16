@@ -33,13 +33,13 @@ impl MiniShelter {
         env.storage().instance().get(&DataKey::Recipient).unwrap()
     }
 
-    // pub fn init(env: Env, steward_key: BytesN<32>) {
-    //     Steward::from(&env).perform(|| {
-    //         StewardKey::new(steward_key).save_on(&env);
-    //     });
-    //     Shelter::_extend_instance_ttl(&env);
-    // }
-    //
+     pub fn update_release_key(env: Env, steward_key: BytesN<32>) {
+        Steward::from(&env).perform(|| {
+            ReleaseKey::new(steward_key).save_on(&env);
+        });
+        Shelter::_extend_instance_ttl(&env);
+    }
+
     pub fn open(env: Env) {
         Steward::from(&env).perform(|| Gate::from(&env).open(&env));
     }
