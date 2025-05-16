@@ -3,10 +3,10 @@ use soroban_sdk::{contract, contractimpl, Address, BytesN, Env};
 use crate::{gate::Gate, steward::Steward, storage_types::DataKey};
 
 #[contract]
-pub struct Shelter;
+pub struct MiniShelter;
 
 #[contractimpl]
-impl Shelter {
+impl MiniShelter {
     pub fn __constructor(env: Env, steward: Address, recipient: BytesN<32>, expiration_date: u64) {
         Steward::new(steward).save_on(&env);
         Gate::from(&env).open(&env);
