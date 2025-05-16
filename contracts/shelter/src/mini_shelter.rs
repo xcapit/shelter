@@ -38,9 +38,9 @@ impl Shelter {
     //     StewardKey::from(&env).value()
     // }
     //
-    // pub fn steward(env: Env) -> Address {
-    //     Steward::from(&env).address()
-    // }
+    pub fn steward(env: Env) -> Address {
+        Steward::from(&env).address()
+    }
     //
     // pub fn update_steward(env: Env, new_steward: Address) {
     //     Steward::from(&env).update_on(&env, &new_steward);
