@@ -1,7 +1,7 @@
    
 use soroban_sdk::{auth::{Context, CustomAccountInterface}, contract, contractimpl, crypto::Hash, Address, BytesN, Env, Vec };
 
-use crate::{available_aid::AvailableAid, gate::Gate, pass::Pass, steward::Steward, steward_key::ReleaseKey, storage_types::{DataKey, Error, INSTANCE_BUMP_AMOUNT, INSTANCE_LIFETIME_THRESHOLD}};
+use crate::{aid::Aid, available_aid::AvailableAid, gate::Gate, pass::Pass, steward::Steward, steward_key::ReleaseKey, storage_types::{DataKey, Error, INSTANCE_BUMP_AMOUNT, INSTANCE_LIFETIME_THRESHOLD}, transfer::Transfer};
 
 #[contract]
 pub struct MiniShelter;
