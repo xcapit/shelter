@@ -67,7 +67,7 @@ impl MiniShelter {
 
 
 #[contractimpl]
-impl CustomAccountInterface for Shelter {
+impl CustomAccountInterface for MiniShelter {
     type Signature = Pass;
     type Error = Error;
 
