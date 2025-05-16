@@ -95,15 +95,6 @@ impl CustomAccountInterface for MiniShelter {
                                 true => Ok(()),
                                 false => Err(Error::InvalidRecipient)
                             }
-                            // Transfer::new(
-                            //     Aid::from(
-                            //         &env,
-                            //         signatures.public_key.clone(),
-                            //         contract_context.contract.clone(),
-                            //     ),
-                            //     contract_context,
-                            // )
-                            // .validate(&env)
                         }),
                     }
                 }
