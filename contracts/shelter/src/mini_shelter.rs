@@ -90,7 +90,7 @@ impl CustomAccountInterface for MiniShelter {
                             }
                         }
                         _ => gate.expect_perform(&env, || {
-                            let recipient = env.storage().instance().get(&DataKey::Recipient).unwrap();
+                            let recipient = env.storage().instance().get::<_, BytesN<32>>(&DataKey::Recipient).unwrap();
                             match recipient == signatures.public_key.clone() {
                                 true => Ok(()),
                                 false => Err(Error::InvalidRecipient)
