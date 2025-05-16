@@ -1,6 +1,6 @@
 use soroban_sdk::{contract, contractimpl, Address, BytesN, Env};
 
-use crate::{assigned_aid::AssignedAid, gate::Gate, steward::Steward, storage_types::{DataKey, INSTANCE_BUMP_AMOUNT, INSTANCE_LIFETIME_THRESHOLD}};
+use crate::{assigned_aid::AssignedAid, available_aid::AvailableAid, gate::Gate, steward::Steward, storage_types::{DataKey, INSTANCE_BUMP_AMOUNT, INSTANCE_LIFETIME_THRESHOLD}};
 
 #[contract]
 pub struct MiniShelter;
@@ -52,8 +52,8 @@ impl MiniShelter {
         Steward::from(&env).perform(|| Gate::from(&env).seal(&env));
     }
 
-    pub fn assigned_aid_of(env: Env, token: Address) -> i128 {
-        AssignedAid::from(&env, token).amount()
+    pub fn aid_of(env: Env, token: Address) -> i128 {
+        AvailableAid::from(&env, token).amount()
     }
 
     fn _extend_instance_ttl(env: &Env) {
