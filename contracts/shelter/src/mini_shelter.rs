@@ -40,21 +40,18 @@ impl MiniShelter {
     //     Shelter::_extend_instance_ttl(&env);
     // }
     //
-    // pub fn open(env: Env) {
-    //     Steward::from(&env).perform(|| Gate::from(&env).open(&env));
-    //     Shelter::_extend_instance_ttl(&env);
-    // }
-    //
-    // pub fn guard(env: Env) {
-    //     Steward::from(&env).perform(|| Gate::from(&env).guard(&env));
-    //     Shelter::_extend_instance_ttl(&env);
-    // }
-    //
-    // pub fn seal(env: Env) {
-    //     Steward::from(&env).perform(|| Gate::from(&env).seal(&env));
-    //     Shelter::_extend_instance_ttl(&env);
-    // }
-    //
+    pub fn open(env: Env) {
+        Steward::from(&env).perform(|| Gate::from(&env).open(&env));
+    }
+
+    pub fn guard(env: Env) {
+        Steward::from(&env).perform(|| Gate::from(&env).guard(&env));
+    }
+
+    pub fn seal(env: Env) {
+        Steward::from(&env).perform(|| Gate::from(&env).seal(&env));
+    }
+
     // pub fn steward_key(env: Env) -> BytesN<32> {
     //     StewardKey::from(&env).value()
     // }
