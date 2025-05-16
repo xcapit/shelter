@@ -25,7 +25,8 @@ pub enum DataKey {
     Steward,
     ReleaseKey,
     GateState,
-    Recipient
+    Recipient,
+    ExpirationDate
 }
 
 #[contracterror]
