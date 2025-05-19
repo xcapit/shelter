@@ -1,4 +1,5 @@
 export STELLAR_NETWORK?=testnet
+export STELLAR_ACCOUNT?=steward
 
 default: build
 
@@ -11,8 +12,13 @@ coverage: build
 	cargo llvm-cov test --html --open
 
 build:
+	rm -rf target/wasm32v1-none/
 	stellar contract build
 	@ls -l target/wasm32v1-none/release/*.wasm
+	stellar contract optimize --wasm target/wasm32v1-none/release/shelter.wasm
+
+upload:
+	stellar contract upload --wasm target/wasm32v1-none/release/shelter.optimized.wasm --source $(STELLAR_ACCOUNT)
 
 fmt:
 	cargo fmt --all

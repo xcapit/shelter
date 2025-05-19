@@ -1,0 +1,44 @@
+{
+  "name": "shelter",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/index.ts",
+  "types": "types/index.d.ts",
+  "type": "module",
+  "scripts": {
+    "build": "pnpm run build:sac && pnpm run build:shelter && tsc",
+    "build:sac": "pnpm --filter=sac-sdk run build",
+    "build:shelter": "pnpm --filter=shelter-sdk run build",
+    "test:base": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
+    "test": "pnpm run test:base",
+    "test:watch": "pnpm run test:base --watch",
+    "test:coverage": "pnpm run test:base --coverage",
+    "test:e2e": "pnpm run test:base --config jest.config.e2e.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "AGPL-3.0",
+  "packageManager": "pnpm@10.11.0",
+  "dependencies": {
+    "@stellar/stellar-sdk": "^13.3.0",
+    "sac-sdk": "workspace:*",
+    "shelter-sdk": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.12",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.1.2",
+    "ts-node-dev": "^2.0.0",
+    "@types/node": "^22.15.3",
+    "typescript": "^5.8.3",
+    "@stellar/typescript-wallet-sdk": "^1.9.0"
+  },
+  "workspaces": [
+    "packages/*"
+  ],
+  "pnpm": {
+    "overrides": {
+      "@stellar/stellar-sdk": "$@stellar/stellar-sdk"
+    }
+  }
+}
