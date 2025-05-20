@@ -1,23 +1,41 @@
 import type { AssembledTransaction } from "@stellar/stellar-sdk/contract";
-import { Client } from "shelter-sdk";
+import { DeployedShelter } from "../deployed-shelter/deployed-shelter";
+import { Client, Keypair, Networks } from "shelter-sdk";
+import type { Rpc } from "../rpc/rpc.interface";
 
 export class Shelter {
   constructor(
-    private readonly _steward: string,
-    private readonly _rpcUrl: string,
+    private readonly _steward: Keypair,
+    private readonly _rpc: Rpc,
     private readonly _wasm: Buffer | string,
-    private readonly _networkPassphrase: string,
+    private readonly _networkPassphrase: Networks,
     private readonly _deployFn: typeof Client.deploy = Client.deploy
   ) {}
 
-  async deploy(): Promise<AssembledTransaction<Client>> {
-    return await this._deployFn(
-      { steward: this._steward },
-      {
-        wasmHash: this._wasm,
+  async deploy(): Promise<DeployedShelter> {
+    return new DeployedShelter(
+      this._steward,
+      new Client({
+        contractId: await this._txHash(
+          await this._deployFn(
+            { steward: this._steward.publicKey() },
+            {
+              wasmHash: this._wasm,
+              networkPassphrase: this._networkPassphrase,
+              rpcUrl: this._rpc.url(),
+              publicKey: this._steward.publicKey(),
+            }
+          )
+        ),
         networkPassphrase: this._networkPassphrase,
-        rpcUrl: this._rpcUrl,
-      }
+        rpcUrl: this._rpc.url(),
+      })
     );
+  }
+
+  private async _txHash(rawTx: AssembledTransaction<Client>): Promise<string> {
+    const shelterDeployTx = rawTx.built!;
+    shelterDeployTx.sign(this._steward);
+    return (await this._rpc.server().sendTransaction(shelterDeployTx)).hash;
   }
 }

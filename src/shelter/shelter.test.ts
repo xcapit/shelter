@@ -1,30 +1,33 @@
-import { Client } from "shelter-sdk";
+import { Client, Keypair, Networks } from "shelter-sdk";
 import { Shelter } from "./shelter";
+import { FakeRpc } from "../rpc/fake/fake-rpc";
 
 describe("Shelter", () => {
-  const rpcUrl = "anRpcUrl";
-  const networkPassphrase = "aNetworkPassphrase";
-  const steward = "aSteward";
+  const networkPassphrase = Networks.TESTNET;
+  const steward = Keypair.random();
   const wasmHash = "aWasmHash";
   const deployFn = () => {
-    return Promise.resolve("aDeployedHash");
+    return {
+      built: { sign: () => {} },
+    };
   };
 
   test("new", () => {
     expect(
-      new Shelter(steward, rpcUrl, wasmHash, networkPassphrase)
+      new Shelter(steward, new FakeRpc(), wasmHash, networkPassphrase)
     ).toBeTruthy();
   });
 
+  // TODO: Se puede mejorar el assert de este test? Capaz hacerle un .steward al DeployedShelter o algo?
   test("deploy", async () => {
     expect(
       await new Shelter(
         steward,
-        rpcUrl,
+        new FakeRpc(),
         wasmHash,
         networkPassphrase,
         deployFn as unknown as typeof Client.deploy
       ).deploy()
-    ).toEqual("aDeployedHash");
+    ).toBeTruthy();
   });
 });
