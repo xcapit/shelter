@@ -1,5 +1,5 @@
 import type { AssembledTransaction } from "@stellar/stellar-sdk/contract";
-import { Keypair } from "shelter-sdk";
+import { Client, Keypair } from "shelter-sdk";
 
 export class FakeClient {
   constructor(
@@ -9,7 +9,7 @@ export class FakeClient {
   public static deploy() {
     return {
       built: { sign: () => {} },
-    };
+    } as unknown as AssembledTransaction<Client>;
   }
 
   async steward(): Promise<AssembledTransaction<string>> {
