@@ -1,4 +1,4 @@
-import { Client, Keypair } from "shelter-sdk";
+import { Keypair } from "shelter-sdk";
 import { DeployedShelter } from "./deployed-shelter";
 import { FakeClient } from "../shelter/shelter.test";
 
