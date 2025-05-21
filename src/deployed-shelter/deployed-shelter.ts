@@ -7,6 +7,6 @@ export class DeployedShelter {
   ) {}
 
   async stewardId(): Promise<string> {
-    return await this._client.steward().publicKey();
+    return await this._client.steward();
   }
 }
