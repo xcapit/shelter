@@ -2,7 +2,7 @@ import { Client, Keypair, Networks } from "shelter-sdk";
 import { Shelter } from "./shelter";
 import { FakeRpc } from "../rpc/fake/fake-rpc";
 
-class FakeClient {
+export class FakeClient {
   constructor(private readonly _options: any) {}
   public static deploy() {
     return {
