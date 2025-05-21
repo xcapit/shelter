@@ -10,10 +10,10 @@
     "build": "pnpm run build:sac && pnpm run build:shelter && tsc",
     "build:sac": "pnpm --filter=sac-sdk run build",
     "build:shelter": "pnpm --filter=shelter-sdk run build",
-    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
-    "test:watch": "node --experimental-vm-modules node_modules/jest/bin/jest.js --watch",
-    "test:coverage": "node --experimental-vm-modules node_modules/jest/bin/jest.js --coverage",
-    "test:e2e": "npm run test:base -- --config jest.config.e2e.js"
+    "test": "pnpm run test:base",
+    "test:watch": "pnpm run test:base --watch",
+    "test:coverage": "pnpm run test:base --coverage",
+    "test:e2e": "pnpm run test:base -- --config jest.config.e2e.js"
   },
   "keywords": [],
   "author": "",
