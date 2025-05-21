@@ -2,6 +2,9 @@ import { Client, Keypair, Networks } from "shelter-sdk";
 import { Shelter } from "./shelter";
 import { FakeRpc } from "../rpc/fake/fake-rpc";
 
+class FakeClient {
+  constructor(private readonly _options: any) {}
+}
 describe("Shelter", () => {
   const networkPassphrase = Networks.TESTNET;
   const steward = Keypair.random();
@@ -11,6 +14,7 @@ describe("Shelter", () => {
       built: { sign: () => {} },
     };
   };
+  const client;
 
   test("new", () => {
     expect(
