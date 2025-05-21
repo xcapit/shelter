@@ -4,13 +4,13 @@ import { FakeClient } from "../shelter/shelter.test";
 
 describe("DeployedShelter", () => {
   const steward = Keypair.random();
-  const client = new FakeClient({})
+  const client = new FakeClient({}, steward);
   let deployedShelter: DeployedShelter;
 
-  beforeAll(()=>{
-    deployedShelter = new DeployedShelter(steward, client)
-  })
-  
+  beforeAll(() => {
+    deployedShelter = new DeployedShelter(steward, client);
+  });
+
   test("new", () => {
     expect(new DeployedShelter(steward, client)).toBeTruthy();
   });
@@ -18,5 +18,4 @@ describe("DeployedShelter", () => {
   test("id", async () => {
     expect(await deployedShelter.stewardId()).toEqual(steward.publicKey());
   });
-
 });
