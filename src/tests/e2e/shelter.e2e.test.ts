@@ -3,7 +3,7 @@ import { Shelter } from "../../shelter/shelter";
 import { DefaultRpc } from "../../rpc/default/default-rpc";
 import { walletSdk } from "@stellar/typescript-wallet-sdk";
 
-describe("e2e", () => {
+describe("Shelter", () => {
   const _randomKeyPair = async (): Promise<Keypair> => {
     const stellar = walletSdk.Wallet.TestNet().stellar();
     const account = stellar.account().createKeypair();
