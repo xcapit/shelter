@@ -2,6 +2,7 @@ import type { AssembledTransaction } from "@stellar/stellar-sdk/contract";
 import { DeployedShelter } from "../deployed-shelter/deployed-shelter";
 import { Client, Keypair, Networks } from "shelter-sdk";
 import type { Rpc } from "../rpc/rpc.interface";
+import type { FakeClient } from "../fake-client/fake-client";
 
 export class Shelter {
   constructor(
@@ -9,7 +10,7 @@ export class Shelter {
     private readonly _rpc: Rpc,
     private readonly _wasm: Buffer | string,
     private readonly _networkPassphrase: Networks,
-    private readonly _client: any = Client
+    private readonly _client: typeof Client | FakeClient = Client
   ) {}
 
   async deploy(): Promise<DeployedShelter> {
