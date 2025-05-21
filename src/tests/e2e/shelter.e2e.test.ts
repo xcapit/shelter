@@ -23,6 +23,8 @@ describe("Shelter", () => {
       Networks.TESTNET
     );
 
-    expect(await shelter.deploy()).toBeTruthy();
+    expect(await (await shelter.deploy()).stewardId()).toEqual(
+      steward.publicKey()
+    );
   });
 });
