@@ -1,5 +1,5 @@
 import type { AssembledTransaction } from "@stellar/stellar-sdk/contract";
-import type { Keypair } from "shelter-sdk";
+import { Keypair } from "shelter-sdk";
 
 export class FakeClient {
   constructor(
