@@ -10,7 +10,7 @@ export class Shelter {
     private readonly _rpc: Rpc,
     private readonly _wasm: Buffer | string,
     private readonly _networkPassphrase: Networks,
-    private readonly _client: typeof Client | FakeClient = Client
+    private readonly _client: typeof Client | typeof FakeClient = Client
   ) {}
 
   async deploy(): Promise<DeployedShelter> {
