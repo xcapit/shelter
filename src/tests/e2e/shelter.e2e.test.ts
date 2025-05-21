@@ -11,7 +11,7 @@ describe("e2e", () => {
     return Keypair.fromSecret(account.secretKey);
   };
 
-  test("aoeu", async () => {
+  test("shelter deploy", async () => {
     const steward = await _randomKeyPair();
     const rpc = new DefaultRpc(
       "https://soroban-rpc.testnet.stellar.gateway.fm"
