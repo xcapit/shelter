@@ -6,7 +6,7 @@ export class DeployedShelter {
     private readonly _client: any // TODO:
   ) {}
 
-  stewardId(): Promise<string> {
-    return Promise.resolve(this._client.steward());
+  async stewardId(): Promise<string> {
+    return await this._client.steward();
   }
 }
