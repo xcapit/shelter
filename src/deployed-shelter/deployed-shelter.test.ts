@@ -13,7 +13,7 @@ describe("DeployedShelter", () => {
   });
 
   test("id", async () => {
-    expect(await deployedShelter.stewardId()).toEqual('id');
+    expect(await deployedShelter.stewardId()).toEqual(steward.publicKey());
   });
 
 });
