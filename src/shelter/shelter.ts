@@ -18,7 +18,7 @@ export class Shelter {
       this._steward,
       new this._client({
         contractId: await this._txHash(
-          await this._deployFn(
+          await this._client.deploy(
             { steward: this._steward.publicKey() },
             {
               wasmHash: this._wasm,
