@@ -1,7 +1,7 @@
 import { Keypair, Networks } from "@stellar/stellar-sdk";
 import { Shelter } from "../../shelter/shelter";
 import { DefaultRpc } from "../../rpc/default/default-rpc";
-import { Stellar, walletSdk } from "@stellar/typescript-wallet-sdk";
+import { walletSdk } from "@stellar/typescript-wallet-sdk";
 
 
 describe('e2e', () => {
