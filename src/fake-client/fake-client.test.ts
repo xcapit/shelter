@@ -1,5 +1,4 @@
 import { Keypair } from "shelter-sdk";
-import { DeployedShelter } from "./deployed-shelter";
 import { FakeClient } from "../fake-client/fake-client";
 
 describe("FakeClient", () => {
