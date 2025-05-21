@@ -9,6 +9,10 @@ export class FakeClient {
       built: { sign: () => {} },
     };
   }
+
+  async steward(): Promise<any> {
+    return 'id'
+  }
 }
 describe("Shelter", () => {
   const networkPassphrase = Networks.TESTNET;
