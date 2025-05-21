@@ -18,7 +18,6 @@ describe("Shelter", () => {
     ).toBeTruthy();
   });
 
-  // TODO: Se puede mejorar el assert de este test? Capaz hacerle un .steward al DeployedShelter o algo?
   test("deploy", async () => {
     expect(
       await new Shelter(
