@@ -13,8 +13,8 @@ export class FakeClient {
     };
   }
 
-  async steward(): Promise<any> {
-    return "id";
+  async steward(): Promise<string> {
+    return Promise.resolve(this._steward.publicKey());
   }
 }
 describe("Shelter", () => {
