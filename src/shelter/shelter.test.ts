@@ -4,16 +4,17 @@ import { FakeRpc } from "../rpc/fake/fake-rpc";
 
 class FakeClient {
   constructor(private readonly _options: any) {}
+  public static deploy() {
+    return {
+      built: { sign: () => {} },
+    };
+  }
 }
 describe("Shelter", () => {
   const networkPassphrase = Networks.TESTNET;
   const steward = Keypair.random();
   const wasmHash = "aWasmHash";
-  const deployFn = () => {
-    return {
-      built: { sign: () => {} },
-    };
-  };
+  const deployFn = () => {};
   const client;
 
   test("new", () => {
