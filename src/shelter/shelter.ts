@@ -16,7 +16,7 @@ export class Shelter {
   async deploy(): Promise<DeployedShelter> {
     return new DeployedShelter(
       this._steward,
-      new Client({
+      new this._client({
         contractId: await this._txHash(
           await this._deployFn(
             { steward: this._steward.publicKey() },
