@@ -15,7 +15,9 @@ export class FakeClient {
   }
 
   async steward(): Promise<AssembledTransaction<string>> {
-    return Promise.resolve(this._steward.publicKey());
+    return Promise.resolve(
+      this._steward.publicKey() as unknown as AssembledTransaction<string>
+    );
   }
 }
 describe("Shelter", () => {
