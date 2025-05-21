@@ -1,6 +1,7 @@
 import { Client, Keypair, Networks } from "shelter-sdk";
 import { Shelter } from "./shelter";
 import { FakeRpc } from "../rpc/fake/fake-rpc";
+import type { AssembledTransaction } from "@stellar/stellar-sdk/contract";
 
 export class FakeClient {
   constructor(
@@ -13,7 +14,7 @@ export class FakeClient {
     };
   }
 
-  async steward(): Promise<string> {
+  async steward(): Promise<AssembledTransaction<string>> {
     return Promise.resolve(this._steward.publicKey());
   }
 }
