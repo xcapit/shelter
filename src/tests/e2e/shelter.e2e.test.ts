@@ -12,7 +12,10 @@ describe("Shelter", () => {
   };
 
   test("shelter deploy", async () => {
-    const steward = await _randomKeyPair();
+    // const steward = await _randomKeyPair();
+    const stewardSecret =
+      "SB2SQ4BGHIHHB637KBET2Y7XG3GN5FU4DZGXSSSB5ESFAR5H3XMI5GRI";
+    const steward = Keypair.fromSecret(stewardSecret);
     const rpc = new DefaultRpc(
       "https://soroban-rpc.testnet.stellar.gateway.fm"
     );
