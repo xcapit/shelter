@@ -15,7 +15,7 @@ describe("DeployedShelter", () => {
     expect(new DeployedShelter(steward, client)).toBeTruthy();
   });
 
-  test("id", async () => {
+  test("stewardId", async () => {
     expect(await deployedShelter.stewardId()).toEqual(steward.publicKey());
   });
 });
