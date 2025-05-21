@@ -6,9 +6,11 @@ describe("DeployedShelter", () => {
   const steward = Keypair.random();
   const client = new FakeClient({})
   let deployedShelter: DeployedShelter;
+
   beforeAll(()=>{
     deployedShelter = new DeployedShelter(steward, client)
   })
+  
   test("new", () => {
     expect(new DeployedShelter(steward, client)).toBeTruthy();
   });
