@@ -15,7 +15,6 @@ describe("Shelter", () => {
   const steward = Keypair.random();
   const wasmHash = "aWasmHash";
   const deployFn = () => {};
-  const client;
 
   test("new", () => {
     expect(
@@ -30,7 +29,8 @@ describe("Shelter", () => {
         new FakeRpc(),
         wasmHash,
         networkPassphrase,
-        deployFn as unknown as typeof Client.deploy
+        deployFn as unknown as typeof Client.deploy,
+        FakeClient
       ).deploy()
     ).toBeTruthy();
   });
