@@ -9,7 +9,6 @@ export class Shelter {
     private readonly _rpc: Rpc,
     private readonly _wasm: Buffer | string,
     private readonly _networkPassphrase: Networks,
-    private readonly _deployFn: typeof Client.deploy = Client.deploy,
     private readonly _client: any = Client
   ) {}
 
