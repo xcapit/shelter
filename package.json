@@ -11,7 +11,8 @@
     "build:shelter": "pnpm --filter=shelter-sdk run build",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
     "test:watch": "node --experimental-vm-modules node_modules/jest/bin/jest.js --watch",
-    "test:coverage": "node --experimental-vm-modules node_modules/jest/bin/jest.js --coverage"
+    "test:coverage": "node --experimental-vm-modules node_modules/jest/bin/jest.js --coverage",
+    "test:e2e": "npm run test:base -- --config jest.config.e2e.js"
   },
   "keywords": [],
   "author": "",
