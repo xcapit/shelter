@@ -6,6 +6,7 @@
   "types": "types/index.d.ts",
   "type": "module",
   "scripts": {
+    "test:base": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
     "build": "pnpm run build:sac && pnpm run build:shelter && tsc",
     "build:sac": "pnpm --filter=sac-sdk run build",
     "build:shelter": "pnpm --filter=shelter-sdk run build",
