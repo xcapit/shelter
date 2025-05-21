@@ -14,7 +14,6 @@ describe("Shelter", () => {
   const networkPassphrase = Networks.TESTNET;
   const steward = Keypair.random();
   const wasmHash = "aWasmHash";
-  const deployFn = () => {};
 
   test("new", () => {
     expect(
@@ -29,7 +28,6 @@ describe("Shelter", () => {
         new FakeRpc(),
         wasmHash,
         networkPassphrase,
-        deployFn as unknown as typeof Client.deploy,
         FakeClient
       ).deploy()
     ).toBeTruthy();
