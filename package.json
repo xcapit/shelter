@@ -13,7 +13,7 @@
     "test": "pnpm run test:base",
     "test:watch": "pnpm run test:base --watch",
     "test:coverage": "pnpm run test:base --coverage",
-    "test:e2e": "pnpm run test:base -- --config jest.config.e2e.js"
+    "test:e2e": "pnpm run test:base --config jest.config.e2e.js"
   },
   "keywords": [],
   "author": "",
