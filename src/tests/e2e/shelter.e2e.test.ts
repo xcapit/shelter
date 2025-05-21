@@ -1,8 +1,19 @@
 import { Keypair, Networks } from "@stellar/stellar-sdk";
 import { Shelter } from "../../shelter/shelter";
 import { DefaultRpc } from "../../rpc/default/default-rpc";
+import { Stellar, walletSdk } from "@stellar/typescript-wallet-sdk";
+
 
 describe('e2e', () => {
+
+  const _randomKeyPair = async (): Promise<Keypair> => {
+    const stellar = walletSdk.Wallet.TestNet().stellar();
+    const account = stellar.account().createKeypair();
+    await stellar.fundTestnetAccount(account.publicKey);
+    return Keypair.fromSecret(account.secretKey);
+  };
+
+  
   test('aoeu', async () => {
     const steward = Keypair.random();
     const rpc = new DefaultRpc('https://soroban-rpc.testnet.stellar.gateway.fm');
