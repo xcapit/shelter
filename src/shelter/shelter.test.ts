@@ -3,7 +3,10 @@ import { Shelter } from "./shelter";
 import { FakeRpc } from "../rpc/fake/fake-rpc";
 
 export class FakeClient {
-  constructor(private readonly _options: any) {}
+  constructor(
+    private readonly _options: any,
+    private readonly _steward: Keypair = Keypair.random()
+  ) {}
   public static deploy() {
     return {
       built: { sign: () => {} },
@@ -11,7 +14,7 @@ export class FakeClient {
   }
 
   async steward(): Promise<any> {
-    return 'id'
+    return "id";
   }
 }
 describe("Shelter", () => {
