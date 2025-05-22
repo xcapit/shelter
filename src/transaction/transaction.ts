@@ -10,7 +10,7 @@ export class Transaction {
   ) {}
 
   async result() {
-    const tx = this._rawTx.built!;
+    const tx = (this._rawTx.built!);
     tx.sign(this._signer);
     return this._txData(tx);
   }
