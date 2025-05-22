@@ -6,7 +6,7 @@ import { FakeRpc } from "../rpc/fake/fake-rpc";
 
 describe("DeployedShelter", () => {
   const steward = Keypair.random();
-  const rpc = new FakeRpc();
+  const fakeRpc = new FakeRpc();
   const client = new FakeClient({}, steward);
   let deployedShelter: DeployedShelter;
   const recipient = Keypair.fromPublicKey(
@@ -18,11 +18,11 @@ describe("DeployedShelter", () => {
   const amount = BigInt(1);
 
   beforeAll(() => {
-    deployedShelter = new DeployedShelter(steward, rpc, client);
+    deployedShelter = new DeployedShelter(steward, fakeRpc, client);
   });
 
   test("new", () => {
-    expect(new DeployedShelter(steward, rpc, client)).toBeTruthy();
+    expect(new DeployedShelter(steward, fakeRpc, client)).toBeTruthy();
   });
 
   test("stewardId", async () => {
@@ -49,7 +49,7 @@ describe("DeployedShelter", () => {
   });
 
   test("boundAid", async () => {
-    const _pollTransactionReponse = { status: rpc.Api.GetTransactionStatus.SUCCESS };
+    const _pollTransactionReponse = { status: fakeRpc.Api.GetTransactionStatus.SUCCESS };
 
     await expect(
       new DeployedShelter(steward, new FakeRpc(_pollTransactionReponse), client).boundAid(
