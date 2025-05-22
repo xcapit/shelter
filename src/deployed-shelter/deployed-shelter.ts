@@ -26,7 +26,12 @@ export class DeployedShelter {
       amount,
       expiration,
     });
-    const resultTx = await new Transaction(tx, this._steward, this._rpc).result()
+    const resultTx = await new Transaction(await this._client.bound_aid({
+      recipient,
+      token,
+      amount,
+      expiration,
+    }), this._steward, this._rpc).result()
 
     if (resultTx.status !== "SUCCESS") {
       throw new Error("aoeu");
