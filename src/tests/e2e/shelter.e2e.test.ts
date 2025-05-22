@@ -2,6 +2,7 @@ import { Keypair, Networks } from "@stellar/stellar-sdk";
 import { Shelter } from "../../shelter/shelter";
 import { DefaultRpc } from "../../rpc/default/default-rpc";
 import { walletSdk } from "@stellar/typescript-wallet-sdk";
+import { Client as SAC } from "sac-sdk";
 
 describe("Shelter", async () => {
   const rpc = new DefaultRpc("https://soroban-rpc.testnet.stellar.gateway.fm");
@@ -30,6 +31,11 @@ describe("Shelter", async () => {
       "CCQK3OJ5T4A5B4SDKQWH7PQKC5HMUZHIGUWF2INTKDQB32F3YPEW7L27";
     const expiration = BigInt(Math.floor(Date.now() / 1000) + 7200);
     const amount = BigInt(1);
+  const _sac = (publicKey: string) =>
+    new SAC({
+      networkPassphrase: Networks.TESTNET,
+      rpcUrl,
+    }).getSACClient(tokenContractId, publicKey);
 
     const deployedShelter = await shelter.deploy();
 
