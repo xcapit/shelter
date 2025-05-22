@@ -34,8 +34,8 @@ describe("Shelter", async () => {
     const aliceSecret =
       "SDZVEQPNLS74A5E7VDSUHV2EDUJJUBNNT46PRNGAJXM4SZCBGIYGAZEX";
     const aliceKeyPair = Keypair.fromSecret(aliceSecret);
-   
-    const _sac = (publicKey: string) =>
+
+    const _sac =
       new SAC({
         contractId: tokenContractId,
         networkPassphrase: Networks.TESTNET,
