@@ -23,11 +23,11 @@ describe("DeployedShelter", () => {
   });
 
   test("new", () => {
-    expect(new DeployedShelter(steward, fakeRpc, client).id()).toBeTruthy();
+    expect(new DeployedShelter(steward, fakeRpc, client)).toBeTruthy();
   });
 
   test("id", () => {
-    expect(new DeployedShelter(steward, fakeRpc, client)).toBeTruthy();
+    expect(new DeployedShelter(steward, fakeRpc, client).id()).toBeTruthy();
   });
 
   test("stewardId", async () => {
