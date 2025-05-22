@@ -12,6 +12,7 @@ describe("DeployedShelter", () => {
   const tokenContractId =
     "CCQK3OJ5T4A5B4SDKQWH7PQKC5HMUZHIGUWF2INTKDQB32F3YPEW7L27";
   const _validExpiration = BigInt(Math.floor(Date.now() / 1000) + 7200);
+  const amount = BigInt(1);
 
   beforeAll(() => {
     deployedShelter = new DeployedShelter(steward, rpc, client);
