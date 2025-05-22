@@ -1,4 +1,4 @@
-import { Client, Keypair } from "shelter-sdk";
+import { Client, Keypair, rpc } from "shelter-sdk";
 import type { FakeClient } from "../fake-client/fake-client";
 import type { Rpc } from "../rpc/rpc.interface";
 import { Transaction } from "../transaction/transaction";
@@ -27,7 +27,7 @@ export class DeployedShelter {
       expiration,
     }), this._steward, this._rpc).result()
 
-    if (resultTx.status !== "SUCCESS") {
+    if (resultTx.status !== rpc.Api.GetTransactionStatus.SUCCESS) {
       throw new Error("aoeu");
     }
   }
