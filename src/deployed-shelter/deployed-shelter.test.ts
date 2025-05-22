@@ -50,14 +50,14 @@ describe("DeployedShelter", () => {
   test("boundAid", async () => {
     const _pollTransactionReponse = { status: 'SUCCESS' };
 
-    expect(
-      await new DeployedShelter(steward, new FakeRpc(_pollTransactionReponse), client).boundAid(
+    await expect(
+       new DeployedShelter(steward, new FakeRpc(_pollTransactionReponse), client).boundAid(
         recipient.rawPublicKey(),
         tokenContractId,
         amount,
         expiration
       )
-    ).toBeTruthy();
+    ).resolves.toBeTruthy();
   });
 
 
