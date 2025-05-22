@@ -9,14 +9,10 @@ describe("DeployedShelter", () => {
   const client = new FakeClient({}, steward);
   let deployedShelter: DeployedShelter;
   const recipient = Keypair.fromPublicKey("GASL6XDOK2TO6SCFTXFN2HQDAONLBID2GKX5TYBTHOWA7ZU7VRFZNHGM");
-   const tokenContractId =
+  const tokenContractId =
     "CCQK3OJ5T4A5B4SDKQWH7PQKC5HMUZHIGUWF2INTKDQB32F3YPEW7L27";
-  const _validExpiration = Math.floor(Date.now() / 1000) + 7200;
-  const amount = BigInt(1);
-//  recipient: bob.rawPublicKey(),
-//       token: tokenContractId,
-//       amount: BigInt(amount),
-//       expiration: BigInt(_validExpiration),
+  const _validExpiration = BigInt(Math.floor(Date.now() / 1000) + 7200);
+
   beforeAll(() => {
     deployedShelter = new DeployedShelter(steward, rpc, client);
   });
@@ -29,7 +25,7 @@ describe("DeployedShelter", () => {
     expect(await deployedShelter.stewardId()).toEqual(steward.publicKey());
   });
 
-  test("boundAid", async() => {
-    expect(await deployedShelter.boundAid(recipient.rawPublicKey(),tokenContractId, Bigin )).toBeTruthy()
+  test("boundAid", async () => {
+    expect(await deployedShelter.boundAid(recipient.rawPublicKey(), tokenContractId, Bigin)).toBeTruthy()
   })
 });
