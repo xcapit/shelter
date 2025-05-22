@@ -20,12 +20,6 @@ export class DeployedShelter {
     amount: bigint,
     expiration: bigint
   ): Promise<void> {
-    const tx = await this._client.bound_aid({
-      recipient,
-      token,
-      amount,
-      expiration,
-    });
     const resultTx = await new Transaction(await this._client.bound_aid({
       recipient,
       token,
