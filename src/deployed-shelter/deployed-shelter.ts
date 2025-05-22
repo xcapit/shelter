@@ -27,6 +27,7 @@ export class DeployedShelter {
       expiration,
     });
     const resultTx = await new Transaction(tx, this._steward, this._rpc).result()
+
     if (resultTx.status !== "SUCCESS") {
       throw new Error("aoeu");
     }
