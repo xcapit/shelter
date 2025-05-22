@@ -44,7 +44,7 @@ describe("Shelter", async () => {
 
     const deployedShelter = await shelter.deploy();
 
-    _sac.mint({});
+    _sac.mint({ to: deployedShelter.id(), amount });
 
     await expect(
       deployedShelter.boundAid(
