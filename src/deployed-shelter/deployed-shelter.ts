@@ -25,6 +25,8 @@ export class DeployedShelter {
       amount,
       expiration,
     });
+    const resultTx = await new Transaction(tx, this._steward, this._rpc).result()
+    
     const buildTx = tx.built!;
     buildTx.sign(this._steward);
     const buildTxResponse = await this._rpc
