@@ -1,4 +1,4 @@
-import { Keypair, Networks } from "@stellar/stellar-sdk";
+import { Keypair, Networks, rpc } from "@stellar/stellar-sdk";
 import { Shelter } from "../../shelter/shelter";
 import { DefaultRpc } from "../../rpc/default/default-rpc";
 import { walletSdk } from "@stellar/typescript-wallet-sdk";
