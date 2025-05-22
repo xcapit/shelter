@@ -64,7 +64,7 @@ describe("DeployedShelter", () => {
   test("failed boundAid", async () => {
     const _pollTransactionReponse = { status: 'NOT_FOUND' };
 
-    expect(async () =>
+    expect(
       await new DeployedShelter(steward, new FakeRpc(_pollTransactionReponse), client).boundAid(
         recipient.rawPublicKey(),
         tokenContractId,
