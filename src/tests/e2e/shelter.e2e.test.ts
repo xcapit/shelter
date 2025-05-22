@@ -31,12 +31,15 @@ describe("Shelter", async () => {
       "CCQK3OJ5T4A5B4SDKQWH7PQKC5HMUZHIGUWF2INTKDQB32F3YPEW7L27";
     const expiration = BigInt(Math.floor(Date.now() / 1000) + 7200);
     const amount = BigInt(1);
-  const _sac = (publicKey: string) =>
-    new SAC({
-      contractId: tokenContractId,
-      networkPassphrase: Networks.TESTNET,
-      rpcUrl: rpc.url()
-    })
+    const aliceSecret =
+    "SDZVEQPNLS74A5E7VDSUHV2EDUJJUBNNT46PRNGAJXM4SZCBGIYGAZEX";
+  const aliceKeyPair = Keypair.fromSecret(aliceSecret);
+    const _sac = (publicKey: string) =>
+      new SAC({
+        contractId: tokenContractId,
+        networkPassphrase: Networks.TESTNET,
+        rpcUrl: rpc.url(),
+      });
     // new SAC({
     //   networkPassphrase: Networks.TESTNET,
     //   rpcUrl,
