@@ -26,6 +26,10 @@ describe("DeployedShelter", () => {
     expect(new DeployedShelter(steward, fakeRpc, client)).toBeTruthy();
   });
 
+  test("id", () => {
+    expect(new DeployedShelter(steward, fakeRpc, client)).toBeTruthy();
+  });
+
   test("stewardId", async () => {
     expect(
       await new DeployedShelter(
