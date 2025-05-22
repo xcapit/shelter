@@ -57,7 +57,7 @@ describe("DeployedShelter", () => {
         amount,
         expiration
       )
-    ).resolves.toBeTruthy();
+    ).resolves.toBe();
   });
 
 
