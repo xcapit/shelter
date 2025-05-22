@@ -59,4 +59,18 @@ describe("DeployedShelter", () => {
       )
     ).toBeTruthy();
   });
+
+
+  test("failed boundAid", async () => {
+    const _pollTransactionReponse = { status: 'SUCCESS' };
+
+    expect(
+      await new DeployedShelter(steward, new FakeRpc(_pollTransactionReponse), client).boundAid(
+        recipient.rawPublicKey(),
+        tokenContractId,
+        amount,
+        expiration
+      )
+    ).toBeTruthy();
+  });
 });
