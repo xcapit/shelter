@@ -49,7 +49,7 @@ describe("DeployedShelter", () => {
   });
 
   test("boundAid", async () => {
-    const _pollTransactionReponse = { status: fakeRpc.Api.GetTransactionStatus.SUCCESS };
+    const _pollTransactionReponse = { status: rpc.Api.GetTransactionStatus.SUCCESS };
 
     await expect(
       new DeployedShelter(steward, new FakeRpc(_pollTransactionReponse), client).boundAid(
@@ -63,7 +63,7 @@ describe("DeployedShelter", () => {
 
 
   test("failed boundAid", async () => {
-    const _pollTransactionReponse = { status: 'NOT_FOUND' };
+    const _pollTransactionReponse = { status: rpc.Api.GetTransactionStatus.NOT_FOUND };
 
     await expect(
       new DeployedShelter(steward, new FakeRpc(_pollTransactionReponse), client).boundAid(
