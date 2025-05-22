@@ -5,7 +5,7 @@ import { walletSdk } from "@stellar/typescript-wallet-sdk";
 import { Client as SAC } from "sac-sdk";
 
 describe("Shelter", async () => {
-  const rpc = new DefaultRpc("https://soroban-rpc.testnet.stellar.gateway.fm");
+  const defaultRpc = new DefaultRpc("https://soroban-rpc.testnet.stellar.gateway.fm");
   const wasmHash =
     "50d8a2d89cb783d34c5400a4548b0335f97c3be58aac7ea3b0f8c4b60b001f4a";
   const _randomKeyPair = async (): Promise<Keypair> => {
@@ -15,7 +15,7 @@ describe("Shelter", async () => {
     return Keypair.fromSecret(account.secretKey);
   };
   const steward = await _randomKeyPair();
-  const shelter = new Shelter(steward, rpc, wasmHash, Networks.TESTNET);
+  const shelter = new Shelter(steward, defaultRpc, wasmHash, Networks.TESTNET);
 
   test("shelter deploy", async () => {
     expect(await (await shelter.deploy()).stewardId()).toEqual(
@@ -38,7 +38,7 @@ describe("Shelter", async () => {
     const _sac = new SAC({
       contractId: tokenContractId,
       networkPassphrase: Networks.TESTNET,
-      rpcUrl: rpc.url(),
+      rpcUrl: defaultRpc.url(),
       publicKey: aliceKeyPair.publicKey(),
     });
 
@@ -48,9 +48,9 @@ describe("Shelter", async () => {
     const builtMintTx = rawMintTx.built!
     builtMintTx.sign(aliceKeyPair);
 
-    const sentMintTx = await rpc.server().sendTransaction(builtMintTx)
-    const mintTx = await rpc.server().pollTransaction(sentMintTx.hash);
-    
+    const sentMintTx = await defaultRpc.server().sendTransaction(builtMintTx)
+    const mintTx = await defaultRpc.server().pollTransaction(sentMintTx.hash);
+    expect(mintTx.status).toEqual(rpc.Api.GetTransactionStatus.SUCCESS)
     await expect(
       deployedShelter.boundAid(
         recipient.rawPublicKey(),
