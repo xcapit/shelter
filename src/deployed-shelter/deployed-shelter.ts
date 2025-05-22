@@ -34,15 +34,6 @@ export class DeployedShelter {
           await this._rpc.server().sendTransaction(buildTx)
         ).hash
       );
-    //  const boundBuildTx = tx.built!;
-
-    // boundBuildTx.sign(stewardKeypair);
-
-    // const boundTx = await rpcServer.sendTransaction(boundBuildTx);
-    // console.log("[BOUND AID HASH]:", boundTx.hash);
-
-    // const boundTxResponse = await rpcServer.pollTransaction(boundTx.hash);
-    // expect(boundTxResponse.status).toEqual("SUCCESS");
     return true;
   }
 }
