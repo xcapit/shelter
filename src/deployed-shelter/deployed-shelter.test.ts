@@ -20,4 +20,8 @@ describe("DeployedShelter", () => {
   test("stewardId", async () => {
     expect(await deployedShelter.stewardId()).toEqual(steward.publicKey());
   });
+
+  test("boundAid", async() => {
+    expect(await deployedShelter.boundAid({})).toEqual('bounded')
+  })
 });
