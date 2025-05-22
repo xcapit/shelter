@@ -22,6 +22,6 @@ describe("DeployedShelter", () => {
   });
 
   test("boundAid", async() => {
-    expect(await deployedShelter.boundAid({})).toBeTruthy()
+    expect(await deployedShelter.boundAid()).toBeTruthy()
   })
 });
