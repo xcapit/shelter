@@ -2,6 +2,7 @@ import { Keypair, Networks } from "shelter-sdk";
 import { Shelter } from "./shelter";
 import { FakeRpc } from "../rpc/fake/fake-rpc";
 import { FakeClient } from "../fake-client/fake-client";
+import { contractAddressTransactionReponse } from "../fixtures/fixtures";
 
 describe("Shelter", () => {
   const networkPassphrase = Networks.TESTNET;
@@ -18,7 +19,7 @@ describe("Shelter", () => {
     expect(
       await new Shelter(
         steward,
-        new FakeRpc(),
+        new FakeRpc(contractAddressTransactionReponse),
         wasmHash,
         networkPassphrase,
         FakeClient
