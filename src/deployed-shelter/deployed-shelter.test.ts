@@ -47,6 +47,7 @@ describe("DeployedShelter", () => {
   });
 
   test("boundAid", async () => {
+    const _pollTransactionReponse = { status: 'SUCCESS' };
     expect(
       await new DeployedShelter(steward, new FakeRpc(), client).boundAid(
         recipient.rawPublicKey(),
