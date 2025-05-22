@@ -52,7 +52,7 @@ describe("Shelter", async () => {
     const mintTx = await defaultRpc.server().pollTransaction(sentMintTx.hash);
     expect(mintTx.status).toEqual(rpc.Api.GetTransactionStatus.SUCCESS);
 
-    // TODO: 
+    // TODO: Continue aqui plz
     await expect(
       deployedShelter.boundAid(
         recipient.rawPublicKey(),
