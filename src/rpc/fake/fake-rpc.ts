@@ -1,6 +1,5 @@
 import { rpc } from "shelter-sdk";
 import type { Rpc } from "../rpc.interface";
-import { xdr } from "@stellar/stellar-sdk";
 export class FakeRpc implements Rpc {
   constructor(private readonly _pollTransactionReponse: any = {}) {}
   url(): string {
