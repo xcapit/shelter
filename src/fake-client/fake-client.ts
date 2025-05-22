@@ -8,7 +8,9 @@ export class FakeClient {
   constructor(
     private readonly _options: any,
     private readonly _steward: Keypair = Keypair.random()
-  ) { }
+  ) { 
+    
+  }
   public static deploy() {
     return {
       built: { sign: () => { } },
