@@ -37,6 +37,7 @@ describe("DeployedShelter", () => {
         },
       },
     };
+
     expect(
       await new DeployedShelter(
         steward,
