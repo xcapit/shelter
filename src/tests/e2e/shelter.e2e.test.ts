@@ -27,4 +27,11 @@ describe("Shelter", async () => {
       steward.publicKey()
     );
   });
+
+  test("bound aid", async () => {
+    const deployedShelter = await shelter.deploy();
+    expect(await (await shelter.deploy()).stewardId()).toEqual(
+      steward.publicKey()
+    );
+  });
 });
