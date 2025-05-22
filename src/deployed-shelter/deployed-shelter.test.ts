@@ -71,6 +71,6 @@ describe("DeployedShelter", () => {
         amount,
         expiration
       )
-    ).toThrow();
+    ).rejects.toThrow();
   });
 });
