@@ -2,6 +2,9 @@ import type { AssembledTransaction } from "@stellar/stellar-sdk/contract";
 import { Client, Keypair } from "shelter-sdk";
 
 export class FakeClient {
+  options = {
+    contractId: 'aContractId'
+  }
   constructor(
     private readonly _options: any,
     private readonly _steward: Keypair = Keypair.random()
