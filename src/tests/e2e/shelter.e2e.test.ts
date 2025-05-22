@@ -17,9 +17,6 @@ describe("Shelter", () => {
   test("shelter deploy", async () => {
     const steward = await _randomKeyPair();
 
-    const rpc = new DefaultRpc(
-      "https://soroban-rpc.testnet.stellar.gateway.fm"
-    );
     const shelter = new Shelter(
       steward,
       rpc,
