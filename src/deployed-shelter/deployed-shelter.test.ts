@@ -3,6 +3,7 @@ import { Keypair, xdr } from "shelter-sdk";
 import { DeployedShelter } from "./deployed-shelter";
 import { FakeClient } from "../fake-client/fake-client";
 import { FakeRpc } from "../rpc/fake/fake-rpc";
+import { contractAddressTransactionReponse } from "../fixtures/fixtures";
 
 describe("DeployedShelter", () => {
   const steward = Keypair.random();
@@ -26,23 +27,10 @@ describe("DeployedShelter", () => {
   });
 
   test("stewardId", async () => {
-    const _pollTransactionReponse = {
-      returnValue: {
-        address: (): xdr.ScAddress => {
-          return xdr.ScAddress.scAddressTypeContract(
-            Buffer.from(
-              "227ca7b59a114b96adc361d1d5ce76cb1e2ffe6fa797296749638fded54f9550",
-              "hex"
-            )
-          );
-        },
-      },
-    };
-
     expect(
       await new DeployedShelter(
         steward,
-        new FakeRpc(_pollTransactionReponse),
+        new FakeRpc(contractAddressTransactionReponse),
         client
       ).stewardId()
     ).toEqual(steward.publicKey());
