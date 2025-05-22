@@ -2,6 +2,7 @@ import { Keypair, Networks, xdr } from "shelter-sdk";
 import { Shelter } from "./shelter";
 import { FakeRpc } from "../rpc/fake/fake-rpc";
 import { FakeClient } from "../fake-client/fake-client";
+import { contractAddressTransactionReponse } from "../fixtures/fixtures";
 
 describe("Shelter", () => {
   const networkPassphrase = Networks.TESTNET;
@@ -15,23 +16,10 @@ describe("Shelter", () => {
   });
 
   test("deploy", async () => {
-    // TODO: Fixture this 
-    const _pollTransactionReponse = {
-      returnValue: {
-        address: (): xdr.ScAddress => {
-          return xdr.ScAddress.scAddressTypeContract(
-            Buffer.from(
-              "227ca7b59a114b96adc361d1d5ce76cb1e2ffe6fa797296749638fded54f9550",
-              "hex"
-            )
-          );
-        },
-      },
-    };
     expect(
       await new Shelter(
         steward,
-        new FakeRpc(_pollTransactionReponse),
+        new FakeRpc(contractAddressTransactionReponse),
         wasmHash,
         networkPassphrase,
         FakeClient
