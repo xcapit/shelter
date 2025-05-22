@@ -19,6 +19,14 @@ export class DeployedShelter {
     amount: bigint,
     expiration: bigint
   ): Promise<boolean> {
+    const tx = (await this._client.bound_aid(
+      {
+        recipient,
+        token,
+        amount,
+        expiration
+      }
+    ));
     return true;
   }
 }
