@@ -45,6 +45,7 @@ describe("Shelter", async () => {
 
     const deployedShelter = await shelter.deploy();
 
+    _sac();
     await expect(
       deployedShelter.boundAid(
         recipient.rawPublicKey(),
