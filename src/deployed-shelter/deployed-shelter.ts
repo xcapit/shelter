@@ -9,7 +9,7 @@ export class DeployedShelter {
     private readonly _steward: Keypair,
     private readonly _rpc: Rpc,
     private readonly _client: Client | FakeClient
-  ) { }
+  ) {}
 
   async stewardId(): Promise<string> {
     return (await this._client.steward()).result;
@@ -21,19 +21,23 @@ export class DeployedShelter {
     amount: bigint,
     expiration: bigint
   ): Promise<void> {
-    const resultTx = await new Transaction(await this._client.bound_aid({
-      recipient,
-      token,
-      amount,
-      expiration,
-    }), this._steward, this._rpc).result()
+    const resultTx = await new Transaction(
+      await this._client.bound_aid({
+        recipient,
+        token,
+        amount,
+        expiration,
+      }),
+      this._steward,
+      this._rpc
+    ).result();
 
     if (resultTx.status !== rpc.Api.GetTransactionStatus.SUCCESS) {
       throw new Error(resultTx);
     }
   }
 
-  id(){
+  id(): string {
     return this._client.options.contractId;
   }
 }
