@@ -4,6 +4,9 @@ import { DefaultRpc } from "../../rpc/default/default-rpc";
 import { walletSdk } from "@stellar/typescript-wallet-sdk";
 
 describe("Shelter", () => {
+  const rpc = new DefaultRpc(
+    "https://soroban-rpc.testnet.stellar.gateway.fm"
+  );
   const _randomKeyPair = async (): Promise<Keypair> => {
     const stellar = walletSdk.Wallet.TestNet().stellar();
     const account = stellar.account().createKeypair();
@@ -13,7 +16,7 @@ describe("Shelter", () => {
 
   test("shelter deploy", async () => {
     const steward = await _randomKeyPair();
-    
+
     const rpc = new DefaultRpc(
       "https://soroban-rpc.testnet.stellar.gateway.fm"
     );
