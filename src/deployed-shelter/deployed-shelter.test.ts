@@ -8,7 +8,7 @@ describe("DeployedShelter", () => {
   const rpc = new FakeRpc()
   const client = new FakeClient({}, steward);
   let deployedShelter: DeployedShelter;
-  const merch = "GASL6XDOK2TO6SCFTXFN2HQDAONLBID2GKX5TYBTHOWA7ZU7VRFZNHGM";
+  const merch = Keypair.fromPublicKey("GASL6XDOK2TO6SCFTXFN2HQDAONLBID2GKX5TYBTHOWA7ZU7VRFZNHGM");
   const _validExpiration = Math.floor(Date.now() / 1000) + 7200;
   const amount = 1;
 //  recipient: bob.rawPublicKey(),
