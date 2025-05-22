@@ -1,4 +1,4 @@
-import { Keypair, Networks, xdr } from "shelter-sdk";
+import { Keypair, Networks } from "shelter-sdk";
 import { Shelter } from "./shelter";
 import { FakeRpc } from "../rpc/fake/fake-rpc";
 import { FakeClient } from "../fake-client/fake-client";
