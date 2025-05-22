@@ -4,6 +4,7 @@ import { Client, Keypair, Networks } from "shelter-sdk";
 import type { Rpc } from "../rpc/rpc.interface";
 import type { FakeClient } from "../fake-client/fake-client";
 import { StrKey, Address } from "@stellar/stellar-sdk";
+import { Transaction } from "../transaction/transaction";
 
 export class Shelter {
   constructor(
@@ -37,9 +38,12 @@ export class Shelter {
   }
 
   private async _address(rawTx: AssembledTransaction<Client>): Promise<string> {
-    const shelterDeployTx = rawTx.built!;
-    shelterDeployTx.sign(this._steward);
-    return this._addressOf(await this._txData(shelterDeployTx));
+    // const shelterDeployTx = rawTx.built!;
+    // shelterDeployTx.sign(this._steward);
+    // return this._addressOf(await this._txData(shelterDeployTx));
+    return this._addressOf(
+      await new Transaction(rawTx, this._steward, this._rpc).result()
+    );
   }
 
   private async _addressOf(txData: any) {
@@ -48,9 +52,9 @@ export class Shelter {
     );
   }
 
-  private async _txData(tx: Tx): Promise<any> {
-    return await this._rpc
-      .server()
-      .pollTransaction((await this._rpc.server().sendTransaction(tx)).hash);
-  }
+  // private async _txData(tx: Tx): Promise<any> {
+  //   return await this._rpc
+  //     .server()
+  //     .pollTransaction((await this._rpc.server().sendTransaction(tx)).hash);
+  // }
 }
