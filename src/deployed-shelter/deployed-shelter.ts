@@ -12,7 +12,6 @@ export class DeployedShelter {
   ) { }
 
   async stewardId(): Promise<string> {
-    // this._client.options.contractId
     return (await this._client.steward()).result;
   }
 
