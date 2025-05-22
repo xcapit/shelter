@@ -15,6 +15,7 @@ describe("Shelter", () => {
   });
 
   test("deploy", async () => {
+    // TODO: Fixture this 
     const _pollTransactionReponse = {
       returnValue: {
         address: (): xdr.ScAddress => {
