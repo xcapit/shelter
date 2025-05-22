@@ -30,7 +30,8 @@ describe("Shelter", async () => {
 
   test("bound aid", async () => {
     const deployedShelter = await shelter.deploy();
-    expect(await (await shelter.deploy()).stewardId()).toEqual(
+
+    expect(await deployedShelter.boundAid(recipient, token, amount, expiration)).toEqual(
       steward.publicKey()
     );
   });
