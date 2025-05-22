@@ -38,9 +38,6 @@ export class Shelter {
   }
 
   private async _address(rawTx: AssembledTransaction<Client>): Promise<string> {
-    // const shelterDeployTx = rawTx.built!;
-    // shelterDeployTx.sign(this._steward);
-    // return this._addressOf(await this._txData(shelterDeployTx));
     return this._addressOf(
       await new Transaction(rawTx, this._steward, this._rpc).result()
     );
@@ -51,10 +48,4 @@ export class Shelter {
       Address.fromScAddress(txData.returnValue.address()).toBuffer()
     );
   }
-
-  // private async _txData(tx: Tx): Promise<any> {
-  //   return await this._rpc
-  //     .server()
-  //     .pollTransaction((await this._rpc.server().sendTransaction(tx)).hash);
-  // }
 }
