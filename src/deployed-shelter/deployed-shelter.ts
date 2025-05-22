@@ -32,4 +32,8 @@ export class DeployedShelter {
       throw new Error(resultTx);
     }
   }
+
+  id(){
+    return this._client.options.contractId;
+  }
 }
