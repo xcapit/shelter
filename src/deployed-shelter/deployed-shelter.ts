@@ -12,4 +12,8 @@ export class DeployedShelter {
   async stewardId(): Promise<string> {
     return (await this._client.steward()).result;
   }
+
+  async boundAid(): Promise<void>{
+    return;
+  }
 }
