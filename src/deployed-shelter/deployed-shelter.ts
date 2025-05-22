@@ -7,13 +7,18 @@ export class DeployedShelter {
     private readonly _steward: Keypair,
     private readonly _rpc: Rpc,
     private readonly _client: Client | FakeClient
-  ) { }
+  ) {}
 
   async stewardId(): Promise<string> {
     return (await this._client.steward()).result;
   }
 
-  async boundAid(): Promise<boolean>{
+  async boundAid(
+    recipient: Buffer,
+    token: string,
+    amount: bigint,
+    expiration: number
+  ): Promise<boolean> {
     return true;
   }
 }
