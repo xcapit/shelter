@@ -48,11 +48,7 @@ describe("DeployedShelter", () => {
 
   test("boundAid", async () => {
     expect(
-      await  await new DeployedShelter(
-        steward,
-        new FakeRpc(_pollTransactionReponse),
-        client
-      ).boundAid(
+      await new DeployedShelter(steward, new FakeRpc(), client).boundAid(
         recipient.rawPublicKey(),
         tokenContractId,
         amount,
