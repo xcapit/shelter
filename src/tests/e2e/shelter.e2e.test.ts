@@ -35,13 +35,12 @@ describe("Shelter", async () => {
       "SDZVEQPNLS74A5E7VDSUHV2EDUJJUBNNT46PRNGAJXM4SZCBGIYGAZEX";
     const aliceKeyPair = Keypair.fromSecret(aliceSecret);
 
-    const _sac =
-      new SAC({
-        contractId: tokenContractId,
-        networkPassphrase: Networks.TESTNET,
-        rpcUrl: rpc.url(),
-        publicKey: aliceKeyPair.publicKey(),
-      });
+    const _sac = new SAC({
+      contractId: tokenContractId,
+      networkPassphrase: Networks.TESTNET,
+      rpcUrl: rpc.url(),
+      publicKey: aliceKeyPair.publicKey(),
+    });
 
     const deployedShelter = await shelter.deploy();
 
