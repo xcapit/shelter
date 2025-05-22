@@ -29,7 +29,7 @@ export class DeployedShelter {
     }), this._steward, this._rpc).result()
 
     if (resultTx.status !== rpc.Api.GetTransactionStatus.SUCCESS) {
-      throw new Error("aoeu");
+      throw new Error(resultTx);
     }
   }
 }
