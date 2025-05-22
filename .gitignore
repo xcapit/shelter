@@ -20,3 +20,6 @@ lib
 .aider*
 
 contracts/shelter/test_snapshots
+coverage
+
+types/
