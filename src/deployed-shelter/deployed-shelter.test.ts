@@ -1,5 +1,5 @@
 import { rpc } from "@stellar/stellar-sdk";
-import { Keypair, xdr } from "shelter-sdk";
+import { Keypair } from "shelter-sdk";
 import { DeployedShelter } from "./deployed-shelter";
 import { FakeClient } from "../fake-client/fake-client";
 import { FakeRpc } from "../rpc/fake/fake-rpc";
