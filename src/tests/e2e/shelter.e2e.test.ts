@@ -33,9 +33,14 @@ describe("Shelter", async () => {
     const amount = BigInt(1);
   const _sac = (publicKey: string) =>
     new SAC({
+      contractId: tokenContractId,
       networkPassphrase: Networks.TESTNET,
-      rpcUrl,
-    }).getSACClient(tokenContractId, publicKey);
+      rpcUrl: rpc.url()
+    })
+    // new SAC({
+    //   networkPassphrase: Networks.TESTNET,
+    //   rpcUrl,
+    // }).getSACClient(tokenContractId, publicKey);
 
     const deployedShelter = await shelter.deploy();
 
