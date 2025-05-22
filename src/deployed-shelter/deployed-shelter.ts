@@ -7,7 +7,7 @@ export class DeployedShelter {
     private readonly _steward: Keypair,
     private readonly _rpc: Rpc,
     private readonly _client: Client | FakeClient
-  ) {}
+  ) { }
 
   async stewardId(): Promise<string> {
     return (await this._client.steward()).result;
@@ -17,7 +17,7 @@ export class DeployedShelter {
     recipient: Buffer,
     token: string,
     amount: bigint,
-    expiration: number
+    expiration: bigint
   ): Promise<boolean> {
     return true;
   }
