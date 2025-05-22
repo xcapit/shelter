@@ -1,4 +1,5 @@
-import { Client, Keypair, rpc } from "shelter-sdk";
+import { rpc } from "@stellar/stellar-sdk";
+import { Client, Keypair } from "shelter-sdk";
 import type { FakeClient } from "../fake-client/fake-client";
 import type { Rpc } from "../rpc/rpc.interface";
 import { Transaction } from "../transaction/transaction";
