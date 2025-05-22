@@ -13,7 +13,7 @@ export class DeployedShelter {
     return (await this._client.steward()).result;
   }
 
-  async boundAid(): Promise<void>{
-    return;
+  async boundAid(): Promise<boolean>{
+    return true;
   }
 }
