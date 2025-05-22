@@ -7,7 +7,7 @@ export class DeployedShelter {
     private readonly _steward: Keypair,
     private readonly _rpc: Rpc,
     private readonly _client: Client | FakeClient
-  ) { }
+  ) {}
 
   async stewardId(): Promise<string> {
     return (await this._client.steward()).result;
@@ -18,7 +18,7 @@ export class DeployedShelter {
     token: string,
     amount: bigint,
     expiration: bigint
-  ): Promise<boolean> {
+  ): Promise<void> {
     const tx = await this._client.bound_aid({
       recipient,
       token,
@@ -34,9 +34,8 @@ export class DeployedShelter {
           await this._rpc.server().sendTransaction(buildTx)
         ).hash
       );
-    if (buildTxResponse.status !== 'SUCCESS') {
-      throw new Error('aoeu');
+    if (buildTxResponse.status !== "SUCCESS") {
+      throw new Error("aoeu");
     }
-    return true;
   }
 }
