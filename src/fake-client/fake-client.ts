@@ -18,7 +18,7 @@ export class FakeClient {
     });
   }
 
-  async bound_aid() {
+  async bound_aid(options: any) {
     return {
       built: { sign: () => { } },
     } as unknown as AssembledTransaction<null>;
