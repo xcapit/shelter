@@ -40,6 +40,6 @@ describe("Shelter", async () => {
         amount,
         expiration
       )
-    ).toEqual(steward.publicKey());
+    ).resolves.toBeUndefined();
   });
 });
