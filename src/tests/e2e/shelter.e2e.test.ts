@@ -49,7 +49,8 @@ describe("Shelter", async () => {
     builtMintTx.sign(aliceKeyPair);
 
     const sentMintTx = await rpc.server().sendTransaction(builtMintTx)
-    const mint = await rpc.server().pollTransaction(sentMintTx.hash);
+    const mintTx = await rpc.server().pollTransaction(sentMintTx.hash);
+    
     await expect(
       deployedShelter.boundAid(
         recipient.rawPublicKey(),
