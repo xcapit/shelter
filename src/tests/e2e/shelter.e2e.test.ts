@@ -22,8 +22,6 @@ describe("Shelter", async () => {
   );
 
   test("shelter deploy", async () => {
-
-
     expect(await (await shelter.deploy()).stewardId()).toEqual(
       steward.publicKey()
     );
