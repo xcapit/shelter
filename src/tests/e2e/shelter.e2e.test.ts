@@ -44,8 +44,12 @@ describe("Shelter", async () => {
 
     const deployedShelter = await shelter.deploy();
 
-    _sac.mint({ to: deployedShelter.id(), amount });
+    const rawMintTx = await _sac.mint({ to: deployedShelter.id(), amount });
+    const builtMintTx = rawMintTx.built!
+    builtMintTx.sign(aliceKeyPair);
 
+    const sentMintTx = await rpc.server().sendTransaction(builtMintTx)
+    const mint = await rpc.server().pollTransaction(sentMintTx.hash);
     await expect(
       deployedShelter.boundAid(
         recipient.rawPublicKey(),
