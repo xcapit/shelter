@@ -32,18 +32,16 @@ describe("Shelter", async () => {
     const expiration = BigInt(Math.floor(Date.now() / 1000) + 7200);
     const amount = BigInt(1);
     const aliceSecret =
-    "SDZVEQPNLS74A5E7VDSUHV2EDUJJUBNNT46PRNGAJXM4SZCBGIYGAZEX";
-  const aliceKeyPair = Keypair.fromSecret(aliceSecret);
+      "SDZVEQPNLS74A5E7VDSUHV2EDUJJUBNNT46PRNGAJXM4SZCBGIYGAZEX";
+    const aliceKeyPair = Keypair.fromSecret(aliceSecret);
+   
     const _sac = (publicKey: string) =>
       new SAC({
         contractId: tokenContractId,
         networkPassphrase: Networks.TESTNET,
         rpcUrl: rpc.url(),
+        publicKey: aliceKeyPair.publicKey(),
       });
-    // new SAC({
-    //   networkPassphrase: Networks.TESTNET,
-    //   rpcUrl,
-    // }).getSACClient(tokenContractId, publicKey);
 
     const deployedShelter = await shelter.deploy();
 
