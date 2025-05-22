@@ -4,7 +4,6 @@ import { DefaultRpc } from "../../rpc/default/default-rpc";
 import { walletSdk } from "@stellar/typescript-wallet-sdk";
 
 describe("Shelter", async () => {
-  const steward = await _randomKeyPair();
   const rpc = new DefaultRpc(
     "https://soroban-rpc.testnet.stellar.gateway.fm"
   );
@@ -14,6 +13,7 @@ describe("Shelter", async () => {
     await stellar.fundTestnetAccount(account.publicKey);
     return Keypair.fromSecret(account.secretKey);
   };
+  const steward = await _randomKeyPair();
 
   test("shelter deploy", async () => {
 
