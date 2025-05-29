@@ -18,6 +18,7 @@ export class DefaultPass {
     return tx;
   }
 
+  // TODO: Poblar con lo necesario.
   async _signAuthEntry(entry: xdr.SorobanAuthorizationEntry) {
     const credentials = entry.credentials().address();
 
