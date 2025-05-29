@@ -11,11 +11,15 @@ export class DefaultPass {
       address: this._shelterId,
       authorizeEntry: (entry: any) => {
         const clone = xdr.SorobanAuthorizationEntry.fromXDR(entry.toXDR());
-        return _signAuthEntry(clone, { keypair: this._recipient });
+        return this._signAuthEntry(clone, { keypair: this._recipient });
       },
     });
 
     return tx;
+  }
+
+  _signAuthEntry(clone: any, options: {keypair: Keypair}){
+
   }
 }
 
