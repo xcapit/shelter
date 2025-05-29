@@ -46,6 +46,17 @@ export class DefaultPass {
       public_key: this._recipient.rawPublicKey(),
       signature,
     };
+
+      const shelter = new Shelter({
+        contractId: shelterAddress,
+        networkPassphrase: Networks.TESTNET,
+        rpcUrl: rpcUrl,
+      });
+      const scValType = xdr.ScSpecTypeDef.scSpecTypeUdt(
+        new xdr.ScSpecTypeUdt({ name: "Pass" })
+      );
+
+      const scVal = shelter.spec.nativeToScVal(shelterSignature, scValType);
   }
 }
 
