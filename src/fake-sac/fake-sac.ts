@@ -1,4 +1,4 @@
-import type { AssembledTransaction } from "@stellar/stellar-sdk/contract";
+import {contract} from "@stellar/stellar-sdk";
 
 export class FakeSAC {
   async transfer({
@@ -9,9 +9,9 @@ export class FakeSAC {
     from: string;
     to: string;
     amount: bigint;
-  }): Promise<AssembledTransaction<null>> {
+  }): Promise<contract.AssembledTransaction<null>> {
     return {
       built: { sign: () => {} },
-    } as unknown as AssembledTransaction<null>;
+    } as unknown as contract.AssembledTransaction<null>;
   }
 }
