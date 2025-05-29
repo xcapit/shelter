@@ -44,7 +44,7 @@ export class DefaultPass {
 
     const shelterSignature = {
       public_key: this._recipient.rawPublicKey(),
-      signature: signature,
+      signature,
     };
   }
 }
