@@ -33,7 +33,7 @@ describe("transfer", () => {
     expect(new Transfer(from, to, amount, token)).toBeTruthy();
   });
 
-  test("execute", () => {
+  test("execute", async () => {
     expect(new Transfer(from, to, amount, token).execute()).toBeTruthy();
   });
 });
