@@ -49,8 +49,8 @@ export class DefaultPass {
 
       const shelter = new Shelter({  // Client (Shelter)
         contractId: this._shelterId,
-        networkPassphrase: Networks.TESTNET,
-        rpcUrl: rpcUrl,
+        networkPassphrase: Networks.TESTNET, // Network
+        rpcUrl: rpcUrl, // DefualtRpc
       });
       const scValType = xdr.ScSpecTypeDef.scSpecTypeUdt(
         new xdr.ScSpecTypeUdt({ name: "Pass" })
