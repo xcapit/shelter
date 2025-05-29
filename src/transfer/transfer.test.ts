@@ -5,6 +5,8 @@ export class Transfer {
     private readonly _amount: bigint,
     private readonly _token: string
   ) {}
+
+  execute() {}
 }
 
 describe("transfer", () => {
