@@ -3,7 +3,7 @@ export class Transfer {
     private readonly _from: string,
     private readonly _to: string,
     private readonly _amount: bigint,
-    private readonly _token: string
+    private readonly _token: string // SAC
   ) {}
 
   execute() {
