@@ -16,10 +16,10 @@ export class Transfer {
 }
 
 describe("transfer", () => {
-  const from = "";
-  const to = "";
+  const from = "CBDH3NC57SPUG2T4HGTR5AIVNEUDIXMEI4SBGZNAS2LPJJMJC7NZWNKF";
+  const to = "GASL6XDOK2TO6SCFTXFN2HQDAONLBID2GKX5TYBTHOWA7ZU7VRFZNHGM";
   const amount = BigInt(1);
-  const tokenContractId = ''
+  const tokenContractId = 'CCQK3OJ5T4A5B4SDKQWH7PQKC5HMUZHIGUWF2INTKDQB32F3YPEW7L27'
   const recipient = Keypair.random();
   const token = new SAC({
     contractId: tokenContractId,
