@@ -1,4 +1,4 @@
-import { xdr, type Keypair } from "shelter-sdk";
+import { contract, xdr, type Keypair } from "shelter-sdk";
 
 export class DefaultPass {
   constructor(
@@ -18,7 +18,17 @@ export class DefaultPass {
     return tx;
   }
 
-  _signAuthEntry(entry: xdr.SorobanAuthorizationEntry) {}
+  async _signAuthEntry(entry: xdr.SorobanAuthorizationEntry) {
+    const credentials = entry.credentials().address();
+
+    let expiration = credentials.signatureExpirationLedger();
+
+    if (!expiration) {
+      const { sequence } = await rpcServer.getLatestLedger(); // DefaultRpc
+      expiration = sequence + contract.DEFAULT_TIMEOUT / 5;
+    }
+    credentials.signatureExpirationLedger(expiration);
+  }
 }
 
 // async _signAuthEntry(
