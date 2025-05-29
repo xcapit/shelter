@@ -47,16 +47,47 @@ export class DefaultPass {
       signature,
     };
 
-      const shelter = new Shelter({  // Client (Shelter)
-        contractId: this._shelterId,
-        networkPassphrase: Networks.TESTNET, // Network
-        rpcUrl: rpcUrl, // DefualtRpc -> URL
-      });
-      const scValType = xdr.ScSpecTypeDef.scSpecTypeUdt(
-        new xdr.ScSpecTypeUdt({ name: "Pass" })
-      );
+    const shelter = new Shelter({
+      // Client (Shelter)
+      contractId: this._shelterId,
+      networkPassphrase: Networks.TESTNET, // Network
+      rpcUrl: rpcUrl, // DefualtRpc -> URL
+    });
+    const scValType = xdr.ScSpecTypeDef.scSpecTypeUdt(
+      new xdr.ScSpecTypeUdt({ name: "Pass" })
+    );
 
-      const scVal = shelter.spec.nativeToScVal(shelterSignature, scValType);
+    const scVal = shelter.spec.nativeToScVal(shelterSignature, scValType);
+
+    switch (credentials.signature().switch().name) {
+      case "scvVoid":
+        console.log("add in void");
+        credentials.signature(scVal);
+        break;
+      case "scvVec":
+        // Add the new signature to the existing map
+        // TODO: ?
+        // credentials.signature().vec()?.[0].map()?.push(scVal)
+        console.log("add vec?");
+        // Order the map by key
+        // Not using Buffer.compare because Symbols are 9 bytes and unused bytes _append_ 0s vs prepending them, which is too bad
+        credentials
+          .signature()
+          .vec()?.[0]
+          .map()
+          ?.sort((a, b) => {
+            return (
+              a.key().vec()![0].sym() + a.key().vec()![1].toXDR().join("")
+            ).localeCompare(
+              b.key().vec()![0].sym() + b.key().vec()![1].toXDR().join("")
+            );
+          });
+        break;
+      default:
+        throw new Error("Unsupported signature");
+    }
+
+    return entry;
   }
 }
 
