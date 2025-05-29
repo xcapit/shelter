@@ -1,13 +1,13 @@
-export class Transfer { }
+export class Transfer {}
 
-describe('transfer', () => {
-  const from = '';
-  const to = '';
-  const amount = '';
-  const token = '';
-  const recipient = '';
+describe("transfer", () => {
+  const from = "";
+  const to = "";
+  const amount = "";
+  const token = "";
+  const recipient = "";
 
-  test('new', () => {
-    expect(new Transfer()).toBeTruthy();
+  test("new", () => {
+    expect(new Transfer(from, to, amount, token)).toBeTruthy();
   });
 });
