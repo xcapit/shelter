@@ -6,7 +6,9 @@ export class Transfer {
     private readonly _token: string
   ) {}
 
-  execute() {}
+  execute() {
+    return true;
+  }
 }
 
 describe("transfer", () => {
