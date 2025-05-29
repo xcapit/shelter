@@ -1,12 +1,13 @@
 import { Keypair, Networks, Client as SAC } from "sac-sdk";
 import { FakeRpc } from "../rpc/fake/fake-rpc";
+
 export class Transfer {
   constructor(
     private readonly _from: string,
     private readonly _to: string,
     private readonly _amount: bigint,
     private readonly _token: SAC // SAC
-  ) {}
+  ) { }
 
   execute() {
     return true;
