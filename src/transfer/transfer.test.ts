@@ -1,9 +1,16 @@
-export class Transfer {}
+export class Transfer {
+  constructor(
+    private readonly _from: string,
+    private readonly _to: string,
+    private readonly _amount: bigint,
+    private readonly _token: string
+  ) {}
+}
 
 describe("transfer", () => {
   const from = "";
   const to = "";
-  const amount = "";
+  const amount = BigInt(1);
   const token = "";
   const recipient = "";
 
