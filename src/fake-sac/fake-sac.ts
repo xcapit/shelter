@@ -1,7 +1,11 @@
 export class FakeSAC {
-
-  transfer: ({ from, to, amount }: {
+  transfer({
+    from,
+    to,
+    amount,
+  }: {
     from: string;
     to: string;
-    amount: i128;
-  }
+    amount: bigint;
+  }) {}
+}
