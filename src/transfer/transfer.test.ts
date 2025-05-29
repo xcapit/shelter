@@ -6,7 +6,7 @@ export class Transfer {
     private readonly _from: string,
     private readonly _to: string,
     private readonly _amount: bigint,
-    private readonly _token: SAC // SAC
+    private readonly _token: SAC
   ) { }
 
   async execute() {
