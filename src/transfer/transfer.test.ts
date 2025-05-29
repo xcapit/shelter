@@ -17,4 +17,8 @@ describe("transfer", () => {
   test("new", () => {
     expect(new Transfer(from, to, amount, token)).toBeTruthy();
   });
+
+  test("execute", () => {
+    expect(new Transfer(from, to, amount, token).execute()).toBeTruthy();
+  });
 });
