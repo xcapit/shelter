@@ -1,15 +1,15 @@
 import { rpc } from "@stellar/stellar-sdk";
 import { Client, Keypair } from "shelter-sdk";
 import type { FakeClient } from "../fake-client/fake-client";
-import type { Rpc } from "../rpc/rpc.interface";
 import { Transaction } from "../transaction/transaction";
+import type { Rpc } from "../rpc/rpc";
 
 export class DeployedShelter {
   constructor(
     private readonly _steward: Keypair,
     private readonly _rpc: Rpc,
     private readonly _client: Client | FakeClient
-  ) {}
+  ) { }
 
   async stewardId(): Promise<string> {
     return (await this._client.steward()).result;
@@ -32,8 +32,8 @@ export class DeployedShelter {
       this._rpc
     ).result();
     if (resultTx.status !== rpc.Api.GetTransactionStatus.SUCCESS) {
-      console.log("Error", JSON.stringify(resultTx, null, 2));
-      throw new Error("BOUND AIR ERROR");
+      console.log("Bound Aid Error", JSON.stringify(resultTx, null, 2));
+      throw new Error("BOUND AID ERROR");
     }
   }
 

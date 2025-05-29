@@ -1,17 +1,23 @@
-import { Keypair, Networks } from "shelter-sdk";
+import { Keypair } from "shelter-sdk";
 import { Shelter } from "./shelter";
-import { FakeRpc } from "../rpc/fake/fake-rpc";
 import { FakeClient } from "../fake-client/fake-client";
-import { contractAddressTransactionReponse } from "../fixtures/fixtures";
+import {
+  contractAddressTransactionReponse,
+  FakeServer,
+} from "../fixtures/fixtures";
+import { Rpc } from "../rpc/rpc";
 
 describe("Shelter", () => {
-  const networkPassphrase = Networks.TESTNET;
   const steward = Keypair.random();
   const wasmHash = "aWasmHash";
 
   test("new", () => {
     expect(
-      new Shelter(steward, new FakeRpc(), wasmHash, networkPassphrase)
+      new Shelter(
+        steward,
+        new Rpc(new FakeServer()),
+        wasmHash,
+      )
     ).toBeTruthy();
   });
 
@@ -19,9 +25,8 @@ describe("Shelter", () => {
     expect(
       await new Shelter(
         steward,
-        new FakeRpc(contractAddressTransactionReponse),
+        new Rpc(new FakeServer(contractAddressTransactionReponse)),
         wasmHash,
-        networkPassphrase,
         FakeClient
       ).deploy()
     ).toBeTruthy();

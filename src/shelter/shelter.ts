@@ -1,17 +1,16 @@
 import type { AssembledTransaction } from "@stellar/stellar-sdk/contract";
 import { DeployedShelter } from "../deployed-shelter/deployed-shelter";
-import { Client, Keypair, Networks } from "shelter-sdk";
-import type { Rpc } from "../rpc/rpc.interface";
+import { Client, Keypair } from "shelter-sdk";
 import type { FakeClient } from "../fake-client/fake-client";
 import { StrKey, Address } from "@stellar/stellar-sdk";
 import { Transaction } from "../transaction/transaction";
+import type { Rpc } from "../rpc/rpc";
 
 export class Shelter {
   constructor(
     private readonly _steward: Keypair,
     private readonly _rpc: Rpc,
     private readonly _wasm: Buffer | string,
-    private readonly _networkPassphrase: Networks,
     private readonly _client: typeof Client | typeof FakeClient = Client
   ) { }
 
@@ -21,7 +20,7 @@ export class Shelter {
       this._rpc,
       new this._client({
         contractId: await this._address(await this._deploy()),
-        networkPassphrase: this._networkPassphrase,
+        networkPassphrase: await this._rpc.network(),
         rpcUrl: this._rpc.url(),
         publicKey: this._steward.publicKey(),
       })
@@ -33,7 +32,7 @@ export class Shelter {
       { steward: this._steward.publicKey() },
       {
         wasmHash: this._wasm,
-        networkPassphrase: this._networkPassphrase,
+        networkPassphrase: await this._rpc.network(),
         rpcUrl: this._rpc.url(),
         publicKey: this._steward.publicKey(),
       }

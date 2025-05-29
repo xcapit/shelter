@@ -2,12 +2,12 @@ import { rpc } from "@stellar/stellar-sdk";
 import { Keypair } from "shelter-sdk";
 import { DeployedShelter } from "./deployed-shelter";
 import { FakeClient } from "../fake-client/fake-client";
-import { FakeRpc } from "../rpc/fake/fake-rpc";
-import { contractAddressTransactionReponse } from "../fixtures/fixtures";
+import { contractAddressTransactionReponse, FakeServer } from "../fixtures/fixtures";
+import { Rpc } from "../rpc/rpc";
 
 describe("DeployedShelter", () => {
   const steward = Keypair.random();
-  const fakeRpc = new FakeRpc();
+  const fakeRpc = new Rpc(new FakeServer());
   const client = new FakeClient({}, steward);
   let deployedShelter: DeployedShelter;
   const recipient = Keypair.fromPublicKey(
@@ -34,7 +34,7 @@ describe("DeployedShelter", () => {
     expect(
       await new DeployedShelter(
         steward,
-        new FakeRpc(contractAddressTransactionReponse),
+        new Rpc(new FakeServer(contractAddressTransactionReponse)),
         client
       ).stewardId()
     ).toEqual(steward.publicKey());
@@ -44,7 +44,7 @@ describe("DeployedShelter", () => {
     const _pollTransactionReponse = { status: rpc.Api.GetTransactionStatus.SUCCESS };
 
     await expect(
-      new DeployedShelter(steward, new FakeRpc(_pollTransactionReponse), client).boundAid(
+      new DeployedShelter(steward, new Rpc(new FakeServer(_pollTransactionReponse)), client).boundAid(
         recipient.rawPublicKey(),
         tokenContractId,
         amount,
@@ -58,7 +58,7 @@ describe("DeployedShelter", () => {
     const _pollTransactionReponse = { status: rpc.Api.GetTransactionStatus.NOT_FOUND };
 
     await expect(
-      new DeployedShelter(steward, new FakeRpc(_pollTransactionReponse), client).boundAid(
+      new DeployedShelter(steward, new Rpc(new FakeServer(_pollTransactionReponse)), client).boundAid(
         recipient.rawPublicKey(),
         tokenContractId,
         amount,
