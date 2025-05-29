@@ -37,6 +37,15 @@ export class DefaultPass {
         invocation: entry.rootInvocation(),
       })
     );
+
+    const payload = hash(preimage.toXDR());
+
+    const signature = this._recipient.sign(payload);
+
+    const shelterSignature = {
+      public_key: options.keypair.rawPublicKey(),
+      signature: signature,
+    };
   }
 }
 
