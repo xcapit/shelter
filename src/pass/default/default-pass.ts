@@ -1,4 +1,4 @@
-import { contract, xdr, type Keypair } from "shelter-sdk";
+import { contract, hash, xdr, type Keypair } from "shelter-sdk";
 
 export class DefaultPass {
   constructor(
@@ -28,6 +28,15 @@ export class DefaultPass {
       expiration = sequence + contract.DEFAULT_TIMEOUT / 5;
     }
     credentials.signatureExpirationLedger(expiration);
+
+    const preimage = xdr.HashIdPreimage.envelopeTypeSorobanAuthorization(
+      new xdr.HashIdPreimageSorobanAuthorization({
+        networkId: hash(Buffer.from(Networks.TESTNET)), // Network
+        nonce: credentials.nonce(),
+        signatureExpirationLedger: credentials.signatureExpirationLedger(),
+        invocation: entry.rootInvocation(),
+      })
+    );
   }
 }
 
