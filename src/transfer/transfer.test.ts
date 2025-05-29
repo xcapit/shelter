@@ -1,6 +1,6 @@
-import { Client as SAC } from "sac-sdk";
+import { Keypair, Client as SAC } from "sac-sdk";
 import { FakeSAC } from "../fake-sac/fake-sac";
-import type { FakePass } from "../pass/fake/fake-pass";
+import { FakePass } from "../pass/fake/fake-pass";
 
 export class Transfer {
   constructor(
@@ -8,7 +8,7 @@ export class Transfer {
     private readonly _to: string,
     private readonly _amount: bigint,
     private readonly _token: SAC | FakeSAC
-  ) { }
+  ) {}
 
   async execute(withPass: FakePass) {
     withPass.applyTo(
@@ -16,7 +16,8 @@ export class Transfer {
         from: this._from,
         to: this._to,
         amount: this._amount,
-      }));
+      })
+    );
     return true;
   }
 
@@ -120,6 +121,10 @@ describe("transfer", () => {
   });
 
   test("execute", async () => {
-    expect(new Transfer(from, to, amount, token).execute()).toBeTruthy();
+    expect(
+      new Transfer(from, to, amount, token).execute(
+        new FakePass(Keypair.random(), "")
+      )
+    ).toBeTruthy();
   });
 });
