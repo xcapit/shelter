@@ -5,4 +5,9 @@ export class DefaultPass {
     private readonly _recipient: Keypair,
     private readonly _shelterId: string
   ) {}
+
+  async applyTo(tx: any) { 
+
+    
+  }
 }
