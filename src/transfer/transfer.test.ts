@@ -10,6 +10,7 @@ export class Transfer {
   ) { }
 
   execute() {
+    await this._token.transfer({ from: this._from, to: this._to, amount: this._amount });
     return true;
   }
 }
