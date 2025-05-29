@@ -47,8 +47,8 @@ export class DefaultPass {
       signature,
     };
 
-      const shelter = new Shelter({
-        contractId: shelterAddress,
+      const shelter = new Shelter({  // Client (Shelter)
+        contractId: this._shelterId,
         networkPassphrase: Networks.TESTNET,
         rpcUrl: rpcUrl,
       });
