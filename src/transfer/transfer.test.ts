@@ -1,6 +1,6 @@
 import { Keypair, Networks, Client as SAC } from "sac-sdk";
 import { FakeRpc } from "../rpc/fake/fake-rpc";
-import type { FakeSAC } from "../fake-sac/fake-sac";
+import { FakeSAC } from "../fake-sac/fake-sac";
 
 export class Transfer {
   constructor(
@@ -22,12 +22,7 @@ describe("transfer", () => {
   const amount = BigInt(1);
   const tokenContractId = 'CCQK3OJ5T4A5B4SDKQWH7PQKC5HMUZHIGUWF2INTKDQB32F3YPEW7L27'
   const recipient = Keypair.random();
-  const token = new SAC({
-    contractId: tokenContractId,
-    networkPassphrase: Networks.TESTNET,
-    rpcUrl: new FakeRpc().url(),
-    publicKey: recipient.publicKey(),
-  });
+  const token = new FakeSAC();
 
 
   test("new", () => {
