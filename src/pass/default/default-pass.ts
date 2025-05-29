@@ -18,7 +18,7 @@ export class DefaultPass {
     return tx;
   }
 
-  _signAuthEntry(clone: any, options: {keypair: Keypair}){
+  _signAuthEntry(entry: xdr.SorobanAuthorizationEntry, options: {keypair: Keypair}){
 
   }
 }
