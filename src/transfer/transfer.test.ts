@@ -11,16 +11,12 @@ export class Transfer {
   ) { }
 
   async execute(withPass: FakePass) {
-    withPass.applyTo(await this._token.transfer({
-      from: this._from,
-      to: this._to,
-      amount: this._amount,
-    }));
-    await this._token.transfer({
-      from: this._from,
-      to: this._to,
-      amount: this._amount,
-    });
+    withPass.applyTo(
+      await this._token.transfer({
+        from: this._from,
+        to: this._to,
+        amount: this._amount,
+      }));
     return true;
   }
 
