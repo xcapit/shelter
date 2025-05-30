@@ -21,8 +21,15 @@ export class SimulatedTransaction {
   }
 
   private async _txData(tx: Tx): Promise<any> {
-    return await this._rpc
-      .server()
-      .pollTransaction((await this._rpc.server().sendTransaction(tx)).hash);
+    try {
+      const sendTx = await this._rpc.server().sendTransaction(tx)
+      console.log('SEND TX', sendTx);
+      return await this._rpc
+        .server()
+        .pollTransaction(sendTx.hash);
+    } catch (error) {
+      console.log('SEND TX ERROR', error)
+    }
+
   }
 }
