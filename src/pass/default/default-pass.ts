@@ -21,21 +21,20 @@ export class DefaultPass {
     return tx;
   }
 
-  // TODO: Continuar aca
   async _signAuthEntry(entry: xdr.SorobanAuthorizationEntry) {
     const credentials = entry.credentials().address();
 
     let expiration = credentials.signatureExpirationLedger();
 
     if (!expiration) {
-      const { sequence } = await this._rpc.server().getLatestLedger(); // DefaultRpc
+      const { sequence } = await this._rpc.server().getLatestLedger();
       expiration = sequence + contract.DEFAULT_TIMEOUT / 5;
     }
     credentials.signatureExpirationLedger(expiration);
 
     const preimage = xdr.HashIdPreimage.envelopeTypeSorobanAuthorization(
       new xdr.HashIdPreimageSorobanAuthorization({
-        networkId: hash(Buffer.from(this._networkPassphrase)), // Network
+        networkId: hash(Buffer.from(this._networkPassphrase)),
         nonce: credentials.nonce(),
         signatureExpirationLedger: credentials.signatureExpirationLedger(),
         invocation: entry.rootInvocation(),
@@ -52,10 +51,9 @@ export class DefaultPass {
     };
 
     const shelter = new Client({
-      // Client (Shelter)
       contractId: this._shelterId,
-      networkPassphrase: this._networkPassphrase, // Network
-      rpcUrl: this._rpc.url(), // DefualtRpc -> URL
+      networkPassphrase: this._networkPassphrase,
+      rpcUrl: this._rpc.url(),
     });
     const scValType = xdr.ScSpecTypeDef.scSpecTypeUdt(
       new xdr.ScSpecTypeUdt({ name: "Pass" })
