@@ -24,6 +24,7 @@ export class SimulatedTransaction {
     try {
       const sendTx = await this._rpc.server().sendTransaction(tx)
       console.log('SEND TX', sendTx);
+      console.log('SEND TX ERR', sendTx.errorResult);
       return await this._rpc
         .server()
         .pollTransaction(sendTx.hash);
