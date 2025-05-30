@@ -118,6 +118,9 @@ describe("Shelter", () => {
 
     const recipientSac = _sac(recipient.publicKey());
 
+    // TODO: 
+    // - Rpc y Network juntarlos
+    // - Abstraccion para el transfer. Aid -> transfer()
     const transfer = new Transfer(
       deployedShelter.id(),
       "GAXRNW46AL4PI7Q6FABZ2OS3BKG3I7FHMBPRP7FBQHQLFX2KU2PBGGUP",
