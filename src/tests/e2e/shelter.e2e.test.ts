@@ -13,12 +13,7 @@ describe("Shelter", () => {
   );
   const wasmHash =
     "50d8a2d89cb783d34c5400a4548b0335f97c3be58aac7ea3b0f8c4b60b001f4a";
-  const _randomKeyPair = async (): Promise<Keypair> => {
-    const stellar = walletSdk.Wallet.TestNet().stellar();
-    const account = stellar.account().createKeypair();
-    await stellar.fundTestnetAccount(account.publicKey);
-    return Keypair.fromSecret(account.secretKey);
-  };
+
   const tokenContractId =
     "CCQK3OJ5T4A5B4SDKQWH7PQKC5HMUZHIGUWF2INTKDQB32F3YPEW7L27";
   const expiration = BigInt(Math.floor(Date.now() / 1000) + 7200);
@@ -29,6 +24,22 @@ describe("Shelter", () => {
 
   let steward: Keypair;
   let shelter: Shelter;
+
+  const _randomKeyPair = async (): Promise<Keypair> => {
+    const stellar = walletSdk.Wallet.TestNet().stellar();
+    const account = stellar.account().createKeypair();
+    await stellar.fundTestnetAccount(account.publicKey);
+    return Keypair.fromSecret(account.secretKey);
+  };
+
+  const _sac = (publicKey: string) => {
+    return new SAC({
+      contractId: tokenContractId,
+      networkPassphrase: Networks.TESTNET,
+      rpcUrl: defaultRpc.url(),
+      publicKey,
+    });
+  };
 
   beforeEach(async () => {
     steward = await _randomKeyPair();
@@ -46,16 +57,11 @@ describe("Shelter", () => {
       "GASL6XDOK2TO6SCFTXFN2HQDAONLBID2GKX5TYBTHOWA7ZU7VRFZNHGM"
     );
 
-    const _sac = new SAC({
-      contractId: tokenContractId,
-      networkPassphrase: Networks.TESTNET,
-      rpcUrl: defaultRpc.url(),
-      publicKey: aliceKeyPair.publicKey(),
-    });
+    const sac = _sac(aliceKeyPair.publicKey())
 
     const deployedShelter = await shelter.deploy();
 
-    const rawMintTx = await _sac.mint({
+    const rawMintTx = await sac.mint({
       to: deployedShelter.id(),
       amount: BigInt(1000),
     });
