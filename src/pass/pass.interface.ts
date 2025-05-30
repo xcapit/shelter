@@ -1,3 +1,5 @@
+import type { AssembledTransaction } from "@stellar/stellar-sdk/contract";
+
 export interface Pass {
-  applyTo(tx: any): any;
+  applyTo(tx: AssembledTransaction<null>): any;
 }
