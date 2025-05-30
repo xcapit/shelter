@@ -118,11 +118,19 @@ describe("Shelter", () => {
       )
     ).resolves.toBeUndefined();
 
+
+    const _sac2 = new SAC({
+      contractId: tokenContractId,
+      networkPassphrase: Networks.TESTNET,
+      rpcUrl: defaultRpc.url(),
+      publicKey: recipient.publicKey(),
+    });
+
     const transfer = new Transfer(
       deployedShelter.id(),
       "GAXRNW46AL4PI7Q6FABZ2OS3BKG3I7FHMBPRP7FBQHQLFX2KU2PBGGUP",
       amount,
-      _sac
+      _sac2
     );
     const pass = new DefaultPass(
       recipient,
