@@ -6,6 +6,7 @@ import { Client as SAC } from "sac-sdk";
 import { SimulatedTransaction } from "../../transaction/simulated-transaction";
 import { DefaultPass } from "../../pass/default/default-pass";
 import { Transfer } from "../../transfer/transfer";
+import { Transaction } from "../../transaction/transaction";
 
 describe("Shelter", () => {
   const defaultRpc = new DefaultRpc(
@@ -61,17 +62,18 @@ describe("Shelter", () => {
 
     const deployedShelter = await shelter.deploy();
 
-    const rawMintTx = await sac.mint({
-      to: deployedShelter.id(),
-      amount: BigInt(1000),
-    });
-    const builtMintTx = rawMintTx.built!;
-    builtMintTx.sign(aliceKeyPair);
+    const mintTx = new Transaction(
+      await sac.mint({
+        to: deployedShelter.id(),
+        amount: BigInt(1000),
+      }),
+      aliceKeyPair,
+      defaultRpc
+    );
 
-    const sentMintTx = await defaultRpc.server().sendTransaction(builtMintTx);
-    const mintTx = await defaultRpc.server().pollTransaction(sentMintTx.hash);
+    const mintResultTx = await mintTx.result()
 
-    expect(mintTx.status).toEqual(rpc.Api.GetTransactionStatus.SUCCESS);
+    expect(mintResultTx.status).toEqual(rpc.Api.GetTransactionStatus.SUCCESS);
 
     await expect(
       deployedShelter.boundAid(
@@ -92,17 +94,18 @@ describe("Shelter", () => {
 
     const deployedShelter = await shelter.deploy();
 
-    const rawMintTx = await sac.mint({
-      to: deployedShelter.id(),
-      amount: BigInt(1000),
-    });
-    const builtMintTx = rawMintTx.built!;
-    builtMintTx.sign(aliceKeyPair);
+    const mintTx = new Transaction(
+      await sac.mint({
+        to: deployedShelter.id(),
+        amount: BigInt(1000),
+      }),
+      aliceKeyPair,
+      defaultRpc
+    );
 
-    const sentMintTx = await defaultRpc.server().sendTransaction(builtMintTx);
-    const mintTx = await defaultRpc.server().pollTransaction(sentMintTx.hash);
+    const mintResultTx = await mintTx.result()
 
-    expect(mintTx.status).toEqual(rpc.Api.GetTransactionStatus.SUCCESS);
+    expect(mintResultTx.status).toEqual(rpc.Api.GetTransactionStatus.SUCCESS);
 
     await expect(
       deployedShelter.boundAid(
