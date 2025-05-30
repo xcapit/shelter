@@ -3,9 +3,9 @@ import { Shelter } from "../../shelter/shelter";
 import { DefaultRpc } from "../../rpc/default/default-rpc";
 import { walletSdk } from "@stellar/typescript-wallet-sdk";
 import { Client as SAC } from "sac-sdk";
-import { Transfer } from "../../transfer/transfer.test";
 import { SimulatedTransaction } from "../../transaction/simulated-transaction";
 import { DefaultPass } from "../../pass/default/default-pass";
+import { Transfer } from "../../transfer/transfer";
 
 describe("Shelter", () => {
   const defaultRpc = new DefaultRpc(
@@ -120,7 +120,7 @@ describe("Shelter", () => {
 
     const transfer = new Transfer(
       deployedShelter.id(),
-      'CBDH3NC57SPUG2T4HGTR5AIVNEUDIXMEI4SBGZNAS2LPJJMJC7NZWNKF',
+      "CBDH3NC57SPUG2T4HGTR5AIVNEUDIXMEI4SBGZNAS2LPJJMJC7NZWNKF",
       amount,
       _sac
     );
@@ -129,13 +129,18 @@ describe("Shelter", () => {
       deployedShelter.id(),
       defaultRpc,
       Networks.TESTNET
-    )
-    const simTx = new SimulatedTransaction(await transfer.value(pass), recipient, defaultRpc)
-    const transferResultTx = await simTx.result()
+    );
+    const simTx = new SimulatedTransaction(
+      await transfer.value(pass),
+      recipient,
+      defaultRpc
+    );
+    const transferResultTx = await simTx.result();
 
-    console.log('result', transferResultTx);
+    console.log("result", transferResultTx);
 
-    expect(transferResultTx.status).toEqual(rpc.Api.GetTransactionStatus.SUCCESS);
-
+    expect(transferResultTx.status).toEqual(
+      rpc.Api.GetTransactionStatus.SUCCESS
+    );
   });
 });
