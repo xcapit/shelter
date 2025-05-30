@@ -8,7 +8,7 @@ export class Transfer {
     private readonly _to: string,
     private readonly _amount: bigint,
     private readonly _token: SAC | FakeSAC
-  ) {}
+  ) { }
 
   async execute(withPass: FakePass) {
     withPass.applyTo(
@@ -36,7 +36,7 @@ describe("transfer", () => {
   test("execute", async () => {
     expect(
       new Transfer(from, to, amount, token).execute(
-        new FakePass(Keypair.random(), "")
+        new FakePass()
       )
     ).toBeTruthy();
   });
