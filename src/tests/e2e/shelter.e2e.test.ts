@@ -119,6 +119,12 @@ describe("Shelter", () => {
     ).resolves.toBeUndefined();
 
     const transfer = new Transfer(deployedShelter.id(), 'GASL6XDOK2TO6SCFTXFN2HQDAONLBID2GKX5TYBTHOWA7ZU7VRFZNHGM', amount, _sac);
-    const simTx = new SimulatedTransaction(await transfer.value(new DefaultPass))
+    const pass = new DefaultPass(
+      recipient,
+      deployedShelter.id(),
+      defaultRpc,
+      Networks.TESTNET
+    )
+    const simTx = new SimulatedTransaction(await transfer.value())
   });
 });
