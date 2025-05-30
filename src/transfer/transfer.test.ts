@@ -1,6 +1,7 @@
 import { Client as SAC } from "sac-sdk";
 import { FakeSAC } from "../fake-sac/fake-sac";
 import type { Pass } from "../pass/pass.interface";
+import { FakePass } from "../pass/fake/fake-pass";
 
 export class Transfer {
   constructor(
