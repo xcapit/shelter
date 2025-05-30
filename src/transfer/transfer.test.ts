@@ -1,6 +1,7 @@
 import { Keypair, Client as SAC } from "sac-sdk";
 import { FakeSAC } from "../fake-sac/fake-sac";
 import { FakePass } from "../pass/fake/fake-pass";
+import { DefaultRpc } from "../rpc/default/default-rpc";
 
 export class Transfer {
   constructor(
@@ -8,19 +9,17 @@ export class Transfer {
     private readonly _to: string,
     private readonly _amount: bigint,
     private readonly _token: SAC | FakeSAC
-  ) { }
+  ) {}
 
-  async execute(withPass: FakePass) {
-    withPass.applyTo(
+  async value(withPass: FakePass) {
+    return await withPass.applyTo(
       await this._token.transfer({
         from: this._from,
         to: this._to,
         amount: this._amount,
       })
     );
-    return true;
   }
-
 }
 
 describe("transfer", () => {
@@ -33,11 +32,9 @@ describe("transfer", () => {
     expect(new Transfer(from, to, amount, token)).toBeTruthy();
   });
 
-  test("execute", async () => {
+  test("value", async () => {
     expect(
-      new Transfer(from, to, amount, token).execute(
-        new FakePass()
-      )
+      new Transfer(from, to, amount, token).value(new FakePass())
     ).toBeTruthy();
   });
 });
