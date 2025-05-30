@@ -13,6 +13,7 @@ export class SimulatedTransaction {
   async result(): Promise<rpc.Api.GetTransactionResponse> {
     const tx = this._rawTx.built!;
     const simTx: any = await this._rpc.server().simulateTransaction(tx);
+    console.log('SIM', simTx);
     const completeTx = rpc.assembleTransaction(tx, simTx).build();
     completeTx.sign(this._signer);
     console.log('xdr', completeTx.toXDR());
