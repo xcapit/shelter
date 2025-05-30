@@ -1,7 +1,6 @@
-import { Keypair, Client as SAC } from "sac-sdk";
+import { Client as SAC } from "sac-sdk";
 import { FakeSAC } from "../fake-sac/fake-sac";
 import { FakePass } from "../pass/fake/fake-pass";
-import { DefaultRpc } from "../rpc/default/default-rpc";
 
 export class Transfer {
   constructor(
