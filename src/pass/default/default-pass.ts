@@ -64,6 +64,7 @@ export class DefaultPass implements Pass {
       networkPassphrase: this._networkPassphrase,
       rpcUrl: this._rpc.url(),
     });
+    
     const scValType = xdr.ScSpecTypeDef.scSpecTypeUdt(
       new xdr.ScSpecTypeUdt({ name: "Pass" })
     );
