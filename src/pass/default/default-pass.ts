@@ -8,6 +8,7 @@ import {
 } from "shelter-sdk";
 import type { Rpc } from "../../rpc/rpc.interface";
 import type { Pass } from "../pass.interface";
+import type { AssembledTransaction } from "@stellar/stellar-sdk/contract";
 
 export class DefaultPass implements Pass {
   constructor(
@@ -17,7 +18,7 @@ export class DefaultPass implements Pass {
     private readonly _networkPassphrase: Networks
   ) {}
 
-  async applyTo(tx: any) {
+  async applyTo(tx: AssembledTransaction<null>) {
     await tx.signAuthEntries({
       address: this._shelterId,
       authorizeEntry: (entry: any) => {
