@@ -1,6 +1,6 @@
 import { Client as SAC } from "sac-sdk";
 import { FakeSAC } from "../fake-sac/fake-sac";
-import { FakePass } from "../pass/fake/fake-pass";
+import type { Pass } from "../pass/pass.interface";
 
 export class Transfer {
   constructor(
@@ -10,7 +10,7 @@ export class Transfer {
     private readonly _token: SAC | FakeSAC
   ) {}
 
-  async value(withPass: FakePass) {
+  async value(withPass: Pass) {
     return await withPass.applyTo(
       await this._token.transfer({
         from: this._from,
