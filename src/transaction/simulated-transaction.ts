@@ -8,29 +8,19 @@ export class SimulatedTransaction {
     private readonly _rawTx: AssembledTransaction<any>,
     private readonly _signer: Keypair,
     private readonly _rpc: Rpc
-  ) { }
+  ) {}
 
   async result(): Promise<rpc.Api.GetTransactionResponse> {
     const tx = this._rawTx.built!;
     const simTx: any = await this._rpc.server().simulateTransaction(tx);
-    console.log('SIM', simTx);
     const completeTx = rpc.assembleTransaction(tx, simTx).build();
     completeTx.sign(this._signer);
-    console.log('xdr', completeTx.toXDR());
     return await this._txData(completeTx);
   }
 
   private async _txData(tx: Tx): Promise<any> {
-    try {
-      const sendTx = await this._rpc.server().sendTransaction(tx)
-      console.log('SEND TX', sendTx);
-      console.log('SEND TX ERR', sendTx.errorResult);
-      return await this._rpc
-        .server()
-        .pollTransaction(sendTx.hash);
-    } catch (error) {
-      console.log('SEND TX ERROR', error)
-    }
-
+    return await this._rpc
+      .server()
+      .pollTransaction((await this._rpc.server().sendTransaction(tx)).hash);
   }
 }
