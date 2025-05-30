@@ -3,6 +3,7 @@ import { Shelter } from "../../shelter/shelter";
 import { DefaultRpc } from "../../rpc/default/default-rpc";
 import { walletSdk } from "@stellar/typescript-wallet-sdk";
 import { Client as SAC } from "sac-sdk";
+import { Transfer } from "../../transfer/transfer.test";
 
 describe("Shelter", () => {
   const defaultRpc = new DefaultRpc(
@@ -114,5 +115,7 @@ describe("Shelter", () => {
         expiration
       )
     ).resolves.toBeUndefined();
+
+    const transfer = new Transfer(deployedShelter.id(), 'GASL6XDOK2TO6SCFTXFN2HQDAONLBID2GKX5TYBTHOWA7ZU7VRFZNHGM', amount, _sac);
   });
 });
