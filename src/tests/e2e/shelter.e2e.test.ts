@@ -128,6 +128,8 @@ describe("Shelter", () => {
     const simTx = new SimulatedTransaction(await transfer.value(pass), recipient, defaultRpc)
     const transferResultTx = await simTx.result()
 
+    console.log('result', transferResultTx);
+
     expect(transferResultTx.status).toEqual(rpc.Api.GetTransactionStatus.SUCCESS);
 
   });
