@@ -12,6 +12,8 @@ export class SimulatedTransaction {
 
   async result(): Promise<rpc.Api.GetTransactionResponse> {
     const tx = this._rawTx.built!;
+    const simTx: any = await rpcServer.simulateTransaction(buildTx);
+    const completeTx = rpc.assembleTransaction(buildTx, simTx).build();
     tx.sign(this._signer);
     return await this._txData(tx);
   }
