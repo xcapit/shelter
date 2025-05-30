@@ -1,4 +1,4 @@
-import { contract, hash, Networks, xdr, type Keypair } from "shelter-sdk";
+import { Client, contract, hash, Networks, xdr, type Keypair } from "shelter-sdk";
 import type { Rpc } from "../../rpc/rpc.interface";
 
 export class DefaultPass {
@@ -51,7 +51,7 @@ export class DefaultPass {
       signature,
     };
 
-    const shelter = new Shelter({
+    const shelter = new Client({
       // Client (Shelter)
       contractId: this._shelterId,
       networkPassphrase: this._networkPassphrase, // Network
