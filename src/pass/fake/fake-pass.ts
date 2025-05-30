@@ -1,5 +1,7 @@
 export class FakePass {
   constructor() { }
 
-  async applyTo(tx: any) { }
+  async applyTo(tx: any) {
+    return tx;
+  }
 }
