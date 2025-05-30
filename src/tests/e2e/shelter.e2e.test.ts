@@ -72,4 +72,47 @@ describe("Shelter", () => {
       )
     ).resolves.toBeUndefined();
   });
+
+  test("recipient transfer from shelter", async () => {
+    const recipient = Keypair.fromPublicKey(
+      "GASL6XDOK2TO6SCFTXFN2HQDAONLBID2GKX5TYBTHOWA7ZU7VRFZNHGM"
+    );
+    const tokenContractId =
+      "CCQK3OJ5T4A5B4SDKQWH7PQKC5HMUZHIGUWF2INTKDQB32F3YPEW7L27";
+    const expiration = BigInt(Math.floor(Date.now() / 1000) + 7200);
+    const amount = BigInt(1);
+    const aliceSecret =
+      "SDZVEQPNLS74A5E7VDSUHV2EDUJJUBNNT46PRNGAJXM4SZCBGIYGAZEX";
+    const aliceKeyPair = Keypair.fromSecret(aliceSecret);
+
+    const _sac = new SAC({
+      contractId: tokenContractId,
+      networkPassphrase: Networks.TESTNET,
+      rpcUrl: defaultRpc.url(),
+      publicKey: aliceKeyPair.publicKey(),
+    });
+
+    const deployedShelter = await shelter.deploy();
+
+    const rawMintTx = await _sac.mint({
+      to: deployedShelter.id(),
+      amount: BigInt(1000),
+    });
+    const builtMintTx = rawMintTx.built!;
+    builtMintTx.sign(aliceKeyPair);
+
+    const sentMintTx = await defaultRpc.server().sendTransaction(builtMintTx);
+    const mintTx = await defaultRpc.server().pollTransaction(sentMintTx.hash);
+
+    expect(mintTx.status).toEqual(rpc.Api.GetTransactionStatus.SUCCESS);
+
+    await expect(
+      deployedShelter.boundAid(
+        recipient.rawPublicKey(),
+        tokenContractId,
+        amount,
+        expiration
+      )
+    ).resolves.toBeUndefined();
+  });
 });
