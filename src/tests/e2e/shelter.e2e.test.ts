@@ -57,7 +57,7 @@ describe("Shelter", () => {
       "GASL6XDOK2TO6SCFTXFN2HQDAONLBID2GKX5TYBTHOWA7ZU7VRFZNHGM"
     );
 
-    const sac = _sac(aliceKeyPair.publicKey())
+    const sac = _sac(aliceKeyPair.publicKey());
 
     const deployedShelter = await shelter.deploy();
 
@@ -88,16 +88,11 @@ describe("Shelter", () => {
       "SBTD4FBLWCWVNJCOSOMVYXPJOYLTQW52EC3AUZ2Q3XX5PAO3SMXIKWHH"
     );
 
-    const _sac = new SAC({
-      contractId: tokenContractId,
-      networkPassphrase: Networks.TESTNET,
-      rpcUrl: defaultRpc.url(),
-      publicKey: aliceKeyPair.publicKey(),
-    });
+    const sac = _sac(aliceKeyPair.publicKey());
 
     const deployedShelter = await shelter.deploy();
 
-    const rawMintTx = await _sac.mint({
+    const rawMintTx = await sac.mint({
       to: deployedShelter.id(),
       amount: BigInt(1000),
     });
@@ -118,18 +113,13 @@ describe("Shelter", () => {
       )
     ).resolves.toBeUndefined();
 
-    const _sac2 = new SAC({
-      contractId: tokenContractId,
-      networkPassphrase: Networks.TESTNET,
-      rpcUrl: defaultRpc.url(),
-      publicKey: recipient.publicKey(),
-    });
+    const recipientSac = _sac(recipient.publicKey());
 
     const transfer = new Transfer(
       deployedShelter.id(),
       "GAXRNW46AL4PI7Q6FABZ2OS3BKG3I7FHMBPRP7FBQHQLFX2KU2PBGGUP",
       amount,
-      _sac2
+      recipientSac
     );
     const pass = new DefaultPass(
       recipient,
