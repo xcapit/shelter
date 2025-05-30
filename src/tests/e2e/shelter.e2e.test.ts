@@ -120,7 +120,7 @@ describe("Shelter", () => {
 
     const transfer = new Transfer(
       deployedShelter.id(),
-      "CBDH3NC57SPUG2T4HGTR5AIVNEUDIXMEI4SBGZNAS2LPJJMJC7NZWNKF",
+      "GAXRNW46AL4PI7Q6FABZ2OS3BKG3I7FHMBPRP7FBQHQLFX2KU2PBGGUP",
       amount,
       _sac
     );
