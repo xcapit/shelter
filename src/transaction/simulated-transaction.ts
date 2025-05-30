@@ -3,7 +3,7 @@ import type { Keypair } from "shelter-sdk";
 import type { Rpc } from "../rpc/rpc.interface";
 import { rpc } from "@stellar/stellar-sdk";
 
-export class Transaction {
+export class SimulatedTransaction {
   constructor(
     private readonly _rawTx: AssembledTransaction<any>,
     private readonly _signer: Keypair,
