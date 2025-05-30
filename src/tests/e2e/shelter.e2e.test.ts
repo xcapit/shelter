@@ -19,6 +19,14 @@ describe("Shelter", () => {
     await stellar.fundTestnetAccount(account.publicKey);
     return Keypair.fromSecret(account.secretKey);
   };
+  const tokenContractId =
+    "CCQK3OJ5T4A5B4SDKQWH7PQKC5HMUZHIGUWF2INTKDQB32F3YPEW7L27";
+  const expiration = BigInt(Math.floor(Date.now() / 1000) + 7200);
+  const amount = BigInt(1);
+  const aliceSecret =
+    "SDZVEQPNLS74A5E7VDSUHV2EDUJJUBNNT46PRNGAJXM4SZCBGIYGAZEX";
+  const aliceKeyPair = Keypair.fromSecret(aliceSecret);
+
   let steward: Keypair;
   let shelter: Shelter;
 
@@ -37,13 +45,6 @@ describe("Shelter", () => {
     const recipient = Keypair.fromPublicKey(
       "GASL6XDOK2TO6SCFTXFN2HQDAONLBID2GKX5TYBTHOWA7ZU7VRFZNHGM"
     );
-    const tokenContractId =
-      "CCQK3OJ5T4A5B4SDKQWH7PQKC5HMUZHIGUWF2INTKDQB32F3YPEW7L27";
-    const expiration = BigInt(Math.floor(Date.now() / 1000) + 7200);
-    const amount = BigInt(1);
-    const aliceSecret =
-      "SDZVEQPNLS74A5E7VDSUHV2EDUJJUBNNT46PRNGAJXM4SZCBGIYGAZEX";
-    const aliceKeyPair = Keypair.fromSecret(aliceSecret);
 
     const _sac = new SAC({
       contractId: tokenContractId,
@@ -80,13 +81,6 @@ describe("Shelter", () => {
     const recipient = Keypair.fromSecret(
       "SBTD4FBLWCWVNJCOSOMVYXPJOYLTQW52EC3AUZ2Q3XX5PAO3SMXIKWHH"
     );
-    const tokenContractId =
-      "CCQK3OJ5T4A5B4SDKQWH7PQKC5HMUZHIGUWF2INTKDQB32F3YPEW7L27";
-    const expiration = BigInt(Math.floor(Date.now() / 1000) + 7200);
-    const amount = BigInt(1);
-    const aliceSecret =
-      "SDZVEQPNLS74A5E7VDSUHV2EDUJJUBNNT46PRNGAJXM4SZCBGIYGAZEX";
-    const aliceKeyPair = Keypair.fromSecret(aliceSecret);
 
     const _sac = new SAC({
       contractId: tokenContractId,
@@ -117,7 +111,6 @@ describe("Shelter", () => {
         expiration
       )
     ).resolves.toBeUndefined();
-
 
     const _sac2 = new SAC({
       contractId: tokenContractId,
