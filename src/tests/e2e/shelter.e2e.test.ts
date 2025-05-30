@@ -145,8 +145,6 @@ describe("Shelter", () => {
     );
     const transferResultTx = await simTx.result();
 
-    console.log("result", transferResultTx);
-
     expect(transferResultTx.status).toEqual(
       rpc.Api.GetTransactionStatus.SUCCESS
     );
