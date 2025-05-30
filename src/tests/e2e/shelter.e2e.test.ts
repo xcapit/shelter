@@ -4,6 +4,8 @@ import { DefaultRpc } from "../../rpc/default/default-rpc";
 import { walletSdk } from "@stellar/typescript-wallet-sdk";
 import { Client as SAC } from "sac-sdk";
 import { Transfer } from "../../transfer/transfer.test";
+import { SimulatedTransaction } from "../../transaction/simulated-transaction";
+import { DefaultPass } from "../../pass/default/default-pass";
 
 describe("Shelter", () => {
   const defaultRpc = new DefaultRpc(
@@ -117,5 +119,6 @@ describe("Shelter", () => {
     ).resolves.toBeUndefined();
 
     const transfer = new Transfer(deployedShelter.id(), 'GASL6XDOK2TO6SCFTXFN2HQDAONLBID2GKX5TYBTHOWA7ZU7VRFZNHGM', amount, _sac);
+    const simTx = new SimulatedTransaction(await transfer.value(new DefaultPass))
   });
 });
