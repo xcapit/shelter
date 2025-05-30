@@ -15,6 +15,7 @@ export class SimulatedTransaction {
     const simTx: any = await this._rpc.server().simulateTransaction(tx);
     const completeTx = rpc.assembleTransaction(tx, simTx).build();
     completeTx.sign(this._signer);
+    console.log('xdr', completeTx.toXDR());
     return await this._txData(completeTx);
   }
 
