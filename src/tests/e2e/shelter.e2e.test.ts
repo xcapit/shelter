@@ -118,7 +118,7 @@ describe("Shelter", () => {
       )
     ).resolves.toBeUndefined();
 
-    const transfer = new Transfer(deployedShelter.id(), 'GASL6XDOK2TO6SCFTXFN2HQDAONLBID2GKX5TYBTHOWA7ZU7VRFZNHGM', amount, _sac);
+    const transfer = new Transfer(deployedShelter.id(), 'CBDH3NC57SPUG2T4HGTR5AIVNEUDIXMEI4SBGZNAS2LPJJMJC7NZWNKF', amount, _sac);
     const pass = new DefaultPass(
       recipient,
       deployedShelter.id(),
