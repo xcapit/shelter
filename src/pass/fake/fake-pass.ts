@@ -1,5 +1,3 @@
-import type { Keypair } from "shelter-sdk";
-
 export class FakePass {
   constructor() { }
 
