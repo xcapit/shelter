@@ -77,8 +77,8 @@ describe("Shelter", () => {
   });
 
   test.only("recipient transfer from shelter", async () => {
-    const recipient = Keypair.fromPublicKey(
-      "GASL6XDOK2TO6SCFTXFN2HQDAONLBID2GKX5TYBTHOWA7ZU7VRFZNHGM"
+    const recipient = Keypair.fromSecret(
+      "SBTD4FBLWCWVNJCOSOMVYXPJOYLTQW52EC3AUZ2Q3XX5PAO3SMXIKWHH"
     );
     const tokenContractId =
       "CCQK3OJ5T4A5B4SDKQWH7PQKC5HMUZHIGUWF2INTKDQB32F3YPEW7L27";
