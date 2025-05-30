@@ -18,7 +18,7 @@ export class DefaultPass implements Pass {
     private readonly _networkPassphrase: Networks
   ) {}
 
-  async applyTo(tx: AssembledTransaction<null>) {
+  async applyTo(tx: AssembledTransaction<null>): Promise<AssembledTransaction<null>> {
     await tx.signAuthEntries({
       address: this._shelterId,
       authorizeEntry: (entry: any) => {
