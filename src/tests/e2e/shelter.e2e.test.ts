@@ -125,6 +125,10 @@ describe("Shelter", () => {
       defaultRpc,
       Networks.TESTNET
     )
-    const simTx = new SimulatedTransaction(await transfer.value())
+    const simTx = new SimulatedTransaction(await transfer.value(pass), recipient, defaultRpc)
+    const transferResultTx = await simTx.result()
+
+    expect(transferResultTx.status).toEqual(rpc.Api.GetTransactionStatus.SUCCESS);
+
   });
 });
