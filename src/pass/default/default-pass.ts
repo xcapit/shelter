@@ -1,4 +1,4 @@
-import { contract, hash, xdr, type Keypair } from "shelter-sdk";
+import { contract, hash, Networks, xdr, type Keypair } from "shelter-sdk";
 import type { Rpc } from "../../rpc/rpc.interface";
 
 export class DefaultPass {
