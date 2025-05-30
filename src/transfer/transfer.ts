@@ -1,6 +1,7 @@
 import { Client as SAC } from "sac-sdk";
 import { FakeSAC } from "../fake-sac/fake-sac";
 import type { Pass } from "../pass/pass.interface";
+import type { AssembledTransaction } from "@stellar/stellar-sdk/contract";
 
 export class Transfer {
   constructor(
@@ -10,7 +11,7 @@ export class Transfer {
     private readonly _token: SAC | FakeSAC
   ) {}
 
-  async value(withPass: Pass) {
+  async value(withPass: Pass): Promise<AssembledTransaction<null>> {
     return await withPass.applyTo(
       await this._token.transfer({
         from: this._from,
