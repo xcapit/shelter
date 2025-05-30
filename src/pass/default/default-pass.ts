@@ -1,13 +1,21 @@
-import { Client, contract, hash, Networks, xdr, type Keypair } from "shelter-sdk";
+import {
+  Client,
+  contract,
+  hash,
+  Networks,
+  xdr,
+  type Keypair,
+} from "shelter-sdk";
 import type { Rpc } from "../../rpc/rpc.interface";
+import type { Pass } from "../pass.interface";
 
-export class DefaultPass {
+export class DefaultPass implements Pass {
   constructor(
     private readonly _recipient: Keypair,
     private readonly _shelterId: string,
     private readonly _rpc: Rpc,
-    private readonly _networkPassphrase: Networks,
-  ) { }
+    private readonly _networkPassphrase: Networks
+  ) {}
 
   async applyTo(tx: any) {
     await tx.signAuthEntries({
