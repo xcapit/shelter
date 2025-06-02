@@ -3,7 +3,7 @@ import type { Keypair } from "shelter-sdk";
 import { rpc } from "@stellar/stellar-sdk";
 import type { Rpc } from "../rpc/rpc";
 
-export class Transaction {
+export class SimulatedTransaction {
   constructor(
     private readonly _rawTx: AssembledTransaction<any>,
     private readonly _signer: Keypair,
@@ -12,8 +12,10 @@ export class Transaction {
 
   async result(): Promise<rpc.Api.GetTransactionResponse> {
     const tx = this._rawTx.built!;
-    tx.sign(this._signer);
-    return await this._txData(tx);
+    const simTx: any = await this._rpc.server().simulateTransaction(tx);
+    const completeTx = this._rpc.assembleTransaction(tx, simTx).build();
+    completeTx.sign(this._signer);
+    return await this._txData(completeTx);
   }
 
   private async _txData(tx: Tx): Promise<any> {

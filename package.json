@@ -12,8 +12,9 @@
     "test:base": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
     "test": "pnpm run test:base",
     "test:watch": "pnpm run test:base --watch",
-    "test:coverage": "pnpm run test:base --coverage",
-    "test:e2e": "pnpm run test:base --config jest.config.e2e.js"
+    "test:e2e": "pnpm run test:base --config jest.config.e2e.js",
+    "coverage": "pnpm run test:base --coverage",
+    "coverage:all": "pnpm run test:base --config jest.config.all.js --coverage"
   },
   "keywords": [],
   "author": "",
