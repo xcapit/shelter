@@ -1,0 +1,21 @@
+{
+  "keytest": "hello world",
+  "keyinterpolationtest": "hello world {{fix}}",
+  "balanceResponse": "Your balance is",
+  "balanceError": "Balance error.",
+  "transferResponse": "Your tokens have been sent! Transaction hash: {{aTxHash}}. Your balance is: {{aBalanceAmount}} {{aToken}}.",
+  "transferError": "Transaction failed! Your tokens have not been sent!",
+  "offRampResponse": "Offramp completed successfully! {{anAmount}} {{aCurrencySymbol}} sent.",
+  "offRampError": "Offramp failed.",
+  "updatePhoneNumberResponse": "Phone number update proposal: \n From: {{aFromPhoneNumber}} \n To: {{aToPhoneNumber}} \n OTP: {{anOTP}}",
+  "updatePhoneNumberConfirmationResponse": "Phone number updated to:",
+  "otpMsg": "Your OTP is {{anOTP}}. Order: {{anAmount}} {{aTokenSymbol}}",
+  "completeOrderMsg": "Your order has been completed! Your balance is {{aBalanceAmount}} {{aToken}}.",
+  "accountCreationMsg": "Smart Account successfully created! Address:",
+  "BALANCE": "BALANCE",
+  "SEND":"SEND",
+  "ACCOUNT":"ACCOUNT",
+  "UPDATE_PHONE":"UPDATE_PHONE",
+  "CONFIRM_PHONE":"CONFIRM_PHONE",
+  "OFFRAMP": "OFFRAMP"
+}

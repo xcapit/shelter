@@ -6,5 +6,6 @@ export default {
   moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node"],
   extensionsToTreatAsEsm: [".ts"],
   testTimeout: 1000000,
+  testPathIgnorePatterns: ["./ltw_service/"],
 };
 

@@ -1,0 +1,43 @@
+services:
+  app:
+    build:
+      context: .
+    volumes:
+      - ./.env:/usr/src/app/.env
+    environment:
+      - NODE_ENV=production
+    ports:
+      - ${APP_PORT}:${APP_PORT}
+    depends_on:
+      - ferretdb
+
+  postgres:
+    image: ghcr.io/ferretdb/postgres-documentdb:17-0.102.0-ferretdb-2.0.0
+    platform: linux/amd64
+    restart: on-failure
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASS}
+      - POSTGRES_DB=${DB_NAME}
+    volumes:
+      - ./postgres:/var/lib/postgresql/data
+
+  ferretdb:
+    image: ghcr.io/ferretdb/ferretdb:2.0.0
+    restart: on-failure
+    ports:
+      - ${DB_PORT}:27017
+    environment:
+      - FERRETDB_POSTGRESQL_URL=postgres://${DB_USER}:${DB_PASS}@postgres:5432/${DB_NAME}
+
+  mongo-express:
+    image: mongo-express
+    container_name: mongo-express
+    restart: always
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGO_EXPRESS_USER}
+      ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGO_EXPRESS_PASS}
+      ME_CONFIG_MONGODB_URL: mongodb://${DB_USER}:${DB_PASS}@ferretdb:27017/${DB_NAME}
+      ME_CONFIG_BASICAUTH: 0

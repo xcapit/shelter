@@ -10,4 +10,5 @@ export default {
   testTimeout: 1000000,
   extensionsToTreatAsEsm: [".ts"],
   coveragePathIgnorePatterns: ["/node_modules/", "/packages/"],
+  testPathIgnorePatterns: ["./ltw_service/"],
 };

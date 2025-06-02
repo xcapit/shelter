@@ -1,0 +1,21 @@
+{
+  "keytest": "bonjour le monde",
+  "keyinterpolationtest": "bonjour le monde {{fix}}",
+  "balanceResponse": "Votre solde est",
+  "balanceError": "Erreur de solde.",
+  "transferResponse": "Vos jetons ont été envoyés ! Hash de la transaction : {{aTxHash}}. Votre solde est : {{aBalanceAmount}} {{aToken}}.",
+  "transferError": "Échec de la transaction ! Vos tokens n'ont pas été envoyés.",
+  "offRampResponse": "Retrait terminé avec succès ! {{anAmount}} {{aCurrencySymbol}} envoyé.",
+  "offRampError": "Retrait échoué.",
+  "updatePhoneNumberResponse": "Proposition de mise à jour du numéro de téléphone : \n De : {{aFromPhoneNumber}} \n À : {{aToPhoneNumber}} \n OTP : {{anOTP}}",
+  "updatePhoneNumberConfirmationResponse": "Numéro de téléphone mis à jour en :",
+  "otpMsg": "Votre OTP est {{anOTP}}. Achat: {{anAmount}} {{aTokenSymbol}}",
+  "completeOrderMsg": "Votre ordre a été complétée ! Votre solde est de {{aBalanceAmount}} {{aToken}}.",
+  "accountCreationMsg": "Smart Account créé avec succès ! Adresse:",
+  "BALANCE": "SOLDE",
+  "SEND": "ENVOYER",
+  "ACCOUNT": "COMPTE",
+  "UPDATE_PHONE": "METTRE_A_JOUR_TELEPHONE",
+  "CONFIRM_PHONE": "CONFIRMER_TELEPHONE",
+  "OFFRAMP": "RETRAIT"
+}

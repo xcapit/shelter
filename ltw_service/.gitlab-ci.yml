@@ -1,0 +1,78 @@
+---
+stages:
+  - syntax
+  - test
+  - coveralls
+
+variables:
+  SRC_DIR: '.'
+  NODE_VERSION: '${NODE_VERSION}'
+  ENV_FILE: '.env'
+
+##########################################################################
+### Templates
+
+### Syntax check
+.syntax-check: &syntax-check
+  stage: syntax
+  image: node:${NODE_VERSION}-alpine
+  before_script:
+    - cd ${SRC_DIR}
+  script:
+    - node --check *.js
+  allow_failure: true
+
+### NodeJS test
+.nodejs-test: &nodejs-test
+  stage: test
+  image: node:${NODE_VERSION}
+  variables:
+    CI: 'true'
+  before_script:
+    - cd ${SRC_DIR}
+  script:
+    - npm i
+    - npm run test:ci
+  artifacts:
+    paths:
+      - coverage/lcov.info
+
+### Coveralls
+.coveralls: &coveralls
+  stage: coveralls
+  needs: ["test"]
+  image: alpine:latest
+  variables:
+    COVERALLS_GIT_BRANCH: $CI_COMMIT_BRANCH
+    COVERALLS_REPO_TOKEN: $COVERALLS_REPO_TOKEN
+    CI_COMMITTER_NAME: $CI_COMMIT_AUTHOR
+  before_script:
+    - apk add --no-cache curl tar
+    - curl -L https://coveralls.io/coveralls-linux.tar.gz | tar -xz -C /usr/local/bin
+  script:
+    - coveralls report coverage/lcov.info
+  allow_failure: true
+
+###########################################################################
+
+### Stages
+
+### Syntax check
+syntax_checking:
+  <<: *syntax-check
+  rules:
+    - if: '($CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "main" || $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "develop" || $CI_COMMIT_REF_PROTECTED == "true") && $CI_COMMIT_TITLE !~ /^chore\(release\):*/'
+
+### Tests
+test:
+  <<: *nodejs-test
+  rules:
+    - if: '($CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "main" || $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "develop" || $CI_COMMIT_REF_PROTECTED == "true") && $CI_COMMIT_TITLE !~ /^chore\(release\):*/'
+
+### coveralls
+coveralls:
+  <<: *coveralls
+  rules:
+    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "main"'
+    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "develop"'
+    - if: '$CI_COMMIT_REF_PROTECTED == "true"'
