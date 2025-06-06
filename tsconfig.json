@@ -21,7 +21,7 @@
     "noUnusedParameters": false,
     "noPropertyAccessFromIndexSignature": false,
     "strictNullChecks": true,
-    "esModuleInterop":true
+    "esModuleInterop": true
   },
   "include": [
     "src",

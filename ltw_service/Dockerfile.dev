@@ -1,0 +1,16 @@
+ARG NODE_VERSION=22.7.0
+
+FROM node:${NODE_VERSION}-alpine as base
+
+WORKDIR /usr/src/app
+
+# Deps to support multiple architectures (x86_64/arm64)
+RUN apk add --no-cache python3 make g++
+
+COPY . .
+
+RUN npm install
+
+EXPOSE 3000
+
+CMD ["npm", "run", "dev"]

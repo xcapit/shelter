@@ -1,0 +1,21 @@
+{
+  "keytest": "hola mundo",
+  "keyinterpolationtest": "hola mundo {{fix}}",
+  "balanceResponse": "Tu saldo es",
+  "balanceError": "Error de saldo.",
+  "transferResponse": "¡Tus tokens han sido enviados! Hash de la transacción: {{aTxHash}}. Tu saldo es: {{aBalanceAmount}} {{aToken}}.",
+  "transferError": "¡La transacción falló! Tus tokens no han sido enviados.",
+  "offRampResponse": "¡Retiro completado con éxito! {{anAmount}} {{aCurrencySymbol}} enviados.",
+  "offRampError": "Retiro fallido.",
+  "updatePhoneNumberResponse": "Propuesta de actualización de número telefónico: \n De: {{aFromPhoneNumber}} \n A: {{aToPhoneNumber}} \n OTP: {{anOTP}}",
+  "updatePhoneNumberConfirmationResponse": "Número telefónico actualizado a:",
+  "otpMsg": "Tu código es {{anOTP}}. Orden: {{anAmount}} {{aTokenSymbol}}",
+  "completeOrderMsg": "¡Tu orden ha sido completada! Tu saldo es {{aBalanceAmount}} {{aToken}}.",
+  "accountCreationMsg": "¡Cuenta creada con éxito! Address:",
+  "BALANCE": "SALDO",
+  "SEND": "ENVIAR",
+  "ACCOUNT": "CUENTA",
+  "UPDATE_PHONE": "ACTUALIZAR_TELEFONO",
+  "CONFIRM_PHONE": "CONFIRMAR_TELEFONO",
+  "OFFRAMP": "RETIRO"
+}

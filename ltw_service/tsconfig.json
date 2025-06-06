@@ -1,0 +1,23 @@
+{
+  "ts-node": {
+    "esm": true,
+    "experimentalSpecifierResolution": "node"
+  },
+  "compilerOptions": {
+    "target": "ESNext", /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
+    "module": "ESNext", /* Specify what module code is generated. */
+    "moduleResolution": "Node",
+    "moduleDetection": "force",
+    "outDir": "./dist", /* Specify an output folder for all emitted files. */
+    "esModuleInterop": true, /* Emit additional JavaScript to ease support for importing CommonJS modules. This enables 'allowSyntheticDefaultImports' for type compatibility. */
+    "forceConsistentCasingInFileNames": true, /* Ensure that casing is correct in imports. */
+    "strict": true, /* Enable all strict type-checking options. */
+    "strictPropertyInitialization": false, /* Check for class properties that are declared but not set in the constructor. */
+    "skipLibCheck": true /* Skip type checking all .d.ts files. */,
+    "resolveJsonModule": true
+  },
+  "include": [
+    "src/**/*",
+    "src/**/*.json"
+  ]
+}

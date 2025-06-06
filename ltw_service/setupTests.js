@@ -1,0 +1,15 @@
+process.env.JWT_SECRET='aSecret';
+process.env.JWT_EXPIRATION_TIME='1m';
+process.env.LANGUAGE='en';
+process.env.PRELOAD_LANGUAGES='en,es';
+process.env.ALCHEMY_API_KEY='anAPIKey';
+process.env.ALCHEMY_RPC='https://arpcurl.com';
+process.env.ALCHEMY_GAS_POLICY_ID='aGasPolicy';
+process.env.TEST_OWNER_ADDRESS='0xE81D7E5Cd979be0a7F6B6c98957A66fdF6240273';
+process.env.TEST_PRIVATE_KEY='0x9ea92b45be8c30b18da6857cf60cfec534c0d612af34b291fd022ac4573e617c';
+process.env.PRIVATE_KEY_NUM_SHARES='3';
+process.env.PRIVATE_KEY_THRESHOLD='2';
+process.env.TWILIO_ACCOUNT_SID='anAccountID';
+process.env.TWILIO_AUTH_TOKEN='anAuthToken';
+process.env.KOTANIPAY_API_KEY='aKotaniPayAPIKey';
+process.env.KOTANIPAY_API_URL='aKotaniPayAPIUrl'

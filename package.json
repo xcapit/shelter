@@ -1,10 +1,15 @@
 {
-  "name": "shelter",
+  "name": "@xcapit/shelter-sdk",
   "version": "1.0.0",
   "description": "",
-  "main": "src/index.ts",
-  "types": "types/index.d.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "type": "module",
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
     "build": "pnpm run build:sac && pnpm run build:shelter && tsc",
     "build:sac": "pnpm --filter=sac-sdk run build",
@@ -26,13 +31,13 @@
     "shelter-sdk": "workspace:*"
   },
   "devDependencies": {
+    "@stellar/typescript-wallet-sdk": "^1.9.0",
     "@types/jest": "^29.5.12",
     "jest": "^29.7.0",
     "ts-jest": "^29.1.2",
     "ts-node-dev": "^2.0.0",
     "@types/node": "^22.15.3",
-    "typescript": "^5.8.3",
-    "@stellar/typescript-wallet-sdk": "^1.9.0"
+    "typescript": "^5.8.3"
   },
   "workspaces": [
     "packages/*"

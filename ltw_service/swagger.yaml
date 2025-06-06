@@ -1,0 +1,490 @@
+openapi: 3.0.0
+info:
+  title: Orders API
+  version: '1.0'
+  description: API for managing orders
+servers:
+  - url: http://localhost:3000
+    description: Local development server
+  - url: https://qa.ltw.xcapit.com
+    description: QA environment
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+paths:
+  /api/users/login:
+    post:
+      security: []
+      summary: User login
+      description: Authenticates a user and returns a JWT token valid for 24 hours
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+              properties:
+                email:
+                  type: string
+                  description: User email
+                  example: "user@example.com"
+                password:
+                  type: string
+                  description: User password
+                  example: "********"
+      responses:
+        '200':
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    description: JWT authentication token
+                    example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+              examples:
+                invalidPassword:
+                  summary: Invalid password error
+                  description: Returned when the password is incorrect
+                  value:
+                    error: "Invalid Password!"
+                userNotFound:
+                  summary: User not found error
+                  description: Returned when the user email is not found
+                  value:
+                    error: "Null user cannot respond."
+  /status:
+    get:
+      security: []
+      summary: Get API health status
+      responses:
+        '200':
+          description: API is healthy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "I'm healthy"
+  /api/orders/complete:
+    post:
+      security:
+        - bearerAuth: [ ]
+      summary: Complete an existing order
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - phoneNumber
+                - otp
+              properties:
+                phoneNumber:
+                  type: string
+                  description: Beneficiary phone number
+                  example: "+XXXXXXXXXXXX"
+                otp:
+                  type: string
+                  description: One-time password sent to beneficiary
+                  example: "019972"
+      responses:
+        '200':
+          description: Order completed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "Order Completed!"
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+              examples:
+                orderNotFound:
+                  summary: Order not found error
+                  description: Returned when no order exists for the given phone number and OTP
+                  value:
+                    error: "Order not found"
+                expiredOrder:
+                  summary: Expired order error
+                  description: Returned when the order has expired
+                  value:
+                    error: "Expired order"
+                blockchainError:
+                  summary: Blockchain error
+                  description: Returned when there is an error interacting with the blockchain
+                  value:
+                    error: "Blockchain transaction failed"
+  /api/beneficiaries/{phoneNumber}/{token}/balance:
+    get:
+      security:
+        - bearerAuth: [ ]
+      summary: Get beneficiary token balance
+      parameters:
+        - name: phoneNumber
+          in: path
+          required: true
+          description: Beneficiary phone number
+          schema:
+            type: string
+          example: "+XXXXXXXXXXXX"
+        - name: token
+          in: path
+          required: true
+          description: Token symbol
+          schema:
+            type: string
+          example: "LINK"
+      responses:
+        '200':
+          description: Balance retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  balance:
+                    type: number
+                    description: Token balance
+                    example: 0.09999999999999995
+                  token:
+                    type: string
+                    description: Token symbol
+                    example: "LINK"
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+              examples:
+                tokenNotFound:
+                  summary: Token not found error
+                  description: Returned when the specified token symbol is not supported
+                  value:
+                    error: "Token not found"
+                beneficiaryNotFound:
+                  summary: Beneficiary not found error
+                  description: Returned when the beneficiary address is not found
+                  value:
+                    error: "Beneficiary address not found"
+  /api/orders:
+    post:
+      security:
+        - bearerAuth: []
+      summary: Create a new order
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - amount
+                - token
+                - phoneNumber
+                - merchAddress
+              properties:
+                amount:
+                  type: number
+                  description: Order amount
+                  example: 0.1
+                token:
+                  type: string
+                  description: Token symbol
+                  example: "USDT"
+                phoneNumber:
+                  type: string
+                  description: Beneficiary phone number
+                  example: "+11234567890"
+                description:
+                  type: string
+                  description: Order description
+                  example: "Food"
+                merchAddress:
+                  type: string
+                  description: Merchant wallet address
+                  example: "0xABCDEF0123456789ABCDEF0123456789ABCDEF01"
+      responses:
+        '200':
+          description: Order created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                    description: Unique order identifier.
+                    example: "dummyOrderId123"
+                  amount:
+                    type: number
+                    description: Order amount.
+                    example: 0.1
+                  token:
+                    type: string
+                    description: Token symbol.
+                    example: "USDT"
+                  phoneNumber:
+                    type: string
+                    description: Beneficiary phone number.
+                    example: "+11234567890"
+                  merchAddress:
+                    type: string
+                    description: Merchant wallet address.
+                    example: "0xABCDEF0123456789ABCDEF0123456789ABCDEF01"
+                  description:
+                    type: string
+                    description: Order description.
+                    example: "Food"
+                  createdAt:
+                    type: string
+                    format: date-time
+                    description: Order creation timestamp.
+                    example: "2025-03-01T12:00:00.000Z"
+                  updatedAt:
+                    type: string
+                    format: date-time
+                    description: Order update timestamp.
+                    example: "2025-03-01T12:00:00.000Z"
+                  success:
+                    type: boolean
+                    description: Order completion status.
+                    example: false
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+              examples:
+                beneficiaryNotFound:
+                  summary: Beneficiary not found error
+                  description: Returned when the beneficiary phone number is not registered
+                  value:
+                    error: "Beneficiary phone number not found"
+                tokenNotFound:
+                  summary: Token not found error
+                  description: Returned when the specified token symbol is not supported
+                  value:
+                    error: "Token not found"
+                invalidAddress:
+                  summary: Invalid merchant address error
+                  description: Returned when the merchant address format is invalid
+                  value:
+                    error: "Address \"0x1234...7890\" is invalid.\n\n- Address must be a hex value of 20 bytes (40 hex characters).\n- Address must match its checksum counterpart.\n\nVersion: viem@2.21.54"
+  /api/orders/beneficiaries/{phoneNumber}:
+    get:
+      security:
+        - bearerAuth: []
+      summary: Retrieve orders by beneficiary phone number
+      description: >
+        Returns a list of orders associated with the provided beneficiary phone number.
+        If no "limit" is specified, 5 orders are returned by default. If the user has no orders,
+        an empty array is returned.
+      parameters:
+        - name: phoneNumber
+          in: path
+          required: true
+          description: Beneficiary phone number.
+          schema:
+            type: string
+          example: "+1234567890"
+        - name: limit
+          in: query
+          required: false
+          description: "Maximum number of orders to return (default: 5)."
+          schema:
+            type: integer
+            default: 5
+          example: 2
+      responses:
+        '200':
+          description: Orders retrieved successfully.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    _id:
+                      type: string
+                      description: Unique order identifier.
+                      example: "order123"
+                    amount:
+                      type: string
+                      description: Order amount.
+                      example: "0.05"
+                    token:
+                      type: string
+                      description: Token symbol.
+                      example: "USDT"
+                    phoneNumber:
+                      type: string
+                      description: Beneficiary phone number.
+                      example: "+1234567890"
+                    merchAddress:
+                      type: string
+                      description: Merchant wallet address.
+                      example: "0xABCDEF1234567890ABCDEF1234567890ABCDEF12"
+                    description:
+                      type: string
+                      description: Order description.
+                      example: "Example order description"
+                    createdAt:
+                      type: string
+                      format: date-time
+                      description: Order creation timestamp.
+                      example: "2023-01-01T00:00:00.000Z"
+                    updatedAt:
+                      type: string
+                      format: date-time
+                      description: Order last update timestamp.
+                      example: "2023-01-01T00:00:00.000Z"
+                    success:
+                      type: boolean
+                      description: Order completion status.
+                      example: false
+              examples:
+                ordersExample:
+                  summary: Example response with orders.
+                  value: |
+                    [
+                      {
+                        "_id": "order123",
+                        "amount": "0.05",
+                        "token": "USDT",
+                        "phoneNumber": "+1234567890",
+                        "merchAddress": "0xABCDEF1234567890ABCDEF1234567890ABCDEF12",
+                        "description": "Example order description",
+                        "createdAt": "2023-01-01T00:00:00.000Z",
+                        "updatedAt": "2023-01-01T00:00:00.000Z",
+                        "success": false
+                      },
+                      {
+                        "_id": "order124",
+                        "amount": "0.10",
+                        "token": "USDT",
+                        "phoneNumber": "+1234567890",
+                        "merchAddress": "0x1234567890ABCDEF1234567890ABCDEF12345678",
+                        "description": "Another example order",
+                        "createdAt": "2023-01-02T00:00:00.000Z",
+                        "updatedAt": "2023-01-02T00:00:00.000Z",
+                        "success": true
+                      }
+                    ]
+                emptyExample:
+                  summary: No orders found.
+                  value: []
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+              examples:
+                phoneNumberNotFound:
+                  summary: Phone number not found error.
+                  description: Returned when no beneficiary exists for the given phone number.
+                  value:
+                    error: "Phone number not found"
+  /api/orders/{orderId}/status:
+    get:
+      security:
+        - bearerAuth: []
+      summary: Retrieve order status
+      description: >
+        Returns the status of the specified order. Possible statuses include:
+          - "Order pending completion": The order is pending and not expired.
+          - "Order successfully completed": The order was completed successfully.
+          - "Order expired": The order has expired.
+        If the order does not exist, an error object is returned.
+      parameters:
+        - name: orderId
+          in: path
+          required: true
+          description: Unique order identifier.
+          schema:
+            type: string
+          example: "order123"
+      responses:
+        '200':
+          description: Order status retrieved successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: Status of the order.
+                    example: "Order pending completion"
+              examples:
+                pending:
+                  summary: Order pending completion.
+                  value:
+                    status: "Order pending completion"
+                completed:
+                  summary: Order successfully completed.
+                  value:
+                    status: "Order successfully completed"
+                expired:
+                  summary: Order expired.
+                  value:
+                    status: "Order expired"
+        '400':
+          description: Error retrieving order status.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error message.
+                    example: "Order not found"
+              examples:
+                orderNotFound:
+                  summary: Order not found error.
+                  value:
+                    error: "Order not found"
