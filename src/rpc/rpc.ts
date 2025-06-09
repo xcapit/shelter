@@ -10,7 +10,7 @@ import type { Api } from "@stellar/stellar-sdk/rpc";
 export class Rpc {
   private _cachedNetwork: string = "";
   constructor(
-    private readonly _server: rpc.Server | FakeServer,
+    private readonly _server: any,
     private readonly _rpc: any = rpc
   ) { }
 

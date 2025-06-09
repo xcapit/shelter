@@ -15,6 +15,11 @@ import { OnlyRoles } from '../system/only-roles/only-roles';
 import { Sponsor } from './models/sponsor/sponsor';
 import { env } from 'process';
 import dotenv from 'dotenv';
+import { Keypair, Networks, rpc } from '@stellar/stellar-sdk';
+import { DeployedShelter, Rpc, ShelterClient } from '@xcapit/shelter-sdk';
+import { PhoneNumber } from '../shared/phone-number-info/phone-number';
+import { AmountOf } from './models/amount-of/amount-of';
+import { AidTTL } from './models/aid-ttl/aid-ttl';
 
 dotenv.config();
 
@@ -45,6 +50,12 @@ export class BeneficiariesServer extends ServerSystem {
       new OnlyRoles(this._users, ['Admin', 'NGO']).allowedRole(),
       (req, res, next) =>
         this._checkBeneficiaryBalance(new AuthorizedRequestOf(req), res, next),
+    );
+    this._aServer.post(
+      '/api/beneficiaries/bound-aid',
+      new OnlyRoles(this._users, ['Admin', 'NGO']).allowedRole(),
+      (req, res, next) =>
+        this._boundAid(new AuthorizedRequestOf(req), res, next),
     );
   }
 
@@ -126,6 +137,41 @@ export class BeneficiariesServer extends ServerSystem {
         //   res.json(beneficiaryBalance);
         //   return 'Balance retrieved successfully'
         // });
+      },
+      res,
+      next,
+    );
+  }
+
+  private async _boundAid(
+    req: AuthorizedRequestOf,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
+    await this.executeAction(
+      async () => {
+        const stewardKeypair = Keypair.fromSecret(env.STEWARD_SECRET!);
+        return await new DeployedShelter(
+          stewardKeypair,
+          new Rpc(new rpc.Server(env.STELLAR_RPC!)),
+          new ShelterClient({
+            contractId: env.SHELTER_ID!,
+            networkPassphrase: Networks.TESTNET,
+            rpcUrl: env.STELLAR_RPC!,
+            publicKey: stewardKeypair.publicKey(),
+          }),
+        ).boundAid(
+          Keypair.fromPublicKey(
+            (
+              await this._beneficiaries.findOneBy(
+                await new PhoneNumber(req.body().phoneNumber).value(),
+              )
+            ).address(),
+          ).rawPublicKey(),
+          (await new Tokens().oneBy(req.body().token)).address(),
+          BigInt(req.body().amount),
+          BigInt(new AidTTL(req.body().expiration).expirationDate())
+        );
       },
       res,
       next,
