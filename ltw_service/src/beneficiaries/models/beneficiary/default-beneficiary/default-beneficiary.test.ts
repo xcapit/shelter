@@ -20,4 +20,8 @@ describe("DefaultBeneficiary", () => {
   test("address", () => {
     expect(beneficiary.address()).toEqual(rawBeneficiaryData.address);
   });
+
+  test("keypair", () => {
+    expect(beneficiary.keypair()).toBeTruthy();
+  });
 });
