@@ -1,23 +1,23 @@
-// TODO:
-// import { formatUnits } from "viem";
-// import { Token } from "../token/token.interface";
+import { Token } from "../token/token.interface";
 
-// export type RawAmount = {
-//   value: number;
-//   token: string;
-// };
+export class AmountOf {
+  constructor(
+    private _aWeiAmount: bigint,
+    private _aToken: Token
+  ) { }
 
-// export class AmountOf {
-//   constructor(
-//     private _aWeiAmount: bigint,
-//     private _aToken: Token
-//   ) {}
+  value(): number {
+    return parseFloat(this._formatUnits());
+  }
 
-//   value(): number {
-//     return parseFloat(formatUnits(this._aWeiAmount, this._aToken.decimals()));
-//   }
+  weiValue(): bigint {
+    return this._aWeiAmount;
+  }
 
-//   weiValue(): bigint {
-//     return this._aWeiAmount;
-//   }
-// }
+  private _formatUnits(): string {
+    const valueStr = BigInt(this._aWeiAmount).toString().padStart(this._aToken.decimals() + 1, "0");
+    const whole = valueStr.slice(0, -this._aToken.decimals());
+    const fraction = valueStr.slice(-this._aToken.decimals()).replace(/0+$/, "");
+    return fraction ? `${whole}.${fraction}` : whole;
+  }
+}

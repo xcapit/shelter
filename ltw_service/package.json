@@ -21,7 +21,7 @@
   "license": "AGPL-3.0-or-later",
   "dependencies": {
     "@stellar/typescript-wallet-sdk": "^1.9.0",
-    "@xcapit/shelter-sdk": "file:../",
+    "@xcapit/shelter-sdk": "file:../sdk",
     "@stellar/stellar-sdk": "^13.3.0",
     "axios": "^1.7.9",
     "bcryptjs": "^2.4.3",

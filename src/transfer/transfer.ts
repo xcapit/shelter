@@ -9,9 +9,9 @@ export class Transfer {
     private readonly _to: string,
     private readonly _amount: bigint,
     private readonly _token: SAC | FakeSAC
-  ) {}
+  ) { }
 
-  async value(withPass: Pass): Promise<AssembledTransaction<null>> {
+  async value(withPass: Pass): Promise<any> {
     return await withPass.applyTo(
       await this._token.transfer({
         from: this._from,

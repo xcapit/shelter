@@ -1,4 +1,4 @@
-import { rawUSDCData } from "../../../../fixtures/raw-tokens-data";
+import { rawTokenData } from "../../../../fixtures/raw-tokens-data";
 import { OTP } from "../../../../beneficiaries/models/otp/otp";
 import { DefaultToken } from "../../../../beneficiaries/models/token/default-token/default-token";
 import { SmsMsg } from "../../../../shared/messages/sms-msg.interface";
@@ -14,7 +14,7 @@ describe("OTPSendMsg", () => {
   });
 
   beforeEach(() => {
-    otpSendMsg = new OTPSendMsg(new OTP(), 10, new DefaultToken(rawUSDCData));
+    otpSendMsg = new OTPSendMsg(new OTP(), 10, new DefaultToken(rawTokenData));
   });
 
   test("new", () => {
@@ -22,6 +22,6 @@ describe("OTPSendMsg", () => {
   });
 
   test("toString", () => {
-    expect(otpSendMsg.toString()).toContain(rawUSDCData.symbol);
+    expect(otpSendMsg.toString()).toContain(rawTokenData.symbol);
   });
 });

@@ -6,13 +6,13 @@ on:
     paths:
       - "src/**"
       - "package.json"
-      - "pnpm-lock.yaml"
+      - "package-lock.json"
   pull_request:
     branches: [main]
     paths:
       - "src/**"
       - "package.json"
-      - "pnpm-lock.yaml"
+      - "package-lock.json"
   workflow_dispatch:
 
 concurrency:
@@ -32,31 +32,13 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "23.11.0"
-
-      - name: Install pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: "10.11.0"
-
-      - name: Get pnpm store directory
-        id: pnpm-cache
-        shell: bash
-        run: |
-          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
-
-      - name: Setup pnpm cache
-        uses: actions/cache@v3
-        with:
-          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-store-
+          cache: 'npm'
 
       - name: Install dependencies
-        run: pnpm install
+        run: npm ci
 
       - name: Build
-        run: pnpm run build
+        run: npm run build
 
       - name: Run tests
-        run: pnpm run test
+        run: npm run test

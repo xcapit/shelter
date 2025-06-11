@@ -5,30 +5,23 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "type": "module",
-  "files": [
-    "dist",
-    "README.md",
-    "LICENSE"
-  ],
   "scripts": {
-    "build": "pnpm run build:sac && pnpm run build:shelter && tsc",
-    "build:sac": "pnpm --filter=sac-sdk run build",
-    "build:shelter": "pnpm --filter=shelter-sdk run build",
+    "build": "npm run build:deps && tsc",
+    "build:deps": "cd packages/shelter-sdk && npm run build && cd ../sac-sdk && npm run build",
     "test:base": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
-    "test": "pnpm run test:base",
-    "test:watch": "pnpm run test:base --watch",
-    "test:e2e": "pnpm run test:base --config jest.config.e2e.js",
-    "coverage": "pnpm run test:base --coverage",
-    "coverage:all": "pnpm run test:base --config jest.config.all.js --coverage"
+    "test": "npm run test:base",
+    "test:watch": "npm run test:base --watch",
+    "test:e2e": "npm run test:base --config jest.config.e2e.js",
+    "coverage": "npm run test:base --coverage",
+    "coverage:all": "npm run test:base --config jest.config.all.js --coverage"
   },
   "keywords": [],
   "author": "",
   "license": "AGPL-3.0",
-  "packageManager": "pnpm@10.11.0",
   "dependencies": {
     "@stellar/stellar-sdk": "^13.3.0",
-    "sac-sdk": "workspace:*",
-    "shelter-sdk": "workspace:*"
+    "sac-sdk": "./packages/sac-sdk",
+    "shelter-sdk": "./packages/shelter-sdk"
   },
   "devDependencies": {
     "@stellar/typescript-wallet-sdk": "^1.9.0",
@@ -38,13 +31,5 @@
     "ts-node-dev": "^2.0.0",
     "@types/node": "^22.15.3",
     "typescript": "^5.8.3"
-  },
-  "workspaces": [
-    "packages/*"
-  ],
-  "pnpm": {
-    "overrides": {
-      "@stellar/stellar-sdk": "$@stellar/stellar-sdk"
-    }
   }
 }

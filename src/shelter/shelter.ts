@@ -27,7 +27,7 @@ export class Shelter {
     );
   }
 
-  private async _deploy(): Promise<AssembledTransaction<Client>> {
+  private async _deploy(): Promise<any> {
     return await this._client.deploy(
       { steward: this._steward.publicKey() },
       {

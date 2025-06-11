@@ -1,4 +1,4 @@
-import { rawUSDCData } from "../../../../fixtures/raw-tokens-data";
+import { rawTokenData } from "../../../../fixtures/raw-tokens-data";
 import { Token } from "../token.interface";
 import { DefaultToken } from "./default-token";
 
@@ -6,7 +6,7 @@ describe("DefaultToken", () => {
   let token: Token;
 
   beforeEach(() => {
-    token = new DefaultToken(rawUSDCData);
+    token = new DefaultToken(rawTokenData);
   });
 
   test("new", () => {
@@ -14,10 +14,7 @@ describe("DefaultToken", () => {
   });
 
   test("address", () => {
-    expect(token.address()).toEqual(rawUSDCData.contract);
+    expect(token.address()).toEqual(rawTokenData.contract);
   });
 
-  test("abi", () => {
-    expect(token.abi()).toEqual(rawUSDCData.abi);
-  });
 });

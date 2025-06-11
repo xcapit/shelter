@@ -1,7 +1,7 @@
-import { Token } from "../token.interface";
+import { Token } from '../token.interface';
 
 export class NullToken implements Token {
-  private _errorMsg = "Token not found";
+  private _errorMsg = 'Token not found';
 
   symbol(): string {
     throw new Error(this._errorMsg);
@@ -10,9 +10,6 @@ export class NullToken implements Token {
     throw new Error(this._errorMsg);
   }
   address(): string {
-    throw new Error(this._errorMsg);
-  }
-  abi(): any[] {
     throw new Error(this._errorMsg);
   }
 }

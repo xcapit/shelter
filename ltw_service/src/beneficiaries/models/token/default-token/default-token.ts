@@ -2,7 +2,7 @@ import { RawToken } from "../../../../constants/tokens/raw-token.type";
 import { Token } from "../token.interface";
 
 export class DefaultToken implements Token {
-  constructor(private _rawData: RawToken) {}
+  constructor(private _rawData: RawToken) { }
 
   symbol(): string {
     return this._rawData.symbol;
@@ -13,10 +13,6 @@ export class DefaultToken implements Token {
   }
 
   address(): string {
-    return `${this._rawData.contract}`.toLocaleLowerCase();
-  }
-
-  abi(): any[] {
-    return this._rawData.abi;
+    return this._rawData.contract;
   }
 }
