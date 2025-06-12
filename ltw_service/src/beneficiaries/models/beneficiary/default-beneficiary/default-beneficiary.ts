@@ -6,6 +6,8 @@ export class DefaultBeneficiary implements Beneficiary {
   constructor(private _rawBeneficiaryData: RawBeneficiary) { }
 
   keypair(): Keypair {
+    console.log('RBD', this._rawBeneficiaryData)
+    console.log('KP', Keypair.fromSecret(this._rawBeneficiaryData.secret));
     return Keypair.fromSecret(this._rawBeneficiaryData.secret);
   }
 
