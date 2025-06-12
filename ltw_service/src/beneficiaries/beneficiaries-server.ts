@@ -20,6 +20,7 @@ import { DeployedShelter, Rpc, ShelterClient } from '@xcapit/shelter-sdk';
 import { PhoneNumber } from '../shared/phone-number-info/phone-number';
 import { AmountOf } from './models/amount-of/amount-of';
 import { AidTTL } from './models/aid-ttl/aid-ttl';
+import { WeiOf } from './models/wei-of/wei-of';
 
 dotenv.config();
 
@@ -151,6 +152,7 @@ export class BeneficiariesServer extends ServerSystem {
     await this.executeAction(
       async () => {
         const stewardKeypair = Keypair.fromSecret(env.STEWARD_SECRET!);
+        const token = await new Tokens().oneBy(req.body().token);
         return await new DeployedShelter(
           stewardKeypair,
           new Rpc(new rpc.Server(env.STELLAR_RPC!)),
@@ -168,8 +170,8 @@ export class BeneficiariesServer extends ServerSystem {
               )
             ).address(),
           ).rawPublicKey(),
-          (await new Tokens().oneBy(req.body().token)).address(),
-          BigInt(req.body().amount),
+          token.address(),
+          new WeiOf(req.body().amount, token).value(),
           BigInt(new AidTTL(req.body().expiration).expirationDate())
         );
       },

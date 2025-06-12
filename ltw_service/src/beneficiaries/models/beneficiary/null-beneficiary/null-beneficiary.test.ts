@@ -27,4 +27,8 @@ describe("NullBeneficiary", () => {
   test("countryCode", () => {
     expect(() => nullBeneficiary.countryCode()).toThrow();
   });
+
+  test("keypair", () => {
+    expect(() => nullBeneficiary.keypair()).toThrow();
+  });
 });

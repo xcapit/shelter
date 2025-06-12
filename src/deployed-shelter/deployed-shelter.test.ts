@@ -2,7 +2,10 @@ import { rpc } from "@stellar/stellar-sdk";
 import { Keypair } from "shelter-sdk";
 import { DeployedShelter } from "./deployed-shelter";
 import { FakeClient } from "../fake-client/fake-client";
-import { contractAddressTransactionReponse, FakeServer } from "../fixtures/fixtures";
+import {
+  contractAddressTransactionReponse,
+  FakeServer,
+} from "../fixtures/fixtures";
 import { Rpc } from "../rpc/rpc";
 
 describe("DeployedShelter", () => {
@@ -41,29 +44,39 @@ describe("DeployedShelter", () => {
   });
 
   test("boundAid", async () => {
-    const _pollTransactionReponse = { status: rpc.Api.GetTransactionStatus.SUCCESS };
+    const _pollTransactionReponse = {
+      status: rpc.Api.GetTransactionStatus.SUCCESS,
+    };
 
     await expect(
-      new DeployedShelter(steward, new Rpc(new FakeServer(_pollTransactionReponse)), client).boundAid(
-        recipient.rawPublicKey(),
-        tokenContractId,
-        amount,
-        expiration
-      )
+      new DeployedShelter(
+        steward,
+        new Rpc(new FakeServer(_pollTransactionReponse)),
+        client
+      ).boundAid(recipient.rawPublicKey(), tokenContractId, amount, expiration)
     ).resolves.toBeUndefined();
   });
 
-
   test("failed boundAid", async () => {
-    const _pollTransactionReponse = { status: rpc.Api.GetTransactionStatus.NOT_FOUND };
+    const _pollTransactionReponse = {
+      status: rpc.Api.GetTransactionStatus.NOT_FOUND,
+    };
 
     await expect(
-      new DeployedShelter(steward, new Rpc(new FakeServer(_pollTransactionReponse)), client).boundAid(
-        recipient.rawPublicKey(),
-        tokenContractId,
-        amount,
-        expiration
-      )
+      new DeployedShelter(
+        steward,
+        new Rpc(new FakeServer(_pollTransactionReponse)),
+        client
+      ).boundAid(recipient.rawPublicKey(), tokenContractId, amount, expiration)
     ).rejects.toThrow();
+  });
+
+  test("aidOf", async () => {
+    await expect(
+      new DeployedShelter(steward, new Rpc(new FakeServer()), client).aidOf(
+        recipient.rawPublicKey(),
+        tokenContractId
+      )
+    ).resolves.toEqual(1);
   });
 });

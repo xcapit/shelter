@@ -6,7 +6,6 @@ import { UpdatePhoneNumberConfirmationCmd } from '../command/update-phone-number
 import { UpdatePhoneNumberProposalCmd } from '../command/update-phone-number-proposal-cmd/update-phone-number-proposal-cmd';
 import { ParsedIncomingSms } from '../parsed-incoming-sms/parsed-incoming-sms';
 // TODO
-// import { BalanceCmd } from '../command/balance-cmd/balance-cmd';
 // import { TransferCmd } from '../command/transfer-cmd/transfer-cmd';
 // import { PrivateKeyOf } from '../../../beneficiaries/models/private-key/private-key-of/private-key-of';
 // import { AlchemySmartAccount } from '../../../beneficiaries/models/smart-account/alchemy-smart-account/alchemy-smart-account';
@@ -14,22 +13,32 @@ import { ParsedIncomingSms } from '../parsed-incoming-sms/parsed-incoming-sms';
 import { TranslatedKey } from '../../../system/multi-language/translated-key/translated-key';
 import twilio from 'twilio';
 import dotenv from 'dotenv';
-import process from 'process';
+import process, { env } from 'process';
 import { FakeTwilio } from '../../../sms/models/fake-twilio/fake-twilio';
 import { PhoneNumberUpdates } from '../../../beneficiaries/models/phone-number-updates/phone-number-updates';
 import { DefaultPhoneNumberUpdatesDataRepo } from '../../../beneficiaries/models/data-repo/phone-number-updates-data-repo/default/default-phone-number-updates-data-repo';
+import { BalanceCmd } from '../command/balance-cmd/balance-cmd';
+import { DeployedShelter, Rpc, ShelterClient } from '@xcapit/shelter-sdk';
+import { Keypair, Networks, rpc } from '@stellar/stellar-sdk';
 
 dotenv.config();
 
-const { TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN } = process.env;
+const {
+  TWILIO_ACCOUNT_SID,
+  TWILIO_AUTH_TOKEN,
+  STEWARD_SECRET,
+  STELLAR_RPC,
+  SHELTER_ID,
+} = process.env;
 export class Commands {
+  // TODO: DeployedShelter recibido en constructor
   constructor(
     private _beneficiaries: Beneficiaries,
     private _client: twilio.Twilio | FakeTwilio = twilio(
       TWILIO_ACCOUNT_SID,
       TWILIO_AUTH_TOKEN,
     ),
-  ) { }
+  ) {}
 
   async of(aParsedIncomingSms: ParsedIncomingSms): Promise<Command> {
     return (
@@ -44,15 +53,24 @@ export class Commands {
     parsedIncomingSms: ParsedIncomingSms,
   ): Promise<Map<string, Command>> {
     return new Map<string, Command>([
-      // TODO
-      // [
-      //   new TranslatedKey('BALANCE').toString(),
-      //   new BalanceCmd(
-      //     parsedIncomingSms.commandParams(),
-      //     await this._beneficiaryPhoneNumber(parsedIncomingSms),
-      //     this._beneficiaries,
-      //   ),
-      // ],
+      [
+        new TranslatedKey('BALANCE').toString(),
+        new BalanceCmd(
+          parsedIncomingSms.commandParams(),
+          await this._beneficiaryPhoneNumber(parsedIncomingSms),
+          this._beneficiaries,
+          new DeployedShelter(
+            Keypair.fromSecret(STEWARD_SECRET!),
+            new Rpc(new rpc.Server(STELLAR_RPC!)),
+            new ShelterClient({
+              contractId: SHELTER_ID!,
+              networkPassphrase: Networks.TESTNET,
+              rpcUrl: STELLAR_RPC!,
+              publicKey: Keypair.fromSecret(STEWARD_SECRET!).publicKey(),
+            }),
+          ),
+        ),
+      ],
       // TODO
       // [
       //   new TranslatedKey('SEND').toString(),
@@ -77,7 +95,10 @@ export class Commands {
         new UpdatePhoneNumberProposalCmd(
           await this._beneficiaryPhoneNumber(parsedIncomingSms),
           parsedIncomingSms.commandParams(),
-          new PhoneNumberUpdates(new DefaultPhoneNumberUpdatesDataRepo(), this._client),
+          new PhoneNumberUpdates(
+            new DefaultPhoneNumberUpdatesDataRepo(),
+            this._client,
+          ),
         ),
       ],
       [
@@ -86,7 +107,10 @@ export class Commands {
           await this._beneficiaryPhoneNumber(parsedIncomingSms),
           parsedIncomingSms.commandParams(),
           this._beneficiaries,
-          new PhoneNumberUpdates(new DefaultPhoneNumberUpdatesDataRepo(), this._client),
+          new PhoneNumberUpdates(
+            new DefaultPhoneNumberUpdatesDataRepo(),
+            this._client,
+          ),
         ),
       ],
       // TODO
