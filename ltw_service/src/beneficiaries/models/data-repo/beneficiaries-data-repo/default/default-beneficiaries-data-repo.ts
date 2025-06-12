@@ -20,6 +20,7 @@ export class DefaultBeneficiariesDataRepo implements BeneficiariesDataRepo {
       .lean();
   }
 
+  // TODO: rename
   findSecretsBy(aPhoneNumber: string): Promise<any> {
     return this._aModel
       .findOne({ phoneNumber: aPhoneNumber, active: true }, 'secret')
