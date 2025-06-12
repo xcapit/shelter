@@ -27,6 +27,6 @@ describe("OrderCompleteMsg", () => {
   });
 
   test("toString", () => {
-    expect(orderCompleteMsg.toString()).toEqual('Your order has been completed! Your balance is 1.11 USDC.');
+    expect(orderCompleteMsg.toString()).toEqual('Your order has been completed! Your balance is 0.111 BO1.');
   });
 });
