@@ -10,11 +10,11 @@ import { CompleteOrderData, completeOrderSerializer } from "../beneficiaries/ser
 // import {AlchemySmartAccount} from "../beneficiaries/models/smart-account/alchemy-smart-account/alchemy-smart-account";
 // import { PrivateKeyOf } from "../beneficiaries/models/private-key/private-key-of/private-key-of";
 // import { Transfer } from "../beneficiaries/models/transfer/transfer";
-// import { OrderOfReqBody } from "./models/order-of-req-body/order-of-req-body";
+import { OrderOfReqBody } from "./models/order-of-req-body/order-of-req-body";
 // import { OrderCompleteMsg } from "./models/messages/order-complete-msg/order-complete-msg";
-// import { DefaultOrder } from "./models/order/default-order/default-order";
+import { DefaultOrder } from "./models/order/default-order/default-order";
 // import { BalanceOf } from "../shared/balance-of/balance-of";
-// import { BeneficiaryOrderResponse } from "./models/beneficiary-order-response/beneficiary-order-response";
+import { BeneficiaryOrderResponse } from "./models/beneficiary-order-response/beneficiary-order-response";
 import { AuthorizedRequestOf } from "../system/authorized-request/authorized-request-of";
 import { Users } from "../users/models/users/users";
 import { StatusMsg } from "../metrics/models/status-msg/status-msg";
@@ -25,7 +25,7 @@ export class OrdersServer extends ServerSystem {
 
   constructor(
     private _aServer: Express,
-    // TODO: 
+    // TODO:
     // private _orders: Orders,
     private _orders: any,
     private _beneficiaries: Beneficiaries,
@@ -48,19 +48,18 @@ export class OrdersServer extends ServerSystem {
 
   private async _createOrder(req: AuthorizedRequestOf, res: Response, next: NextFunction): Promise<void> {
     await this.executeAction(async () => {
-      // TODO:
-      // return await (await this._users.findOneBy(req.username())).ifActiveDo<void>(async () => {
-      //   const order = new OrderOfReqBody(req.body(), this._beneficiaries, new Tokens());
-      //   const savedOrder = new DefaultOrder(await this._orders.save(order))
+      return await (await this._users.findOneBy(req.username())).ifActiveDo<void>(async () => {
+        const order = new OrderOfReqBody(req.body(), this._beneficiaries, new Tokens());
+        const savedOrder = new DefaultOrder(await this._orders.save(order))
 
-      //   new SMS(
-      //     await order.beneficiaryPhoneNumber(),
-      //     await order.otpMsg(),
-      //     new TwilioSMSClient()
-      //   ).send();
+        new SMS(
+          await order.beneficiaryPhoneNumber(),
+          await order.otpMsg(),
+          new TwilioSMSClient()
+        ).send();
 
-      //   res.send(new BeneficiaryOrderResponse(savedOrder).toJSON());
-      // });
+        res.send(new BeneficiaryOrderResponse(savedOrder).toJSON());
+      });
     }, res, next);
   }
 
