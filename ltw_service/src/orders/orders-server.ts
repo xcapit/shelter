@@ -119,7 +119,8 @@ export class OrdersServer extends ServerSystem {
           order.merchAddress(),
           new WeiOf(order.amount(), token).value(),
           new Pass(
-            beneficiary.keypair(),
+            // beneficiary.keypair(),
+            Keypair.fromSecret(await new SecretOf(beneficiary.phoneNumber()).value()),
             shelter.id(),
             rpc
           )
