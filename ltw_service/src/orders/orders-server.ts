@@ -20,6 +20,12 @@ import { Users } from "../users/models/users/users";
 import { StatusMsg } from "../metrics/models/status-msg/status-msg";
 import { Limit } from "../system/limit/limit";
 import { OnlyRoles } from "../system/only-roles/only-roles";
+import { Aid, Rpc, SAC } from "@xcapit/shelter-sdk";
+import { rpc } from "@stellar/stellar-sdk";
+import dotenv from 'dotenv';
+import { env } from 'process';
+
+dotenv.config();
 
 export class OrdersServer extends ServerSystem {
 
@@ -79,18 +85,32 @@ export class OrdersServer extends ServerSystem {
 
         let bodyResponse = "Transfer error!";
         const token = await new Tokens().oneBy(order.tokenSymbol())
-        const txHash = await new Transfer(
-          new AlchemySmartAccount(
-            new PrivateKeyOf(
-              (
-                await this._beneficiaries.findOneBy(order.phoneNumber())
-              ).phoneNumber()
-            )
-          ),
-          token,
-          order.amount(),
-          order.merchAddress()
-        ).txHash();
+        const beneficiary = await this._beneficiaries.findOneBy(order.phoneNumber())
+        const ourRpc = new Rpc(
+          new rpc.Server(env.STELLAR_RPC!)
+        )
+        const sac = new SAC({
+      contractId: token.address(),
+      networkPassphrase: Networks.TESTNET,
+      rpcUrl: defaultRpc.url(),
+      publicKey,
+    });
+        new Aid(
+          beneficiary.keypair(),
+          sac
+        )
+        // const txHash = await new Transfer(
+        //   new AlchemySmartAccount(
+        //     new PrivateKeyOf(
+        //       (
+        //         await this._beneficiaries.findOneBy(order.phoneNumber())
+        //       ).phoneNumber()
+        //     )
+        //   ),
+        //   token,
+        //   order.amount(),
+        //   order.merchAddress()
+        // ).txHash();
 
         if (txHash) {
           bodyResponse = new OrderCompleteMsg(
