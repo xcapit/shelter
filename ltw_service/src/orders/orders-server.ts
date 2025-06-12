@@ -21,7 +21,7 @@ import { StatusMsg } from "../metrics/models/status-msg/status-msg";
 import { Limit } from "../system/limit/limit";
 import { OnlyRoles } from "../system/only-roles/only-roles";
 import { Aid, DeployedShelter, Rpc, SAC, ShelterClient } from "@xcapit/shelter-sdk";
-import { rpc } from "@stellar/stellar-sdk";
+import { Keypair, rpc } from "@stellar/stellar-sdk";
 import dotenv from 'dotenv';
 import { env } from 'process';
 
@@ -86,6 +86,7 @@ export class OrdersServer extends ServerSystem {
         let bodyResponse = "Transfer error!";
         const token = await new Tokens().oneBy(order.tokenSymbol())
         const beneficiary = await this._beneficiaries.findOneBy(order.phoneNumber())
+        const stewardKeypair = Keypair.fromSecret(env.STEWARD_SECRET!);
         const ourRpc = new Rpc(
           new rpc.Server(env.STELLAR_RPC!)
         )
