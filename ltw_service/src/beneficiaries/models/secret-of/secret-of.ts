@@ -1,5 +1,3 @@
-// TODO:
-// import { Hex } from "viem";
 import { Beneficiaries } from "../beneficiaries/beneficiaries";
 
 export class SecretOf {
