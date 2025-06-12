@@ -9,7 +9,7 @@ import { CompleteOrderData, completeOrderSerializer } from "../beneficiaries/ser
 // import { Orders } from "./models/orders/orders";
 // import {AlchemySmartAccount} from "../beneficiaries/models/smart-account/alchemy-smart-account/alchemy-smart-account";
 // import { PrivateKeyOf } from "../beneficiaries/models/private-key/private-key-of/private-key-of";
-import { Transfer } from "../beneficiaries/models/transfer/transfer";
+// import { Transfer } from "../beneficiaries/models/transfer/transfer";
 import { OrderOfReqBody } from "./models/order-of-req-body/order-of-req-body";
 import { OrderCompleteMsg } from "./models/messages/order-complete-msg/order-complete-msg";
 import { DefaultOrder } from "./models/order/default-order/default-order";
