@@ -21,8 +21,6 @@ export class Orders {
     return rawBeneficiaryOrder
       ? new DefaultOrder(rawBeneficiaryOrder)
       : new NotFoundOrder();
-    return new NotFoundOrder()
-
   }
 
   async findOneById(
@@ -34,17 +32,14 @@ export class Orders {
     return rawBeneficiaryOrder
       ? new DefaultOrder(rawBeneficiaryOrder)
       : new NotFoundOrder();
-    return new NotFoundOrder()
   }
 
   async findLatestBy(aPhoneNumber: string, ordersToFetch = 10): Promise<any[]> {
-    // TODO:
-    // const rawBeneficiaryOrders = await this._aDataRepo.findLatestBy(
-    //   aPhoneNumber,
-    //   ordersToFetch
-    // );
-    // return rawBeneficiaryOrders.map(rawBeneficiaryOrders => new DefaultOrder(rawBeneficiaryOrders));
-    return []
+    const rawBeneficiaryOrders = await this._aDataRepo.findLatestBy(
+      aPhoneNumber,
+      ordersToFetch
+    );
+    return rawBeneficiaryOrders.map(rawBeneficiaryOrders => new DefaultOrder(rawBeneficiaryOrders));
   }
 
   async completeOrder(anOrder: BeneficiaryOrder) {
@@ -58,9 +53,7 @@ export class Orders {
     }
   }
 
-  // TODO:
-  // async save(anOrder: OrderOfReqBody): Promise<any> {
-  async save(anOrder: any): Promise<any> {
+  async save(anOrder: OrderOfReqBody): Promise<any> {
     return this._aDataRepo.save(await anOrder.toJson());
   }
 }
