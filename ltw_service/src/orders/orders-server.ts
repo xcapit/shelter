@@ -135,16 +135,15 @@ export class OrdersServer extends ServerSystem {
         //   order.merchAddress()
         // ).txHash();
 
-        if (txHash) {
-          bodyResponse = new OrderCompleteMsg(
-            await new BalanceOf(
-              token,
-              (await this._beneficiaries.findOneBy(order.phoneNumber())).address()
-            ).toAmount(),
-            token
-          ).toString();
-          await this._orders.completeOrder(order);
-        }
+        bodyResponse = new OrderCompleteMsg(
+          await new BalanceOf(
+            token,
+            beneficiary.keypair(),
+            shelter
+          ).toAmount(),
+          token
+        ).toString();
+        await this._orders.completeOrder(order);
 
         new SMS(order.phoneNumber(), bodyResponse, new TwilioSMSClient()).send();
 
