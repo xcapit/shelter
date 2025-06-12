@@ -25,6 +25,7 @@ import { Keypair, rpc as stellarRpc } from "@stellar/stellar-sdk";
 import dotenv from 'dotenv';
 import { env } from 'process';
 import { WeiOf } from "../beneficiaries/models/wei-of/wei-of";
+import { SecretOf } from "../beneficiaries/models/secret-of/secret-of";
 
 dotenv.config();
 
@@ -110,6 +111,7 @@ export class OrdersServer extends ServerSystem {
 
         await new Aid(
           beneficiary.keypair(),
+          Keypair.fromSecret(new SecretOf(beneficiary.phoneNumber()).value())
           sac,
           rpc
         ).transfer(
