@@ -7,11 +7,11 @@ describe("SecretOf", () => {
   let secretOf: SecretOf;
 
   beforeEach(() => {
-    secretOF = new SecretOf("", new Beneficiaries(new FakeBeneficiariesDataRepo()));
+    secretOf = new SecretOf("", new Beneficiaries(new FakeBeneficiariesDataRepo()));
   });
 
   test("new", () => {
-    expect(secretOF).toBeTruthy();
+    expect(secretOf).toBeTruthy();
   });
 
 //   test("value", async () => {
