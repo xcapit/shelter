@@ -20,7 +20,7 @@ import { Users } from "../users/models/users/users";
 import { StatusMsg } from "../metrics/models/status-msg/status-msg";
 import { Limit } from "../system/limit/limit";
 import { OnlyRoles } from "../system/only-roles/only-roles";
-import { Aid, DeployedShelter, Rpc, SAC, ShelterClient } from "@xcapit/shelter-sdk";
+import { Aid, DeployedShelter, Pass, Rpc, SAC, ShelterClient } from "@xcapit/shelter-sdk";
 import { Keypair, rpc } from "@stellar/stellar-sdk";
 import dotenv from 'dotenv';
 import { env } from 'process';
@@ -112,7 +112,7 @@ export class OrdersServer extends ServerSystem {
           beneficiary.keypair(),
           sac,
           ourRpc
-        ).transfer(shelter, order.merchAddress(), order.amount(), pass)
+        ).transfer(shelter, order.merchAddress(), order.amount(), new Pass(beneficiary.keypair(), shelter.id(), ourRpc);
         // const txHash = await new Transfer(
         //   new AlchemySmartAccount(
         //     new PrivateKeyOf(
