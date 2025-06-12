@@ -61,7 +61,7 @@ describe('Beneficiaries', () => {
   test('findPrivateKeyBy', async () => {
     expect(
       await beneficiaries.findPrivateKeyBy(rawBeneficiaryData.phoneNumber),
-    ).toEqual(rawBeneficiaryData.ownerPrivateKey);
+    ).toEqual(rawBeneficiaryData.secret);
   });
 });
 
