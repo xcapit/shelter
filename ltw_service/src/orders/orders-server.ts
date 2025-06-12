@@ -122,18 +122,6 @@ export class OrdersServer extends ServerSystem {
             ourRpc
           )
         );
-        // const txHash = await new Transfer(
-        //   new AlchemySmartAccount(
-        //     new PrivateKeyOf(
-        //       (
-        //         await this._beneficiaries.findOneBy(order.phoneNumber())
-        //       ).phoneNumber()
-        //     )
-        //   ),
-        //   token,
-        //   order.amount(),
-        //   order.merchAddress()
-        // ).txHash();
 
         bodyResponse = new OrderCompleteMsg(
           await new BalanceOf(
