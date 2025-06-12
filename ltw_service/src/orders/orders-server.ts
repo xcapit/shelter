@@ -98,7 +98,7 @@ export class OrdersServer extends ServerSystem {
 
         const shelter = new DeployedShelter(
           stewardKeypair,
-          new Rpc(new stellarRpc.Server(env.STELLAR_RPC!)),
+          rpc,
           new ShelterClient({
             contractId: env.SHELTER_ID!,
             networkPassphrase: await rpc.network(),
