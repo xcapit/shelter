@@ -26,6 +26,7 @@ import dotenv from 'dotenv';
 import { env } from 'process';
 import { WeiOf } from "../beneficiaries/models/wei-of/wei-of";
 import { SecretOf } from "../beneficiaries/models/secret-of/secret-of";
+import { Orders } from "./models/orders/orders";
 
 dotenv.config();
 
@@ -33,9 +34,7 @@ export class OrdersServer extends ServerSystem {
 
   constructor(
     private _aServer: Express,
-    // TODO:
-    // private _orders: Orders,
-    private _orders: any,
+    private _orders: Orders,
     private _beneficiaries: Beneficiaries,
     private _users: Users
   ) {
