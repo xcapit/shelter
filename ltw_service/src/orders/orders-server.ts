@@ -20,7 +20,7 @@ import { Users } from "../users/models/users/users";
 import { StatusMsg } from "../metrics/models/status-msg/status-msg";
 import { Limit } from "../system/limit/limit";
 import { OnlyRoles } from "../system/only-roles/only-roles";
-import { Aid, Rpc, SAC } from "@xcapit/shelter-sdk";
+import { Aid, DeployedShelter, Rpc, SAC, ShelterClient } from "@xcapit/shelter-sdk";
 import { rpc } from "@stellar/stellar-sdk";
 import dotenv from 'dotenv';
 import { env } from 'process';
@@ -95,10 +95,23 @@ export class OrdersServer extends ServerSystem {
           rpcUrl: ourRpc.url(),
           publicKey: beneficiary.address(),
         });
+
+        const shelter = new DeployedShelter(
+          stewardKeypair,
+          new Rpc(new rpc.Server(env.STELLAR_RPC!)),
+          new ShelterClient({
+            contractId: env.SHELTER_ID!,
+            networkPassphrase: Networks.TESTNET,
+            rpcUrl: env.STELLAR_RPC!,
+            publicKey: stewardKeypair.publicKey(),
+          }),
+        );
+
         new Aid(
           beneficiary.keypair(),
-          sac
-        )
+          sac,
+          ourRpc
+        ).transfer(deployedShelter, order.merchAddress(), order.amount(), pass)
         // const txHash = await new Transfer(
         //   new AlchemySmartAccount(
         //     new PrivateKeyOf(
