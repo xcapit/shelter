@@ -103,7 +103,7 @@ export class OrdersServer extends ServerSystem {
           new ShelterClient({
             contractId: env.SHELTER_ID!,
             networkPassphrase: await rpc.network(),
-            rpcUrl: env.STELLAR_RPC!,
+            rpcUrl: rpc.url(),
             publicKey: stewardKeypair.publicKey(),
           }),
         );
