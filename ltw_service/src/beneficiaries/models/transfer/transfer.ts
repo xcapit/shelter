@@ -11,7 +11,7 @@
 //     private _aToken: Token,
 //     private _anAmount: string,
 //     private _to: string
-//   ) {}
+//   ) { }
 
 //   async txHash() {
 //     return await this._aSmartAccount.transactionHashOf(

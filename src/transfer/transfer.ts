@@ -11,13 +11,11 @@ export class Transfer {
     private readonly _token: SAC | FakeSAC
   ) { }
 
-  async value(withPass: Pass): Promise<any> {
-    return await withPass.applyTo(
-      await this._token.transfer({
-        from: this._from,
-        to: this._to,
-        amount: this._amount,
-      })
-    );
+  async value(withPass: Pass): Promise<AssembledTransaction<null>> {
+    return await withPass.applyTo(await this._token.transfer({
+      from: this._from,
+      to: this._to,
+      amount: this._amount,
+    }));
   }
 }

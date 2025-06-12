@@ -13,6 +13,7 @@ import {UsersDataRepo} from "./users/models/users-data-repo/users-data-repo";
 import {LowTechServer} from "./low-tech-server";
 import express from "express";
 import { FakeTwilio } from "./sms/models/fake-twilio/fake-twilio";
+import { DeployedShelter } from "@xcapit/shelter-sdk";
 
 
 describe('Low Tech Server', () => {
@@ -21,14 +22,15 @@ describe('Low Tech Server', () => {
   const beneficiaries = new Beneficiaries(new DefaultBeneficiariesDataRepo(fakeMongoModelInstance), new FakeTwilio());
   const orders = new Orders(new FakeBeneficiaryOrdersDataRepo(rawBeneficiaryOrder));
   const users = new Users(new UsersDataRepo(fakeMongoModelInstance));
+  const shelter = {} as DeployedShelter;
 
 
   test('new', () => {
-    expect(new LowTechServer(aServer, beneficiaries, orders, users)).toBeTruthy();
+    expect(new LowTechServer(aServer, beneficiaries, orders, users, shelter)).toBeTruthy();
   });
 
   test('register', () => {
-    const server = new LowTechServer(aServer, beneficiaries, orders, users);
+    const server = new LowTechServer(aServer, beneficiaries, orders, users, shelter);
 
     server.register();
   });

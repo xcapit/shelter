@@ -29,9 +29,9 @@ describe("DefaultBeneficiariesDataRepo", () => {
     ).toEqual(rawBeneficiaryData);
   });
 
-  test("findSecretsBy", async () => {
+  test("findSecretBy", async () => {
     expect(
-      await beneficiariesDataRepo.findSecretsBy(
+      await beneficiariesDataRepo.findSecretBy(
         rawBeneficiaryData.phoneNumber
       )
     ).toEqual(rawBeneficiaryData);

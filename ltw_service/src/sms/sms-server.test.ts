@@ -8,6 +8,7 @@ import {SMSServer} from "./sms-server";
 import { FakeTwilio } from "./models/fake-twilio/fake-twilio";
 import { Users } from "../users/models/users/users";
 import { UsersDataRepo } from "../users/models/users-data-repo/users-data-repo";
+import { DeployedShelter } from "@xcapit/shelter-sdk";
 
 
 describe('SMSs server', () => {
@@ -15,13 +16,14 @@ describe('SMSs server', () => {
   const fakeMongoModelInstance = new FakeMongoModel().create();
   const beneficiaries = new Beneficiaries(new DefaultBeneficiariesDataRepo(fakeMongoModelInstance), new FakeTwilio());
   const users = new Users(new UsersDataRepo(fakeMongoModelInstance));
+  const shelter = {} as DeployedShelter;
 
   test('new', () => {
-    expect(new SMSServer(aServer, beneficiaries, users)).toBeTruthy();
+    expect(new SMSServer(aServer, beneficiaries, users, shelter)).toBeTruthy();
   });
 
   test('register', () => {
-    const server = new SMSServer(aServer, beneficiaries, users);
+    const server = new SMSServer(aServer, beneficiaries, users, shelter);
 
     server.register();
   });

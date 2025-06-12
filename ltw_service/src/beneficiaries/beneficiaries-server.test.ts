@@ -8,19 +8,21 @@ import {
 import {Users} from "../users/models/users/users";
 import {UsersDataRepo} from "../users/models/users-data-repo/users-data-repo";
 import { FakeTwilio } from "../sms/models/fake-twilio/fake-twilio";
+import { DeployedShelter } from "@xcapit/shelter-sdk";
 
 describe('Beneficiaries server', () => {
   const aServer = express();
   const fakeMongoModelInstance = new FakeMongoModel().create();
   const users = new Users(new UsersDataRepo(fakeMongoModelInstance));
   const beneficiaries = new Beneficiaries(new DefaultBeneficiariesDataRepo(fakeMongoModelInstance), new FakeTwilio());
+  const shelter = {} as DeployedShelter;
 
   test('new', () => {
-    expect(new BeneficiariesServer(aServer, beneficiaries, users)).toBeTruthy();
+    expect(new BeneficiariesServer(aServer, beneficiaries, users, shelter)).toBeTruthy();
   });
 
   test('register', () => {
-    const beneficiariesServer = new BeneficiariesServer(aServer, beneficiaries, users);
+    const beneficiariesServer = new BeneficiariesServer(aServer, beneficiaries, users, shelter);
 
     beneficiariesServer.register();
   });

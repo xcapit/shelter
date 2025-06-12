@@ -13,6 +13,7 @@ import {FakeMongoModel} from "../db/mongo/fake-mongo/fake-mongo.model";
 import { Users } from "../users/models/users/users";
 import {UsersDataRepo} from "../users/models/users-data-repo/users-data-repo";
 import { FakeTwilio } from "../sms/models/fake-twilio/fake-twilio";
+import { DeployedShelter } from "@xcapit/shelter-sdk";
 
 describe('Orders server', () => {
   const aServer = express();
@@ -20,13 +21,14 @@ describe('Orders server', () => {
   const beneficiaries = new Beneficiaries(new DefaultBeneficiariesDataRepo(fakeMongoModelInstance), new FakeTwilio());
   const orders = new Orders(new FakeBeneficiaryOrdersDataRepo(rawBeneficiaryOrder));
   const users = new Users(new UsersDataRepo(fakeMongoModelInstance));
+  const shelter = {} as DeployedShelter;
 
   test('new', () => {
-    expect(new OrdersServer(aServer, orders, beneficiaries, users)).toBeTruthy();
+    expect(new OrdersServer(aServer, orders, beneficiaries, users, shelter)).toBeTruthy();
   });
 
   test('register', () => {
-    const ordersServer = new OrdersServer(aServer, orders, beneficiaries, users);
+    const ordersServer = new OrdersServer(aServer, orders, beneficiaries, users, shelter);
 
     ordersServer.register();
   });
