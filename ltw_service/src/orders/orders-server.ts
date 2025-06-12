@@ -90,11 +90,11 @@ export class OrdersServer extends ServerSystem {
           new rpc.Server(env.STELLAR_RPC!)
         )
         const sac = new SAC({
-      contractId: token.address(),
-      networkPassphrase: ourRpc.network(),
-      rpcUrl: defaultRpc.url(),
-      publicKey,
-    });
+          contractId: token.address(),
+          networkPassphrase: await ourRpc.network(),
+          rpcUrl: defaultRpc.url(),
+          publicKey,
+        });
         new Aid(
           beneficiary.keypair(),
           sac
