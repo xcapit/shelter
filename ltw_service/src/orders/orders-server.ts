@@ -13,7 +13,7 @@ import { CompleteOrderData, completeOrderSerializer } from "../beneficiaries/ser
 import { OrderOfReqBody } from "./models/order-of-req-body/order-of-req-body";
 // import { OrderCompleteMsg } from "./models/messages/order-complete-msg/order-complete-msg";
 import { DefaultOrder } from "./models/order/default-order/default-order";
-// import { BalanceOf } from "../shared/balance-of/balance-of";
+import { BalanceOf } from "../shared/balance-of/balance-of";
 import { BeneficiaryOrderResponse } from "./models/beneficiary-order-response/beneficiary-order-response";
 import { AuthorizedRequestOf } from "../system/authorized-request/authorized-request-of";
 import { Users } from "../users/models/users/users";
