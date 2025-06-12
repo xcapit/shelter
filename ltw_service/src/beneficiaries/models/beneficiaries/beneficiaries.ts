@@ -119,8 +119,7 @@ export class Beneficiaries {
   }
 
   async findPrivateKeyBy(aPhoneNumber: string): Promise<string> {
-    return
-    await this._aDataRepo.findSecretsBy(aPhoneNumber)).secret
+    return await this._aDataRepo.findSecretsBy(aPhoneNumber).secret
       ;
   }
 }
