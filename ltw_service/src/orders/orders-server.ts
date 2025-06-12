@@ -92,7 +92,7 @@ export class OrdersServer extends ServerSystem {
         const sac = new SAC({
           contractId: token.address(),
           networkPassphrase: await ourRpc.network(),
-          rpcUrl: defaultRpc.url(),
+          rpcUrl: ourRpc.url(),
           publicKey,
         });
         new Aid(
