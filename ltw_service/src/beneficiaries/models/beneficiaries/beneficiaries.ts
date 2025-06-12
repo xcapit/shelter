@@ -119,8 +119,8 @@ export class Beneficiaries {
   }
 
   async findPrivateKeyBy(aPhoneNumber: string): Promise<string> {
-    return await this._privateKeySharding.combine(
-      (await this._aDataRepo.findSecretsBy(aPhoneNumber)).ownerSecrets,
-    );
+    return
+    await this._aDataRepo.findSecretsBy(aPhoneNumber)).secret
+      ;
   }
 }
