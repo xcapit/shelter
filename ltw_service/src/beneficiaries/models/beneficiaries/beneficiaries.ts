@@ -117,4 +117,10 @@ export class Beneficiaries {
       ? new DefaultBeneficiary(rawBeneficiaryData)
       : new NullBeneficiary();
   }
+
+  async findPrivateKeyBy(aPhoneNumber: string): Promise<string> {
+    return await this._privateKeySharding.combine(
+      (await this._aDataRepo.findSecretsBy(aPhoneNumber)).ownerSecrets,
+    );
+  }
 }
