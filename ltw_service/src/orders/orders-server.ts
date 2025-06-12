@@ -89,7 +89,7 @@ export class OrdersServer extends ServerSystem {
         const stewardKeypair = Keypair.fromSecret(env.STEWARD_SECRET!);
         const rpc = new Rpc(
           new stellarRpc.Server(env.STELLAR_RPC!)
-        )
+        );
         const sac = new SAC({
           contractId: token.address(),
           networkPassphrase: await rpc.network(),
