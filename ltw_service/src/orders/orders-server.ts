@@ -84,8 +84,8 @@ export class OrdersServer extends ServerSystem {
         await this._orders.validateOrder(order);
 
         let bodyResponse = "Transfer error!";
-        const token = await new Tokens().oneBy(order.tokenSymbol())
-        const beneficiary = await this._beneficiaries.findOneBy(order.phoneNumber())
+        const token = await new Tokens().oneBy(order.tokenSymbol());
+        const beneficiary = await this._beneficiaries.findOneBy(order.phoneNumber());
         const stewardKeypair = Keypair.fromSecret(env.STEWARD_SECRET!);
         const rpc = new Rpc(
           new stellarRpc.Server(env.STELLAR_RPC!)
