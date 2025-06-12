@@ -93,7 +93,7 @@ export class OrdersServer extends ServerSystem {
           contractId: token.address(),
           networkPassphrase: await ourRpc.network(),
           rpcUrl: ourRpc.url(),
-          publicKey,
+          publicKey: beneficiary.address(),
         });
         new Aid(
           beneficiary.keypair(),
