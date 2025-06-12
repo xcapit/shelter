@@ -71,7 +71,6 @@ export class OrdersServer extends ServerSystem {
 
   private async _completeOrder(req: AuthorizedRequestOf, res: Response, next: NextFunction): Promise<void> {
     await this.executeAction(async () => {
-      // TODO
       await (await this._users.findOneBy(req.username())).ifActiveDo<void>(async () => {
         const serializedData: CompleteOrderData =
           await completeOrderSerializer.validate(req.body());
