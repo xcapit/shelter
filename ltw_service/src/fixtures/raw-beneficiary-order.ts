@@ -6,7 +6,7 @@ export const rawBeneficiaryOrder: RawBeneficiaryOrder = {
   amount: "10",
   token: "USDC",
   phoneNumber: "+1234",
-  merchAddress : "0xa5cc3c03994DB5b0d9A5eEdD10CabaB0813678AC",
+  merchAddress: "GDIQCQETMJNQU7W4FRYA62ARS4JH32L45YDLZHS7CMOSMBD6OU7Z252T",
   otp: "123456",
   expirationDate: 1716920996945,
   createdAt: '2024-12-23T18:11:50.625Z',
