@@ -11,7 +11,7 @@ import { CompleteOrderData, completeOrderSerializer } from "../beneficiaries/ser
 // import { PrivateKeyOf } from "../beneficiaries/models/private-key/private-key-of/private-key-of";
 // import { Transfer } from "../beneficiaries/models/transfer/transfer";
 import { OrderOfReqBody } from "./models/order-of-req-body/order-of-req-body";
-// import { OrderCompleteMsg } from "./models/messages/order-complete-msg/order-complete-msg";
+import { OrderCompleteMsg } from "./models/messages/order-complete-msg/order-complete-msg";
 import { DefaultOrder } from "./models/order/default-order/default-order";
 import { BalanceOf } from "../shared/balance-of/balance-of";
 import { BeneficiaryOrderResponse } from "./models/beneficiary-order-response/beneficiary-order-response";
