@@ -102,7 +102,7 @@ export class OrdersServer extends ServerSystem {
           new Rpc(new rpc.Server(env.STELLAR_RPC!)),
           new ShelterClient({
             contractId: env.SHELTER_ID!,
-            networkPassphrase: Networks.TESTNET,
+            networkPassphrase: await ourRpc.network(),
             rpcUrl: env.STELLAR_RPC!,
             publicKey: stewardKeypair.publicKey(),
           }),
