@@ -21,7 +21,7 @@ import { StatusMsg } from "../metrics/models/status-msg/status-msg";
 import { Limit } from "../system/limit/limit";
 import { OnlyRoles } from "../system/only-roles/only-roles";
 import { Aid, DeployedShelter, Pass, Rpc, SAC, ShelterClient } from "@xcapit/shelter-sdk";
-import { Keypair, rpc } from "@stellar/stellar-sdk";
+import { Keypair, rpc as stellarRpc } from "@stellar/stellar-sdk";
 import dotenv from 'dotenv';
 import { env } from 'process';
 
@@ -86,22 +86,22 @@ export class OrdersServer extends ServerSystem {
         const token = await new Tokens().oneBy(order.tokenSymbol())
         const beneficiary = await this._beneficiaries.findOneBy(order.phoneNumber())
         const stewardKeypair = Keypair.fromSecret(env.STEWARD_SECRET!);
-        const ourRpc = new Rpc(
-          new rpc.Server(env.STELLAR_RPC!)
+        const rpc = new Rpc(
+          new stellarRpc.Server(env.STELLAR_RPC!)
         )
         const sac = new SAC({
           contractId: token.address(),
-          networkPassphrase: await ourRpc.network(),
-          rpcUrl: ourRpc.url(),
+          networkPassphrase: await rpc.network(),
+          rpcUrl: rpc.url(),
           publicKey: beneficiary.address(),
         });
 
         const shelter = new DeployedShelter(
           stewardKeypair,
-          new Rpc(new rpc.Server(env.STELLAR_RPC!)),
+          new Rpc(new stellarRpc.Server(env.STELLAR_RPC!)),
           new ShelterClient({
             contractId: env.SHELTER_ID!,
-            networkPassphrase: await ourRpc.network(),
+            networkPassphrase: await rpc.network(),
             rpcUrl: env.STELLAR_RPC!,
             publicKey: stewardKeypair.publicKey(),
           }),
@@ -110,7 +110,7 @@ export class OrdersServer extends ServerSystem {
         await new Aid(
           beneficiary.keypair(),
           sac,
-          ourRpc
+          rpc
         ).transfer(
           shelter,
           order.merchAddress(),
@@ -118,7 +118,7 @@ export class OrdersServer extends ServerSystem {
           new Pass(
             beneficiary.keypair(),
             shelter.id(),
-            ourRpc
+            rpc
           )
         );
 
