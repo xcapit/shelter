@@ -66,47 +66,47 @@ export class OrdersServer extends ServerSystem {
   private async _completeOrder(req: AuthorizedRequestOf, res: Response, next: NextFunction): Promise<void> {
     await this.executeAction(async () => {
       // TODO
-      // await (await this._users.findOneBy(req.username())).ifActiveDo<void>(async () => {
-      //   const serializedData: CompleteOrderData =
-      //     await completeOrderSerializer.validate(req.body());
+      await (await this._users.findOneBy(req.username())).ifActiveDo<void>(async () => {
+        const serializedData: CompleteOrderData =
+          await completeOrderSerializer.validate(req.body());
 
-      //   const order = await this._orders.findOneByOTPandPhoneNumber(
-      //     serializedData.otp,
-      //     serializedData.phoneNumber
-      //   );
+        const order = await this._orders.findOneByOTPandPhoneNumber(
+          serializedData.otp,
+          serializedData.phoneNumber
+        );
 
-      //   await this._orders.validateOrder(order);
+        await this._orders.validateOrder(order);
 
-      //   let bodyResponse = "Transfer error!";
-      //   const token = await new Tokens().oneBy(order.tokenSymbol())
-      //   const txHash = await new Transfer(
-      //     new AlchemySmartAccount(
-      //       new PrivateKeyOf(
-      //         (
-      //           await this._beneficiaries.findOneBy(order.phoneNumber())
-      //         ).phoneNumber()
-      //       )
-      //     ),
-      //     token,
-      //     order.amount(),
-      //     order.merchAddress()
-      //   ).txHash();
+        let bodyResponse = "Transfer error!";
+        const token = await new Tokens().oneBy(order.tokenSymbol())
+        const txHash = await new Transfer(
+          new AlchemySmartAccount(
+            new PrivateKeyOf(
+              (
+                await this._beneficiaries.findOneBy(order.phoneNumber())
+              ).phoneNumber()
+            )
+          ),
+          token,
+          order.amount(),
+          order.merchAddress()
+        ).txHash();
 
-      //   if (txHash) {
-      //     bodyResponse = new OrderCompleteMsg(
-      //       await new BalanceOf(
-      //         token,
-      //         (await this._beneficiaries.findOneBy(order.phoneNumber())).address()
-      //       ).toAmount(),
-      //       token
-      //     ).toString();
-      //     await this._orders.completeOrder(order);
-      //   }
+        if (txHash) {
+          bodyResponse = new OrderCompleteMsg(
+            await new BalanceOf(
+              token,
+              (await this._beneficiaries.findOneBy(order.phoneNumber())).address()
+            ).toAmount(),
+            token
+          ).toString();
+          await this._orders.completeOrder(order);
+        }
 
-      //   new SMS(order.phoneNumber(), bodyResponse, new TwilioSMSClient()).send();
+        new SMS(order.phoneNumber(), bodyResponse, new TwilioSMSClient()).send();
 
-      //   res.send(new StatusMsg("Order Completed!").toJson());
-      // });
+        res.send(new StatusMsg("Order Completed!").toJson());
+      });
     }, res, next);
   }
 
