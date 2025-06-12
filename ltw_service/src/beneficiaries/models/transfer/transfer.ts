@@ -1,5 +1,4 @@
 // TODO:
-
 // import { SmartAccount } from "../smart-account/smart-account";
 // import { Token } from "../token/token.interface";
 // import { TransferTransaction } from "../transfer-transaction/transfer-transaction";
