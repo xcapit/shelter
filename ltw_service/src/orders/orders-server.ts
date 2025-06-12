@@ -112,7 +112,16 @@ export class OrdersServer extends ServerSystem {
           beneficiary.keypair(),
           sac,
           ourRpc
-        ).transfer(shelter, order.merchAddress(), order.amount(), new Pass(beneficiary.keypair(), shelter.id(), ourRpc);
+        ).transfer(
+          shelter,
+          order.merchAddress(),
+          order.amount(),
+          new Pass(
+            beneficiary.keypair(),
+            shelter.id(),
+            ourRpc
+          )
+        );
         // const txHash = await new Transfer(
         //   new AlchemySmartAccount(
         //     new PrivateKeyOf(
