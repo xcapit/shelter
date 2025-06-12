@@ -108,7 +108,7 @@ export class OrdersServer extends ServerSystem {
           }),
         );
 
-        new Aid(
+        await new Aid(
           beneficiary.keypair(),
           sac,
           ourRpc
