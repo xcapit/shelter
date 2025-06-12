@@ -1,12 +1,8 @@
-// TODO:
-import { DefaultBeneficiary } from "../../../beneficiaries/models/beneficiary/default-beneficiary/default-beneficiary";
 import { rawBeneficiaryOrder } from "../../../fixtures/raw-beneficiary-order";
 import { rawBeneficiaryData } from "../../../fixtures/raw-beneficiary-data";
 import { Orders } from "./orders";
-import { OTP } from "../../../beneficiaries/models/otp/otp";
 import { DefaultOrder } from "../order/default-order/default-order";
 import { FakeBeneficiaryOrdersDataRepo } from "../../../beneficiaries/models/data-repo/beneficiary-orders-data-repo/fake/fake-beneficiary-orders-data-repo";
-import { TTL } from "../../../beneficiaries/models/ttl/ttl";
 import { OrderOfReqBody } from "../order-of-req-body/order-of-req-body";
 
 describe("BeneficiaryOrders", () => {
