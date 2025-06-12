@@ -110,7 +110,7 @@ export class OrdersServer extends ServerSystem {
         );
 
         await new Aid(
-          beneficiary.keypair(),
+          // beneficiary.keypair(),
           Keypair.fromSecret(await new SecretOf(beneficiary.phoneNumber()).value())
           sac,
           rpc
