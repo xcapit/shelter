@@ -24,6 +24,7 @@ import { Aid, DeployedShelter, Pass, Rpc, SAC, ShelterClient } from "@xcapit/she
 import { Keypair, rpc as stellarRpc } from "@stellar/stellar-sdk";
 import dotenv from 'dotenv';
 import { env } from 'process';
+import { WeiOf } from "../beneficiaries/models/wei-of/wei-of";
 
 dotenv.config();
 
@@ -114,7 +115,7 @@ export class OrdersServer extends ServerSystem {
         ).transfer(
           shelter,
           order.merchAddress(),
-          order.amount(),
+          new WeiOf(order.amount(), token).value(),
           new Pass(
             beneficiary.keypair(),
             shelter.id(),
