@@ -19,7 +19,6 @@ export class SimulatedTransaction {
   }
 
   private async _txData(tx: Tx): Promise<any> {
-    console.log('tx', tx);
     return await this._rpc
       .server()
       .pollTransaction((await this._rpc.server().sendTransaction(tx)).hash);
