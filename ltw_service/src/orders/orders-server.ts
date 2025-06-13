@@ -186,6 +186,7 @@ export class OrdersServer extends ServerSystem {
             ).toAmount(),
             token,
           ).toString();
+
           await this._orders.completeOrder(order);
 
           new SMS(
