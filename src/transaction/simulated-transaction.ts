@@ -17,7 +17,7 @@ export class SimulatedTransaction {
     const simTx: any = await this._rpc.server().simulateTransaction(tx);
     console.log('simulated 1, result:', simTx);
     const completeTx = this._rpc.assembleTransaction(tx, simTx).build();
-    console.log('simulated 2');
+    console.log('simulated 2, completeTx:', completeTx);
     completeTx.sign(this._signer);
     console.log('signed');
     return await this._txData(completeTx);
