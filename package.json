@@ -10,10 +10,10 @@
     "build:deps": "cd packages/shelter-sdk && npm run build && cd ../sac-sdk && npm run build",
     "test:base": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
     "test": "npm run test:base",
-    "test:watch": "npm run test:base --watch",
-    "test:e2e": "npm run test:base --config jest.config.e2e.js",
-    "coverage": "npm run test:base --coverage",
-    "coverage:all": "npm run test:base --config jest.config.all.js --coverage"
+    "test:watch": "npm run test:base -- --watch",
+    "test:e2e": "npm run test:base -- --config jest.config.e2e.js",
+    "coverage": "npm run test:base -- --coverage",
+    "coverage:all": "npm run test:base -- --config jest.config.all.js --coverage"
   },
   "keywords": [],
   "author": "",
