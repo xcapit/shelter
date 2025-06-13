@@ -77,7 +77,7 @@ describe("Shelter", () => {
     ).resolves.toBeUndefined();
   });
 
-  test.only("recipient transfer from shelter", async () => {
+  test("recipient transfer from shelter", async () => {
     const recipient = Keypair.fromSecret(
       "SBTD4FBLWCWVNJCOSOMVYXPJOYLTQW52EC3AUZ2Q3XX5PAO3SMXIKWHH"
     );
