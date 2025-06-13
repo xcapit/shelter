@@ -1,7 +1,6 @@
 import { Client as SAC } from "sac-sdk";
 import { FakeSAC } from "../fake-sac/fake-sac";
 import type { Pass } from "../pass/pass.interface";
-import type { AssembledTransaction } from "@stellar/stellar-sdk/contract";
 
 export class Transfer {
   constructor(
