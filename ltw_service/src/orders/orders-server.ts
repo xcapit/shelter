@@ -125,34 +125,26 @@ export class OrdersServer extends ServerSystem {
           const serializedData: CompleteOrderData =
             await completeOrderSerializer.validate(req.body());
 
-          console.log(1);
           const order = await this._orders.findOneByOTPandPhoneNumber(
             serializedData.otp,
             serializedData.phoneNumber,
           );
 
-          console.log(2);
           await this._orders.validateOrder(order);
-          console.log(3);
 
           let bodyResponse = 'Transfer error!';
           const token = await new Tokens().oneBy(order.tokenSymbol());
-          console.log(4);
           const beneficiary = await this._beneficiaries.findOneBy(
             order.phoneNumber(),
           );
-          console.log(5);
           const stewardKeypair = Keypair.fromSecret(env.STEWARD_SECRET!);
-          console.log(6);
           const rpc = new Rpc(new stellarRpc.Server(env.STELLAR_RPC!));
-          console.log(7);
           const sac = new SAC({
             contractId: token.address(),
             networkPassphrase: await rpc.network(),
             rpcUrl: rpc.url(),
             publicKey: beneficiary.address(),
           });
-          console.log(8);
 
           const shelter = new DeployedShelter(
             stewardKeypair,
@@ -164,7 +156,6 @@ export class OrdersServer extends ServerSystem {
               publicKey: stewardKeypair.publicKey(),
             }),
           );
-          console.log(9);
 
           await new Aid(
             // beneficiary.keypair(),
@@ -186,7 +177,6 @@ export class OrdersServer extends ServerSystem {
               rpc,
             ),
           );
-          console.log(10);
 
           bodyResponse = new OrderCompleteMsg(
             await new BalanceOf(
@@ -196,9 +186,7 @@ export class OrdersServer extends ServerSystem {
             ).toAmount(),
             token,
           ).toString();
-          console.log(11);
           await this._orders.completeOrder(order);
-          console.log(12);
 
           new SMS(
             order.phoneNumber(),
