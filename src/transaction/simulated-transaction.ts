@@ -15,7 +15,7 @@ export class SimulatedTransaction {
     const tx = this._rawTx.built!;
     console.log('built raw tx', typeof tx);
     const simTx: any = await this._rpc.server().simulateTransaction(tx);
-    console.log('simulated 1, result:', simTx);
+    console.log('simulated 1, result:', typeof simTx);
     const assembledTx = this._rpc.assembleTransaction(tx, simTx);
     console.log('assembled tx:', assembledTx);
     const completeTx = this._rpc.assembleTransaction(tx, simTx).build();
