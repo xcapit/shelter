@@ -12,11 +12,10 @@ export class Transfer {
   ) { }
 
   async value(withPass: Pass): Promise<AssembledTransaction<null>> {
-    const tx = await this._token.transfer({
+    return await withPass.applyTo(await this._token.transfer({
       from: this._from,
       to: this._to,
       amount: this._amount,
-    });
-    return await withPass.applyTo(tx);
+    }));
   }
 }
