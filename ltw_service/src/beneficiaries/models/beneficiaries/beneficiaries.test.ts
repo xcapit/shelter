@@ -57,6 +57,12 @@ describe('Beneficiaries', () => {
 
     expect(() => aBeneficiary.address()).toThrow();
   });
+
+  test('findPrivateKeyBy', async () => {
+    expect(
+      await beneficiaries.findPrivateKeyBy(rawBeneficiaryData.phoneNumber),
+    ).toEqual(rawBeneficiaryData.secret);
+  });
 });
 
 // TODO:

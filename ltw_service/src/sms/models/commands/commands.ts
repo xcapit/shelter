@@ -23,17 +23,11 @@ import { Keypair, Networks, rpc } from '@stellar/stellar-sdk';
 
 dotenv.config();
 
-const {
-  TWILIO_ACCOUNT_SID,
-  TWILIO_AUTH_TOKEN,
-  STEWARD_SECRET,
-  STELLAR_RPC,
-  SHELTER_ID,
-} = process.env;
+const { TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN } = process.env;
 export class Commands {
-  // TODO: DeployedShelter recibido en constructor
   constructor(
     private _beneficiaries: Beneficiaries,
+    private _shelter: DeployedShelter,
     private _client: twilio.Twilio | FakeTwilio = twilio(
       TWILIO_ACCOUNT_SID,
       TWILIO_AUTH_TOKEN,
@@ -59,16 +53,7 @@ export class Commands {
           parsedIncomingSms.commandParams(),
           await this._beneficiaryPhoneNumber(parsedIncomingSms),
           this._beneficiaries,
-          new DeployedShelter(
-            Keypair.fromSecret(STEWARD_SECRET!),
-            new Rpc(new rpc.Server(STELLAR_RPC!)),
-            new ShelterClient({
-              contractId: SHELTER_ID!,
-              networkPassphrase: Networks.TESTNET,
-              rpcUrl: STELLAR_RPC!,
-              publicKey: Keypair.fromSecret(STEWARD_SECRET!).publicKey(),
-            }),
-          ),
+          this._shelter,
         ),
       ],
       // TODO

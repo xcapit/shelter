@@ -13,7 +13,7 @@ export class FakeBeneficiariesDataRepo implements BeneficiariesDataRepo {
     return Promise.resolve(this._findOneByReturn);
   }
 
-  findSecretsBy(phoneNumber: string): Promise<any> {
+  findSecretBy(phoneNumber: string): Promise<any> {
     return Promise.resolve(rawBeneficiaryData);
   }
 

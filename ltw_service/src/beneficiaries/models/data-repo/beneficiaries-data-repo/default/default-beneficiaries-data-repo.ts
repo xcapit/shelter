@@ -5,7 +5,7 @@ import { RawBeneficiary } from '../../../beneficiary/raw-beneficiary.type';
 import { Beneficiary } from '../../../beneficiary/beneficiary.interface';
 
 export class DefaultBeneficiariesDataRepo implements BeneficiariesDataRepo {
-  constructor(private _aModel: Model<any> = BeneficiariesModel) {}
+  constructor(private _aModel: Model<any> = BeneficiariesModel) { }
 
   save(rawData: RawBeneficiary): Promise<any> {
     return this._aModel.create(rawData);
@@ -20,9 +20,9 @@ export class DefaultBeneficiariesDataRepo implements BeneficiariesDataRepo {
       .lean();
   }
 
-  findSecretsBy(aPhoneNumber: string): Promise<any> {
+  findSecretBy(aPhoneNumber: string): Promise<any> {
     return this._aModel
-      .findOne({ phoneNumber: aPhoneNumber, active: true }, 'ownerSecrets')
+      .findOne({ phoneNumber: aPhoneNumber, active: true }, 'secret')
       .lean();
   }
 

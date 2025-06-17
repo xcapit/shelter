@@ -28,8 +28,8 @@ describe("FakeBeneficiariesDataRepo", () => {
     expect(await aFakeDataRepo.findOneBy("")).toBeNull();
   });
 
-  test("findSecretsBy", async () => {
-    expect(await aFakeDataRepo.findSecretsBy("")).toBeTruthy();
+  test("findSecretBy", async () => {
+    expect(await aFakeDataRepo.findSecretBy("")).toBeTruthy();
   });
 
   test("update", async () => {

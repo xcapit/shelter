@@ -29,6 +29,7 @@ export class BeneficiariesServer extends ServerSystem {
     private _aServer: Express,
     private _beneficiaries: Beneficiaries,
     private _users: Users,
+    private _shelter: DeployedShelter,
   ) {
     super();
   }
@@ -151,18 +152,8 @@ export class BeneficiariesServer extends ServerSystem {
   ): Promise<void> {
     await this.executeAction(
       async () => {
-        const stewardKeypair = Keypair.fromSecret(env.STEWARD_SECRET!);
         const token = await new Tokens().oneBy(req.body().token);
-        return await new DeployedShelter(
-          stewardKeypair,
-          new Rpc(new rpc.Server(env.STELLAR_RPC!)),
-          new ShelterClient({
-            contractId: env.SHELTER_ID!,
-            networkPassphrase: Networks.TESTNET,
-            rpcUrl: env.STELLAR_RPC!,
-            publicKey: stewardKeypair.publicKey(),
-          }),
-        ).boundAid(
+        return await this._shelter.boundAid(
           Keypair.fromPublicKey(
             (
               await this._beneficiaries.findOneBy(
@@ -172,7 +163,7 @@ export class BeneficiariesServer extends ServerSystem {
           ).rawPublicKey(),
           token.address(),
           new WeiOf(req.body().amount, token).value(),
-          BigInt(new AidTTL(req.body().expiration).expirationDate())
+          BigInt(new AidTTL(req.body().expiration).expirationDate()),
         );
       },
       res,

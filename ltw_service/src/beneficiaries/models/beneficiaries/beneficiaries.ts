@@ -117,4 +117,8 @@ export class Beneficiaries {
       ? new DefaultBeneficiary(rawBeneficiaryData)
       : new NullBeneficiary();
   }
+
+  async findPrivateKeyBy(aPhoneNumber: string): Promise<string> {
+    return (await this._aDataRepo.findSecretBy(aPhoneNumber)).secret;
+  }
 }

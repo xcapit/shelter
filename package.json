@@ -10,16 +10,16 @@
     "build:deps": "cd packages/shelter-sdk && npm run build && cd ../sac-sdk && npm run build",
     "test:base": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
     "test": "npm run test:base",
-    "test:watch": "npm run test:base --watch",
-    "test:e2e": "npm run test:base --config jest.config.e2e.js",
-    "coverage": "npm run test:base --coverage",
-    "coverage:all": "npm run test:base --config jest.config.all.js --coverage"
+    "test:watch": "npm run test:base -- --watch",
+    "test:e2e": "npm run test:base -- --config jest.config.e2e.js",
+    "coverage": "npm run test:base -- --coverage",
+    "coverage:all": "npm run test:base -- --config jest.config.all.js --coverage"
   },
   "keywords": [],
   "author": "",
   "license": "AGPL-3.0",
   "dependencies": {
-    "@stellar/stellar-sdk": "^13.3.0",
+    "@stellar/stellar-sdk": "13.0.0",
     "sac-sdk": "./packages/sac-sdk",
     "shelter-sdk": "./packages/shelter-sdk"
   },

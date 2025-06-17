@@ -1,5 +1,5 @@
 import type { AssembledTransaction, Tx } from "@stellar/stellar-sdk/contract";
-import type { Keypair } from "shelter-sdk";
+import type { Keypair, Transaction } from "shelter-sdk";
 import { rpc } from "@stellar/stellar-sdk";
 import type { Rpc } from "../rpc/rpc";
 
@@ -13,7 +13,7 @@ export class SimulatedTransaction {
   async result(): Promise<rpc.Api.GetTransactionResponse> {
     const tx = this._rawTx.built!;
     const simTx: any = await this._rpc.server().simulateTransaction(tx);
-    const completeTx = this._rpc.assembleTransaction(tx, simTx).build();
+    const completeTx = this._rpc.assembleTransaction(tx, simTx as unknown as Transaction).build();
     completeTx.sign(this._signer);
     return await this._txData(completeTx);
   }
