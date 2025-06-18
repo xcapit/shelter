@@ -32,7 +32,7 @@ export class SponsoredTransaction {
   }
 }
 
-describe("Simulated transaction", () => {
+describe("Sponsored transaction", () => {
   const sponsor = Keypair.random();
   const _rpc = {
     assembleTransaction: (raw: any, simulation: any) => {
