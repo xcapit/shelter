@@ -1,5 +1,4 @@
 import { Keypair, rpc as StellarRpc } from "shelter-sdk";
-import {} from "./simulated-transaction";
 import { Rpc } from "../rpc/rpc";
 import { FakeServer } from "../fixtures/fixtures";
 import type { AssembledTransaction } from "@stellar/stellar-sdk/contract";
