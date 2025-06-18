@@ -2,7 +2,7 @@ import { Keypair, rpc as StellarRpc } from "shelter-sdk";
 import { Rpc } from "../rpc/rpc";
 import { FakeServer } from "../fixtures/fixtures";
 import type { AssembledTransaction } from "@stellar/stellar-sdk/contract";
-import * as StellarSDK from "@stellar/stellar-sdk"; //TODO: ver este import si esta ok
+import * as StellarSDK from "@stellar/stellar-sdk";
 
 export class SponsoredTransaction {
   constructor(
