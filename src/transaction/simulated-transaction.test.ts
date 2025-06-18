@@ -15,7 +15,7 @@ describe('Simulated transaction', () => {
 
   test('value', async () => {
     const simulatedTransaction = new SimulatedTransaction({} as unknown as AssembledTransaction<any>, Keypair.random(), new Rpc(new FakeServer(), _rpc))
-
+    
     expect(simulatedTransaction.value()).toBeTruthy()
   });
 
