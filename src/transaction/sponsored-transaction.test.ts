@@ -3,15 +3,18 @@ import { SimulatedTransaction } from "./simulated-transaction";
 import { Rpc } from "../rpc/rpc";
 import { FakeServer } from "../fixtures/fixtures";
 import type { AssembledTransaction } from "@stellar/stellar-sdk/contract";
+import * as StellarSDK from "@stellar/stellar-sdk"; //TODO: ver este import si esta ok
 
 export class SponsoredTransaction {
-  constructor(
+
+    constructor(
     private readonly _innerTx: any,
     private readonly _signer: Keypair,
     private readonly _rpc: Rpc
   ) {}
 
   async result(): Promise<rpc.Api.GetTransactionResponse> {
+    const networkPassphrase = StellarSDK.Networks.TESTNET;//TODO: agregue esto pero abri que ver en detalle esto
     const feeBumpTransaction =
       StellarSDK.TransactionBuilder.buildFeeBumpTransaction(
         this._signer,
