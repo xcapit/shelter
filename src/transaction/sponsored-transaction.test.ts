@@ -5,7 +5,7 @@ import { FakeServer } from "../fixtures/fixtures";
 import type { AssembledTransaction } from "@stellar/stellar-sdk/contract";
 
 describe('Simulated transaction', () => {
-  
+    const sponsor = Keypair.random();
     const _rpc = {
         assembleTransaction: (raw: any, simulation: any) => {
         return {
@@ -15,9 +15,9 @@ describe('Simulated transaction', () => {
     };
 
   test('new', async () => {
-    const sponsoredTransaction = new SponsoredTransaction({} as unknown as AssembledTransaction<any>, Keypair.random(), new Rpc(new FakeServer(), _rpc));
+    const sponsoredTransaction = new SponsoredTransaction({} as unknown as AssembledTransaction<any>, sponsor, new Rpc(new FakeServer(), _rpc));
     
-    expect(simulatedTransaction.value()).toBeTruthy()
+    expect(sponsoredTransaction).toBeTruthy()
   });
 
 });
