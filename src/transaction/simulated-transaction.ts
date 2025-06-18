@@ -19,7 +19,11 @@ export class SimulatedTransaction {
   }
 
   async value() {
-    return true; // completeTx signed
+    // return true; // completeTx signed
+    const tx = this._rawTx.built!;
+    const simTx: any = await this._rpc.server().simulateTransaction(tx);
+    const completeTx = this._rpc.assembleTransaction(tx, simTx as unknown as Transaction).build();
+    completeTx.sign(this._signer);
   }
 
   async _signedTx(aTx) {
