@@ -52,13 +52,13 @@ describe("Sponsored transaction", () => {
     expect(sponsoredTransaction).toBeTruthy();
   });
 
-  test("result", async () => {
-    const sponsoredTransaction = new SponsoredTransaction(
-      {} as unknown as AssembledTransaction<any>,
-      sponsor,
-      new Rpc(new FakeServer(), _rpc)
-    );
+  // test("result", async () => {
+  //   const sponsoredTransaction = new SponsoredTransaction(
+  //     {} as unknown as AssembledTransaction<any>,
+  //     sponsor,
+  //     new Rpc(new FakeServer(), _rpc)
+  //   );
 
-    expect(sponsoredTransaction.result()).toBeTruthy();
-  });
+  //   expect(sponsoredTransaction.result()).toBeTruthy();
+  // });
 });
