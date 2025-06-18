@@ -6,8 +6,7 @@ import type { AssembledTransaction } from "@stellar/stellar-sdk/contract";
 import * as StellarSDK from "@stellar/stellar-sdk"; //TODO: ver este import si esta ok
 
 export class SponsoredTransaction {
-
-    constructor(
+  constructor(
     private readonly _innerTx: any,
     private readonly _signer: Keypair,
     private readonly _rpc: Rpc
@@ -17,10 +16,10 @@ export class SponsoredTransaction {
     const feeBumpTransaction =
       StellarSDK.TransactionBuilder.buildFeeBumpTransaction(
         this._signer,
-        +StellarSDK.BASE_FEE * 2,
+        (+StellarSDK.BASE_FEE * 2).toString(),
         this._innerTx,
-        await this._rpc.network(),
-    );
+        await this._rpc.network()
+      );
     feeBumpTransaction.sign(this._signer);
     return await this._txData(feeBumpTransaction);
   }
