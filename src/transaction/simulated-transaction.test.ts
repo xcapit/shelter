@@ -4,8 +4,15 @@ import { Rpc } from "../rpc/rpc";
 import { FakeServer } from "../fixtures/fixtures";
 
 describe('Simulated transaction', () => {
-
+  const _rpc = {
+      assembleTransaction: (raw: any, simulation: any) => {
+        return {
+          build: () => ({ sign: () => { } }),
+        };
+      },
+    };
+    
   test('value', async () => {
-    new SimulatedTransaction({}, Keypair.random(), new Rpc(new FakeServer()))
+    new SimulatedTransaction({}, Keypair.random(), new Rpc(new FakeServer(), _rpc))
   });
 });
