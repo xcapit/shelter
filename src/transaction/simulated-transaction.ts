@@ -14,7 +14,7 @@ export class SimulatedTransaction {
     return await this._txData(await this.value());
   }
 
-  async value() {
+  async value() { //TODO ver tipado
     const tx = this._rawTx.built!;
     const simTx: any = await this._rpc.server().simulateTransaction(tx);
     const completeTx = this._rpc.assembleTransaction(tx, simTx as unknown as Transaction).build();
