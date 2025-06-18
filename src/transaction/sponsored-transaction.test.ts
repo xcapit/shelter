@@ -25,13 +25,12 @@ export class SponsoredTransaction {
   ) {}
 
   async result(): Promise<StellarRpc.Api.GetTransactionResponse | void> {
-    const feeBumpTransaction =
-      this._feeBumpTxBuilt.value(
-        this._signer,
-        (+StellarSDK.BASE_FEE * 2).toString(),
-        this._innerTx,
-        await this._rpc.network()
-      );
+    const feeBumpTransaction = this._feeBumpTxBuilt.value(
+      this._signer,
+      (+StellarSDK.BASE_FEE * 2).toString(),
+      this._innerTx,
+      await this._rpc.network()
+    );
     // feeBumpTransaction.sign(this._signer);
     // return await this._txData(feeBumpTransaction);
     return;
@@ -61,7 +60,7 @@ describe("Sponsored transaction", () => {
       {} as unknown as AssembledTransaction<any>,
       sponsor,
       new Rpc(new FakeServer(), _rpc),
-      new FeeBumpTransaction()
+      new FeeBumpTxBuilt()
     );
 
     expect(sponsoredTransaction).toBeTruthy();
@@ -71,8 +70,8 @@ describe("Sponsored transaction", () => {
     const sponsoredTransaction = new SponsoredTransaction(
       {} as unknown as AssembledTransaction<any>,
       sponsor,
-      new Rpc(new FakeServer(), _rpc
-      {} as FeeBumpTransaction)
+      new Rpc(new FakeServer(), _rpc),
+      { value: () => {} } as unknown as FeeBumpTxBuilt
     );
 
     expect(sponsoredTransaction.result()).toBeTruthy();
