@@ -22,6 +22,10 @@ export class SimulatedTransaction {
     return true;
   }
 
+  async _signedTx(aTx) {
+    return aTx.sign(this._signer);
+  }
+
   private async _txData(tx: Tx): Promise<any> {
     return await this._rpc
       .server()
