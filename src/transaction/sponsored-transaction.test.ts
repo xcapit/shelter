@@ -12,6 +12,17 @@ export class SponsoredTransaction {
   ) {}
 
   async result(): Promise<rpc.Api.GetTransactionResponse> {
+    const feeBumpTransaction =
+      StellarSDK.TransactionBuilder.buildFeeBumpTransaction(
+        this._signer,
+        StellarSDK.BASE_FEE * 2,
+        this._innerTx,
+        networkPassphrase,
+    );
+
+// Sign the fee-bump transaction with the fee account
+feeBumpTransaction.sign(feeKeypair);
+
     return await this._txData(await this.value());
   }
 }
