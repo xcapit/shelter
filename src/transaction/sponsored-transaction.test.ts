@@ -4,16 +4,29 @@ import { FakeServer } from "../fixtures/fixtures";
 import type { AssembledTransaction } from "@stellar/stellar-sdk/contract";
 import * as StellarSDK from "@stellar/stellar-sdk";
 
+class FeeBumpTransaction {
+  constructor(private readonly _txBuilder = StellarSDK.TransactionBuilder) {}
+
+  build(signer: Keypair, fee: string, innerTx: any, networkPassphrase: string) {
+    return this._txBuilder.buildFeeBumpTransaction(
+      signer,
+      fee,
+      innerTx,
+      networkPassphrase
+    );
+  }
+}
 export class SponsoredTransaction {
   constructor(
     private readonly _innerTx: any,
     private readonly _signer: Keypair,
-    private readonly _rpc: Rpc
+    private readonly _rpc: Rpc,
+    private readonly _feeBumpTransaction: FeeBumpTransaction
   ) {}
 
   async result(): Promise<StellarRpc.Api.GetTransactionResponse | void> {
     const feeBumpTransaction =
-      StellarSDK.TransactionBuilder.buildFeeBumpTransaction(
+      this._feeBumpTransaction.build(
         this._signer,
         (+StellarSDK.BASE_FEE * 2).toString(),
         this._innerTx,
