@@ -14,12 +14,16 @@ describe("Shelter", () => {
   const wasmHash =
     "50d8a2d89cb783d34c5400a4548b0335f97c3be58aac7ea3b0f8c4b60b001f4a";
   const tokenContractId =
-    "CCQK3OJ5T4A5B4SDKQWH7PQKC5HMUZHIGUWF2INTKDQB32F3YPEW7L27";
+    "CBN2MBW4AFEHXMLE5ADTAWFOQKEHBYTVO62AZ7DTQONACYE26VFPHKVA";
   const expiration = BigInt(Math.floor(Date.now() / 1000) + 7200);
   const amount = BigInt(1);
-  const aliceSecret =
-    "SDZVEQPNLS74A5E7VDSUHV2EDUJJUBNNT46PRNGAJXM4SZCBGIYGAZEX";
-  const aliceKeyPair = Keypair.fromSecret(aliceSecret);
+  const tokenOwnerSecret =
+    "SACQ5FHZMXD67HMT43HIYDSYQN7R3J7SXGOSBQ53EJ3WMH5DVHVRIPWC";
+  const tokenOwnerKeypair = Keypair.fromSecret(tokenOwnerSecret);
+  const recipientKeypair = Keypair.fromSecret(
+    "SAG4OTVSVXNJH3BY2CMQSG25W2X7UGJWUYGELVHC3KEKXDZWSZRZEZDR"
+  );
+  const merch = "GDJ3AUXRFGZCPQVDSP67XZFFOXK4I36LDYEC4GRGFADDXKO6AFHQEJK7";
   let steward: Keypair;
   let shelter: Shelter;
 
@@ -51,17 +55,14 @@ describe("Shelter", () => {
   });
 
   test("bound aid", async () => {
-    const recipient = Keypair.fromPublicKey(
-      "GASL6XDOK2TO6SCFTXFN2HQDAONLBID2GKX5TYBTHOWA7ZU7VRFZNHGM"
-    );
-    const sac = _sac(aliceKeyPair.publicKey());
+    const sac = _sac(tokenOwnerKeypair.publicKey());
     const deployedShelter = await shelter.deploy();
     const mintTx = new Transaction(
       await sac.mint({
         to: deployedShelter.id(),
         amount: BigInt(1000),
       }),
-      aliceKeyPair,
+      tokenOwnerKeypair,
       defaultRpc
     );
     const mintResultTx = await mintTx.result();
@@ -69,7 +70,7 @@ describe("Shelter", () => {
 
     await expect(
       deployedShelter.boundAid(
-        recipient.rawPublicKey(),
+        recipientKeypair.rawPublicKey(),
         tokenContractId,
         amount,
         expiration
@@ -78,24 +79,21 @@ describe("Shelter", () => {
   });
 
   test("recipient transfer from shelter", async () => {
-    const recipient = Keypair.fromSecret(
-      "SBTD4FBLWCWVNJCOSOMVYXPJOYLTQW52EC3AUZ2Q3XX5PAO3SMXIKWHH"
-    );
-    const sac = _sac(aliceKeyPair.publicKey());
+    const sac = _sac(tokenOwnerKeypair.publicKey());
     const deployedShelter = await shelter.deploy();
     const mintTx = new Transaction(
       await sac.mint({
         to: deployedShelter.id(),
         amount: BigInt(1000),
       }),
-      aliceKeyPair,
+      tokenOwnerKeypair,
       defaultRpc
     );
     const mintResultTx = await mintTx.result();
     expect(mintResultTx.status).toEqual(rpc.Api.GetTransactionStatus.SUCCESS);
     await expect(
       deployedShelter.boundAid(
-        recipient.rawPublicKey(),
+        recipientKeypair.rawPublicKey(),
         tokenContractId,
         amount,
         expiration
@@ -103,11 +101,52 @@ describe("Shelter", () => {
     ).resolves.toBeUndefined();
 
     await expect(
-      new Aid(recipient, _sac(recipient.publicKey()), defaultRpc).transfer(
+      new Aid(
+        recipientKeypair,
+        _sac(recipientKeypair.publicKey()),
+        defaultRpc
+      ).transfer(
         deployedShelter,
-        "GAXRNW46AL4PI7Q6FABZ2OS3BKG3I7FHMBPRP7FBQHQLFX2KU2PBGGUP",
+        merch,
         amount,
-        new DefaultPass(recipient, deployedShelter.id(), defaultRpc)
+        new DefaultPass(recipientKeypair, deployedShelter.id(), defaultRpc)
+      )
+    ).resolves.toBeUndefined();
+  });
+
+  test("recipient transfer from shelter (sponsored)", async () => {
+    const sponsor = steward;
+    const sac = _sac(tokenOwnerKeypair.publicKey());
+    const deployedShelter = await shelter.deploy();
+    const mintTx = new Transaction(
+      await sac.mint({
+        to: deployedShelter.id(),
+        amount: BigInt(1000),
+      }),
+      tokenOwnerKeypair,
+      defaultRpc
+    );
+    const mintResultTx = await mintTx.result();
+    expect(mintResultTx.status).toEqual(rpc.Api.GetTransactionStatus.SUCCESS);
+    await expect(
+      deployedShelter.boundAid(
+        recipientKeypair.rawPublicKey(),
+        tokenContractId,
+        amount,
+        expiration
+      )
+    ).resolves.toBeUndefined();
+
+    await expect(
+      new Aid(
+        sponsor,
+        _sac(sponsor.publicKey()),
+        defaultRpc
+      ).transfer(
+        deployedShelter,
+        merch,
+        amount,
+        new DefaultPass(recipientKeypair, deployedShelter.id(), defaultRpc)
       )
     ).resolves.toBeUndefined();
   });

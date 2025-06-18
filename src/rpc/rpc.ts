@@ -12,7 +12,7 @@ export class Rpc {
   constructor(
     private readonly _server: any,
     private readonly _rpc: any = rpc
-  ) { }
+  ) {}
 
   url(): string {
     return this._server.serverURL;
@@ -26,7 +26,8 @@ export class Rpc {
     raw: Transaction | FeeBumpTransaction | any,
     simulation:
       | Api.SimulateTransactionResponse
-      | Api.RawSimulateTransactionResponse | any
+      | Api.RawSimulateTransactionResponse
+      | any
   ): TransactionBuilder | any {
     return this._rpc.assembleTransaction(raw, simulation);
   }
