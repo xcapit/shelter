@@ -18,6 +18,10 @@ export class SimulatedTransaction {
     return await this._txData(completeTx);
   }
 
+  async value() {
+    return true;
+  }
+
   private async _txData(tx: Tx): Promise<any> {
     return await this._rpc
       .server()
