@@ -70,7 +70,13 @@ describe("Sponsored transaction", () => {
       {} as unknown as AssembledTransaction<any>,
       sponsor,
       new Rpc(new FakeServer(), _rpc),
-      { value: () => {} } as unknown as FeeBumpTxBuilt
+      {
+        value: () => {
+          return {
+            sign: () => {},
+          };
+        },
+      } as unknown as FeeBumpTxBuilt
     );
 
     expect(sponsoredTransaction.result()).toBeTruthy();
