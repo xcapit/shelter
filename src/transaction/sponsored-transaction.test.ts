@@ -4,6 +4,16 @@ import { Rpc } from "../rpc/rpc";
 import { FakeServer } from "../fixtures/fixtures";
 import type { AssembledTransaction } from "@stellar/stellar-sdk/contract";
 
+export class SponsoredTransaction{
+      constructor(
+    private readonly _innerTx : any,
+    private readonly _signer: Keypair,
+    private readonly _rpc: Rpc
+  ) { }
+
+
+}
+
 describe('Simulated transaction', () => {
     const sponsor = Keypair.random();
     const _rpc = {
