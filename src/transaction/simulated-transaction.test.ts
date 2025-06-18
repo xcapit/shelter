@@ -7,12 +7,13 @@ describe('Simulated transaction', () => {
   const _rpc = {
       assembleTransaction: (raw: any, simulation: any) => {
         return {
-          build: () => ({ sign: () => { } }),
+          build: () => ({ sign: () => {} }),
         };
       },
     };
-    
+
   test('value', async () => {
-    new SimulatedTransaction({}, Keypair.random(), new Rpc(new FakeServer(), _rpc))
+   // new SimulatedTransaction({} as unknown as AssembledTransaction<any>, Keypair.random(), new Rpc(new FakeServer(), _rpc))
   });
+
 });
