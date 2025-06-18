@@ -1,8 +1,8 @@
-import { Keypair } from "shelter-sdk";
+import { Keypair, rpc as StellarRpc } from "shelter-sdk";
 import { SimulatedTransaction } from "./simulated-transaction";
 import { Rpc } from "../rpc/rpc";
 import { FakeServer } from "../fixtures/fixtures";
-import type { AssembledTransaction } from "@stellar/stellar-sdk/contract";
+import type { AssembledTransaction, Tx } from "@stellar/stellar-sdk/contract";
 import * as StellarSDK from "@stellar/stellar-sdk"; //TODO: ver este import si esta ok
 
 export class SponsoredTransaction {
@@ -12,7 +12,7 @@ export class SponsoredTransaction {
     private readonly _rpc: Rpc
   ) {}
 
-  async result(): Promise<rpc.Api.GetTransactionResponse> {
+  async result(): Promise<StellarRpc.Api.GetTransactionResponse> {
     const feeBumpTransaction =
       StellarSDK.TransactionBuilder.buildFeeBumpTransaction(
         this._signer,
@@ -22,6 +22,12 @@ export class SponsoredTransaction {
       );
     feeBumpTransaction.sign(this._signer);
     return await this._txData(feeBumpTransaction);
+  }
+
+  private async _txData(tx: Tx): Promise<any> {
+    return await this._rpc
+      .server()
+      .pollTransaction((await this._rpc.server().sendTransaction(tx)).hash);
   }
 }
 
