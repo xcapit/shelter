@@ -19,7 +19,7 @@ export class SimulatedTransaction {
   }
 
   async value() {
-    return true;
+    return true; // completeTx signed
   }
 
   async _signedTx(aTx) {
