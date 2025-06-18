@@ -15,7 +15,7 @@ export class SimulatedTransaction {
     // const simTx: any = await this._rpc.server().simulateTransaction(tx);
     // const completeTx = this._rpc.assembleTransaction(tx, simTx as unknown as Transaction).build();
     // completeTx.sign(this._signer);
-    return await this._txData(completeTx);
+    return await this._txData(await this.value());
   }
 
   async value() {
@@ -24,10 +24,6 @@ export class SimulatedTransaction {
     const simTx: any = await this._rpc.server().simulateTransaction(tx);
     const completeTx = this._rpc.assembleTransaction(tx, simTx as unknown as Transaction).build();
     return completeTx.sign(this._signer);
-  }
-
-  async _signedTx(aTx) {
-    return aTx.sign(this._signer);
   }
 
   private async _txData(tx: Tx): Promise<any> {
