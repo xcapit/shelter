@@ -4,6 +4,14 @@ import { FakeServer } from "../fixtures/fixtures";
 import type { AssembledTransaction } from "@stellar/stellar-sdk/contract";
 import * as StellarSDK from "@stellar/stellar-sdk";
 
+// Mock StellarSDK
+jest.mock("@stellar/stellar-sdk", () => ({
+  TransactionBuilder: {
+    buildFeeBumpTransaction: jest.fn(),
+  },
+  BASE_FEE: "100",
+}));
+
 export class SponsoredTransaction {
   constructor(
     private readonly _innerTx: any,
@@ -19,9 +27,8 @@ export class SponsoredTransaction {
         this._innerTx,
         await this._rpc.network()
       );
-    // feeBumpTransaction.sign(this._signer);
-    // return await this._txData(feeBumpTransaction);
-    return;
+    feeBumpTransaction.sign(this._signer);
+    return await this._txData(feeBumpTransaction);
   }
 
   private async _txData(
@@ -35,6 +42,28 @@ export class SponsoredTransaction {
 
 describe("Sponsored transaction", () => {
   const sponsor = Keypair.random();
+  const mockFeeBumpTransaction = {
+    sign: jest.fn(),
+  };
+  const mockTransactionResponse = {
+    hash: "mock-hash",
+    ledger: 1234,
+    envelope_xdr: "mock-envelope",
+    result_xdr: "mock-result",
+    result_meta_xdr: "mock-meta",
+    fee_meta_xdr: "mock-fee-meta",
+    memo_type: "none",
+    memo: null,
+    signatures: [],
+    valid_after: "2023-01-01T00:00:00Z",
+    valid_before: "2023-01-01T00:00:00Z",
+  };
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+    (StellarSDK.TransactionBuilder.buildFeeBumpTransaction as jest.Mock).mockReturnValue(mockFeeBumpTransaction);
+  });
+
   const _rpc = {
     assembleTransaction: (raw: any, simulation: any) => {
       return {
@@ -54,12 +83,22 @@ describe("Sponsored transaction", () => {
   });
 
   test("result", async () => {
+    const fakeServer = new FakeServer(mockTransactionResponse);
     const sponsoredTransaction = new SponsoredTransaction(
       {} as unknown as AssembledTransaction<any>,
       sponsor,
-      new Rpc(new FakeServer(), _rpc)
+      new Rpc(fakeServer, _rpc)
     );
 
-    expect(sponsoredTransaction.result()).toBeTruthy();
+    const result = await sponsoredTransaction.result();
+    
+    expect(StellarSDK.TransactionBuilder.buildFeeBumpTransaction).toHaveBeenCalledWith(
+      sponsor,
+      "200",
+      {},
+      "aPassphrase"
+    );
+    expect(mockFeeBumpTransaction.sign).toHaveBeenCalledWith(sponsor);
+    expect(result).toEqual(mockTransactionResponse);
   });
 });
