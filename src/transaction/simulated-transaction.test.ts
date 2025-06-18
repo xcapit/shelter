@@ -6,16 +6,17 @@ import type { AssembledTransaction } from "@stellar/stellar-sdk/contract";
 
 describe('Simulated transaction', () => {
   const _rpc = {
-      assembleTransaction: (raw: any, simulation: any) => {
-        return {
-          build: () => ({ sign: () => {} }),
-        };
-      },
-    };
+    assembleTransaction: (raw: any, simulation: any) => {
+      return {
+        build: () => ({ sign: () => { } }),
+      };
+    },
+  };
 
   test('value', async () => {
     const simulatedTransaction = new SimulatedTransaction({} as unknown as AssembledTransaction<any>, Keypair.random(), new Rpc(new FakeServer(), _rpc))
-    expect(simulatedTransaction).toBeTruthy()
+
+    expect(simulatedTransaction.value()).toBeTruthy()
   });
 
 });
