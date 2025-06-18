@@ -4,10 +4,10 @@ import { FakeServer } from "../fixtures/fixtures";
 import type { AssembledTransaction } from "@stellar/stellar-sdk/contract";
 import * as StellarSDK from "@stellar/stellar-sdk";
 
-class FeeBumpTransaction {
+class FeeBumpTxBuilt {
   constructor(private readonly _txBuilder = StellarSDK.TransactionBuilder) {}
 
-  build(signer: Keypair, fee: string, innerTx: any, networkPassphrase: string) {
+  value(signer: Keypair, fee: string, innerTx: any, networkPassphrase: string) {
     return this._txBuilder.buildFeeBumpTransaction(
       signer,
       fee,
@@ -21,12 +21,12 @@ export class SponsoredTransaction {
     private readonly _innerTx: any,
     private readonly _signer: Keypair,
     private readonly _rpc: Rpc,
-    private readonly _feeBumpTransaction: FeeBumpTransaction
+    private readonly _feeBumpTxBuilt: FeeBumpTxBuilt
   ) {}
 
   async result(): Promise<StellarRpc.Api.GetTransactionResponse | void> {
     const feeBumpTransaction =
-      this._feeBumpTransaction.build(
+      this._feeBumpTxBuilt.value(
         this._signer,
         (+StellarSDK.BASE_FEE * 2).toString(),
         this._innerTx,
@@ -60,7 +60,8 @@ describe("Sponsored transaction", () => {
     const sponsoredTransaction = new SponsoredTransaction(
       {} as unknown as AssembledTransaction<any>,
       sponsor,
-      new Rpc(new FakeServer(), _rpc)
+      new Rpc(new FakeServer(), _rpc),
+      new FeeBumpTransaction()
     );
 
     expect(sponsoredTransaction).toBeTruthy();
@@ -70,7 +71,8 @@ describe("Sponsored transaction", () => {
     const sponsoredTransaction = new SponsoredTransaction(
       {} as unknown as AssembledTransaction<any>,
       sponsor,
-      new Rpc(new FakeServer(), _rpc)
+      new Rpc(new FakeServer(), _rpc
+      {} as FeeBumpTransaction)
     );
 
     expect(sponsoredTransaction.result()).toBeTruthy();
