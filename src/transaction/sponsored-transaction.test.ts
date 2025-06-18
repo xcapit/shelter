@@ -14,13 +14,12 @@ export class SponsoredTransaction {
   ) {}
 
   async result(): Promise<rpc.Api.GetTransactionResponse> {
-    const networkPassphrase = StellarSDK.Networks.TESTNET;//TODO: agregue esto pero abri que ver en detalle esto
     const feeBumpTransaction =
       StellarSDK.TransactionBuilder.buildFeeBumpTransaction(
         this._signer,
-        StellarSDK.BASE_FEE * 2,
+        +StellarSDK.BASE_FEE * 2,
         this._innerTx,
-        networkPassphrase,
+        await this._rpc.network(),
     );
     feeBumpTransaction.sign(this._signer);
     return await this._txData(feeBumpTransaction);
