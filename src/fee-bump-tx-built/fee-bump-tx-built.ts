@@ -1,6 +1,7 @@
 import * as StellarSDK from "@stellar/stellar-sdk";
 import { Keypair } from "shelter-sdk";
 
+// TODO: Ta feo el nombre este
 export class FeeBumpTxBuilt {
   constructor(private readonly _txBuilder = StellarSDK.TransactionBuilder) {}
 
