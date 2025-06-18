@@ -31,9 +31,8 @@ export class SponsoredTransaction {
       this._innerTx,
       await this._rpc.network()
     );
-    // feeBumpTransaction.sign(this._signer);
-    // return await this._txData(feeBumpTransaction);
-    return;
+    feeBumpTransaction.sign(this._signer);
+    return await this._txData(feeBumpTransaction);
   }
 
   private async _txData(
