@@ -19,11 +19,8 @@ export class SponsoredTransaction {
         this._innerTx,
         networkPassphrase,
     );
-
-// Sign the fee-bump transaction with the fee account
-feeBumpTransaction.sign(feeKeypair);
-
-    return await this._txData(await this.value());
+    feeBumpTransaction.sign(this._signer);
+    return await this._txData(feeBumpTransaction);
   }
 }
 
