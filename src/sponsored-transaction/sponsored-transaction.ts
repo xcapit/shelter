@@ -26,7 +26,7 @@ export class SponsoredTransaction {
         console.log("Success! Results:", response);
       })
       .catch((error) => {
-        console.error("Something went wrong!", error?.response?.data?.extras);
+        console.error("Something went wrong!", error);
       });
 
     // return await this._txData(feeBumpTransaction);
