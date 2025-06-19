@@ -14,7 +14,7 @@ describe("Shelter", () => {
   const wasmHash =
     "50d8a2d89cb783d34c5400a4548b0335f97c3be58aac7ea3b0f8c4b60b001f4a";
   const tokenContractId =
-    "CCQK3OJ5T4A5B4SDKQWH7PQKC5HMUZHIGUWF2INTKDQB32F3YPEW7L27";
+    "CBN2MBW4AFEHXMLE5ADTAWFOQKEHBYTVO62AZ7DTQONACYE26VFPHKVA";
   const expiration = BigInt(Math.floor(Date.now() / 1000) + 7200);
   const amount = BigInt(1);
   const tokenOwnerSecret =
