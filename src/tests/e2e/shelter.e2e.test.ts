@@ -136,6 +136,7 @@ describe("Shelter", () => {
       expiration
     );
 
+    // TODO: Reemplazar por Aid.trasnsfer
     const transferTx = await new Transfer(
       deployedShelter.id(),
       merch,
@@ -161,5 +162,6 @@ describe("Shelter", () => {
         defaultRpc
       ).result()
     ).resolves.toBeUndefined();
+    // TODO: --------------------------
   });
 });
