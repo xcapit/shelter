@@ -17,8 +17,7 @@ describe("Shelter", () => {
     "CBN2MBW4AFEHXMLE5ADTAWFOQKEHBYTVO62AZ7DTQONACYE26VFPHKVA";
   const expiration = BigInt(Math.floor(Date.now() / 1000) + 7200);
   const amount = BigInt(1);
-  const tokenOwnerSecret =
-    "SDZVEQPNLS74A5E7VDSUHV2EDUJJUBNNT46PRNGAJXM4SZCBGIYGAZEX";
+  const tokenOwnerSecret = "";
   const tokenOwnerKeypair = Keypair.fromSecret(tokenOwnerSecret);
   const recipientKeypair = Keypair.fromSecret('');
   const merch = 'GDJ3AUXRFGZCPQVDSP67XZFFOXK4I36LDYEC4GRGFADDXKO6AFHQEJK7';
