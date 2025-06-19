@@ -19,7 +19,7 @@ describe("Shelter", () => {
   const amount = BigInt(1);
   const tokenOwnerSecret = "SACQ5FHZMXD67HMT43HIYDSYQN7R3J7SXGOSBQ53EJ3WMH5DVHVRIPWC";
   const tokenOwnerKeypair = Keypair.fromSecret(tokenOwnerSecret);
-  const recipientKeypair = Keypair.fromSecret('');
+  const recipientKeypair = Keypair.fromSecret('SAG4OTVSVXNJH3BY2CMQSG25W2X7UGJWUYGELVHC3KEKXDZWSZRZEZDR');
   const merch = 'GDJ3AUXRFGZCPQVDSP67XZFFOXK4I36LDYEC4GRGFADDXKO6AFHQEJK7';
   let steward: Keypair;
   let shelter: Shelter;
