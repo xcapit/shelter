@@ -1,4 +1,4 @@
-import type { FeeBumpTxBuilt } from "../fee-bump-tx-built/fee-bump-tx-built";
+import { FeeBumpTxBuilt } from "../fee-bump-tx-built/fee-bump-tx-built";
 import { Keypair, rpc as StellarRpc } from "shelter-sdk";
 import * as StellarSDK from "@stellar/stellar-sdk";
 import { Rpc } from "../rpc/rpc";
@@ -8,18 +8,30 @@ export class SponsoredTransaction {
     private readonly _innerTx: any,
     private readonly _signer: Keypair,
     private readonly _rpc: Rpc,
-    private readonly _feeBumpTxBuilt: FeeBumpTxBuilt
+    private readonly _feeBumpTxBuilt: FeeBumpTxBuilt = new FeeBumpTxBuilt()
   ) {}
 
   async result(): Promise<StellarRpc.Api.GetTransactionResponse | void> {
     const feeBumpTransaction = this._feeBumpTxBuilt.value(
       this._signer,
-      (+StellarSDK.BASE_FEE * 2).toString(),
-      this._innerTx,
+      (+StellarSDK.BASE_FEE * 200000).toString(),
+      this._innerTx.built!,
       await this._rpc.network()
     );
     feeBumpTransaction.sign(this._signer);
-    return await this._txData(feeBumpTransaction);
+    const server = new StellarSDK.Horizon.Server(
+      "https://horizon-testnet.stellar.org"
+    );
+    server
+      .submitTransaction(feeBumpTransaction)
+      .then((response) => {
+        console.log("Success! Results:", response);
+      })
+      .catch((error) => {
+        console.error("Something went wrong!", error?.response?.data?.extras);
+      });
+
+    // return await this._txData(feeBumpTransaction);
   }
 
   private async _txData(

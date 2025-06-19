@@ -29,6 +29,10 @@ export class FakeServer {
     return this._pollTransactionReponse;
   }
 
+  submitTransaction(){
+    
+  }
+
   async getLatestLedger(): Promise<any> {
     return { sequence: 1234 }
   }

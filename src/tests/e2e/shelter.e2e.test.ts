@@ -6,6 +6,8 @@ import { Shelter } from "../../shelter/shelter";
 import { Client as SAC } from "sac-sdk";
 import { Rpc } from "../../rpc/rpc";
 import { Aid } from "../../aid/aid";
+import { SponsoredTransaction } from "../../sponsored-transaction/sponsored-transaction";
+import { Transfer } from "../../transfer/transfer";
 
 describe("Shelter", () => {
   const defaultRpc = new Rpc(
@@ -17,10 +19,13 @@ describe("Shelter", () => {
     "CBN2MBW4AFEHXMLE5ADTAWFOQKEHBYTVO62AZ7DTQONACYE26VFPHKVA";
   const expiration = BigInt(Math.floor(Date.now() / 1000) + 7200);
   const amount = BigInt(1);
-  const tokenOwnerSecret = "SACQ5FHZMXD67HMT43HIYDSYQN7R3J7SXGOSBQ53EJ3WMH5DVHVRIPWC";
+  const tokenOwnerSecret =
+    "SACQ5FHZMXD67HMT43HIYDSYQN7R3J7SXGOSBQ53EJ3WMH5DVHVRIPWC";
   const tokenOwnerKeypair = Keypair.fromSecret(tokenOwnerSecret);
-  const recipientKeypair = Keypair.fromSecret('SAG4OTVSVXNJH3BY2CMQSG25W2X7UGJWUYGELVHC3KEKXDZWSZRZEZDR');
-  const merch = 'GDJ3AUXRFGZCPQVDSP67XZFFOXK4I36LDYEC4GRGFADDXKO6AFHQEJK7';
+  const recipientKeypair = Keypair.fromSecret(
+    "SAG4OTVSVXNJH3BY2CMQSG25W2X7UGJWUYGELVHC3KEKXDZWSZRZEZDR"
+  );
+  const merch = "GDJ3AUXRFGZCPQVDSP67XZFFOXK4I36LDYEC4GRGFADDXKO6AFHQEJK7";
   let steward: Keypair;
   let shelter: Shelter;
 
@@ -98,12 +103,56 @@ describe("Shelter", () => {
     ).resolves.toBeUndefined();
 
     await expect(
-      new Aid(recipientKeypair, _sac(recipientKeypair.publicKey()), defaultRpc).transfer(
+      new Aid(
+        recipientKeypair,
+        _sac(recipientKeypair.publicKey()),
+        defaultRpc
+      ).transfer(
         deployedShelter,
         merch,
         amount,
         new DefaultPass(recipientKeypair, deployedShelter.id(), defaultRpc)
       )
+    ).resolves.toBeUndefined();
+  });
+
+  test.only("sponsored transaction", async () => {
+    const sac = _sac(tokenOwnerKeypair.publicKey());
+    const deployedShelter = await shelter.deploy();
+    await new Transaction(
+      await sac.mint({
+        to: deployedShelter.id(),
+        amount: BigInt(1000),
+      }),
+      tokenOwnerKeypair,
+      defaultRpc
+    ).result();
+
+    deployedShelter.boundAid(
+      recipientKeypair.rawPublicKey(),
+      tokenContractId,
+      amount,
+      expiration
+    );
+
+    const merchSecret =
+      "SBYM2OY6AXH7XFHPYADJPM53EAMWQO33QWN2JERJSIWBUCCFNW5DSCJN";
+
+    const transferTx = await new Transfer(
+      deployedShelter.id(),
+      merch,
+      amount,
+      _sac(recipientKeypair.publicKey())
+    ).value(
+      new DefaultPass(recipientKeypair, deployedShelter.id(), defaultRpc)
+    );
+
+    await expect(
+      new SponsoredTransaction(
+        transferTx,
+        Keypair.fromSecret(merchSecret),
+        defaultRpc
+      ).result()
     ).resolves.toBeUndefined();
   });
 });
