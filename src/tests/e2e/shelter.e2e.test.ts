@@ -19,7 +19,7 @@ describe("Shelter", () => {
   const amount = BigInt(1);
   const tokenOwnerSecret =
     "SDZVEQPNLS74A5E7VDSUHV2EDUJJUBNNT46PRNGAJXM4SZCBGIYGAZEX";
-  const aliceKeyPair = Keypair.fromSecret(tokenOwnerSecret);
+  const tokenOwnerKeypair = Keypair.fromSecret(tokenOwnerSecret);
   let steward: Keypair;
   let shelter: Shelter;
 
@@ -54,14 +54,14 @@ describe("Shelter", () => {
     const recipient = Keypair.fromPublicKey(
       "GASL6XDOK2TO6SCFTXFN2HQDAONLBID2GKX5TYBTHOWA7ZU7VRFZNHGM"
     );
-    const sac = _sac(aliceKeyPair.publicKey());
+    const sac = _sac(tokenOwnerKeypair.publicKey());
     const deployedShelter = await shelter.deploy();
     const mintTx = new Transaction(
       await sac.mint({
         to: deployedShelter.id(),
         amount: BigInt(1000),
       }),
-      aliceKeyPair,
+      tokenOwnerKeypair,
       defaultRpc
     );
     const mintResultTx = await mintTx.result();
@@ -81,14 +81,14 @@ describe("Shelter", () => {
     const recipient = Keypair.fromSecret(
       "SBTD4FBLWCWVNJCOSOMVYXPJOYLTQW52EC3AUZ2Q3XX5PAO3SMXIKWHH"
     );
-    const sac = _sac(aliceKeyPair.publicKey());
+    const sac = _sac(tokenOwnerKeypair.publicKey());
     const deployedShelter = await shelter.deploy();
     const mintTx = new Transaction(
       await sac.mint({
         to: deployedShelter.id(),
         amount: BigInt(1000),
       }),
-      aliceKeyPair,
+      tokenOwnerKeypair,
       defaultRpc
     );
     const mintResultTx = await mintTx.result();
