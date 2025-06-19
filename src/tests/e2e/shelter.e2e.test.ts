@@ -135,9 +135,6 @@ describe("Shelter", () => {
       expiration
     );
 
-    const merchSecret =
-      "SBYM2OY6AXH7XFHPYADJPM53EAMWQO33QWN2JERJSIWBUCCFNW5DSCJN";
-
     const transferTx = await new Transfer(
       deployedShelter.id(),
       merch,
@@ -147,10 +144,12 @@ describe("Shelter", () => {
       new DefaultPass(recipientKeypair, deployedShelter.id(), defaultRpc)
     );
 
+    const sponsorSecret = "SBFLIK3VZAJY3G43E6VHQETNYNZI32C5EBBQ4XIQTCZJRMSIPIRW7FLE";
+
     await expect(
       new SponsoredTransaction(
         transferTx,
-        Keypair.fromSecret(merchSecret),
+        Keypair.fromSecret(sponsorSecret),
         defaultRpc
       ).result()
     ).resolves.toBeUndefined();
