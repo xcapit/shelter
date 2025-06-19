@@ -21,7 +21,7 @@ describe("Shelter", () => {
     "SDZVEQPNLS74A5E7VDSUHV2EDUJJUBNNT46PRNGAJXM4SZCBGIYGAZEX";
   const tokenOwnerKeypair = Keypair.fromSecret(tokenOwnerSecret);
   const recipientKeypair = Keypair.fromSecret('');
-  const merch = '';
+  const merch = 'GDJ3AUXRFGZCPQVDSP67XZFFOXK4I36LDYEC4GRGFADDXKO6AFHQEJK7';
   let steward: Keypair;
   let shelter: Shelter;
 
