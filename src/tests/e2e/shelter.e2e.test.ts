@@ -100,7 +100,7 @@ describe("Shelter", () => {
     await expect(
       new Aid(recipientKeypair, _sac(recipientKeypair.publicKey()), defaultRpc).transfer(
         deployedShelter,
-        "GAXRNW46AL4PI7Q6FABZ2OS3BKG3I7FHMBPRP7FBQHQLFX2KU2PBGGUP",
+        merch,
         amount,
         new DefaultPass(recipientKeypair, deployedShelter.id(), defaultRpc)
       )
