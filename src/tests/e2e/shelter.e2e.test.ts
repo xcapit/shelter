@@ -8,6 +8,7 @@ import { Rpc } from "../../rpc/rpc";
 import { Aid } from "../../aid/aid";
 import { SponsoredTransaction } from "../../sponsored-transaction/sponsored-transaction";
 import { Transfer } from "../../transfer/transfer";
+import { SimulatedTransaction } from "../../simulated-transaction/simulated-transaction";
 
 describe("Shelter", () => {
   const defaultRpc = new Rpc(
@@ -144,11 +145,18 @@ describe("Shelter", () => {
       new DefaultPass(recipientKeypair, deployedShelter.id(), defaultRpc)
     );
 
-    const sponsorSecret = "SBFLIK3VZAJY3G43E6VHQETNYNZI32C5EBBQ4XIQTCZJRMSIPIRW7FLE";
+    const simulatedTx = await new SimulatedTransaction(
+      transferTx,
+      recipientKeypair,
+      defaultRpc
+    ).value();
+
+    const sponsorSecret =
+      "SBFLIK3VZAJY3G43E6VHQETNYNZI32C5EBBQ4XIQTCZJRMSIPIRW7FLE";
 
     await expect(
       new SponsoredTransaction(
-        transferTx,
+        simulatedTx,
         Keypair.fromSecret(sponsorSecret),
         defaultRpc
       ).result()
