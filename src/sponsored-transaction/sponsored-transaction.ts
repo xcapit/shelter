@@ -19,9 +19,7 @@ export class SponsoredTransaction {
       await this._rpc.network()
     );
     feeBumpTransaction.sign(this._signer);
-    const server = new StellarSDK.Horizon.Server(
-      "https://horizon-testnet.stellar.org"
-    );
+    const server = new StellarSDK.Horizon.Server(this._rpc.url());
     server
       .submitTransaction(feeBumpTransaction)
       .then((response) => {
