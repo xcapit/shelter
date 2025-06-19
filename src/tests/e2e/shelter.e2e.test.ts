@@ -90,7 +90,7 @@ describe("Shelter", () => {
     expect(mintResultTx.status).toEqual(rpc.Api.GetTransactionStatus.SUCCESS);
     await expect(
       deployedShelter.boundAid(
-        recipient.rawPublicKey(),
+        recipientKeypair.rawPublicKey(),
         tokenContractId,
         amount,
         expiration
@@ -98,11 +98,11 @@ describe("Shelter", () => {
     ).resolves.toBeUndefined();
 
     await expect(
-      new Aid(recipient, _sac(recipient.publicKey()), defaultRpc).transfer(
+      new Aid(recipientKeypair, _sac(recipientKeypair.publicKey()), defaultRpc).transfer(
         deployedShelter,
         "GAXRNW46AL4PI7Q6FABZ2OS3BKG3I7FHMBPRP7FBQHQLFX2KU2PBGGUP",
         amount,
-        new DefaultPass(recipient, deployedShelter.id(), defaultRpc)
+        new DefaultPass(recipientKeypair, deployedShelter.id(), defaultRpc)
       )
     ).resolves.toBeUndefined();
   });
