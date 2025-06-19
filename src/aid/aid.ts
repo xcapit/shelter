@@ -20,6 +20,8 @@ export class Aid {
     amount: bigint,
     pass: Pass
   ) {
+
+    // TODO: Meter SponsoredTransaction y que envuelva el .value() del Simulated
     const resultTx = await new SimulatedTransaction(
       await new Transfer(deployedShelter.id(), to, amount, this._token).value(
         pass
