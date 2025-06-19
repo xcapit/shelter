@@ -52,9 +52,6 @@ describe("Shelter", () => {
   });
 
   test("bound aid", async () => {
-    const recipient = Keypair.fromPublicKey(
-      "GASL6XDOK2TO6SCFTXFN2HQDAONLBID2GKX5TYBTHOWA7ZU7VRFZNHGM"
-    );
     const sac = _sac(tokenOwnerKeypair.publicKey());
     const deployedShelter = await shelter.deploy();
     const mintTx = new Transaction(
@@ -70,7 +67,7 @@ describe("Shelter", () => {
 
     await expect(
       deployedShelter.boundAid(
-        recipient.rawPublicKey(),
+        recipientKeypair.rawPublicKey(),
         tokenContractId,
         amount,
         expiration
