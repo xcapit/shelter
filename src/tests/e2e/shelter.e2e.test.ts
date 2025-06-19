@@ -76,9 +76,6 @@ describe("Shelter", () => {
   });
 
   test("recipient transfer from shelter", async () => {
-    const recipient = Keypair.fromSecret(
-      "SBTD4FBLWCWVNJCOSOMVYXPJOYLTQW52EC3AUZ2Q3XX5PAO3SMXIKWHH"
-    );
     const sac = _sac(tokenOwnerKeypair.publicKey());
     const deployedShelter = await shelter.deploy();
     const mintTx = new Transaction(
