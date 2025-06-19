@@ -20,6 +20,7 @@ describe("Shelter", () => {
   const tokenOwnerSecret =
     "SDZVEQPNLS74A5E7VDSUHV2EDUJJUBNNT46PRNGAJXM4SZCBGIYGAZEX";
   const tokenOwnerKeypair = Keypair.fromSecret(tokenOwnerSecret);
+  const recipientKeypair = Keypair.fromSecret('');
   let steward: Keypair;
   let shelter: Shelter;
 
