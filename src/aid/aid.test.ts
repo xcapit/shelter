@@ -10,10 +10,11 @@ import { Aid } from "./aid";
 describe("Aid", () => {
   const amount = BigInt(123);
   const recipient = Keypair.random();
+
   const _rpc = {
     assembleTransaction: (raw: any, simulation: any) => {
       return {
-        build: () => ({ sign: () => {} }),
+        build: () => ({ sign: () => { } }),
       };
     },
   };

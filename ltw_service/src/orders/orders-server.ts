@@ -139,22 +139,27 @@ export class OrdersServer extends ServerSystem {
             order.phoneNumber(),
           );
 
+          const sponsorKeypair = Keypair.fromSecret(env.SPONSOR_SECRET!);
+          
           const rpc = new Rpc(new stellarRpc.Server(env.STELLAR_RPC!));
           const sac = new SAC({
             contractId: token.address(),
             networkPassphrase: await rpc.network(),
             rpcUrl: rpc.url(),
-            publicKey: beneficiary.address(),
+            publicKey: sponsorKeypair.publicKey(),
           });
-          const beneficiaryKeypair = Keypair.fromSecret(
-            await new SecretOf(beneficiary.phoneNumber()).value(),
-          );
 
-          await new Aid(beneficiaryKeypair, sac, rpc).transfer(
+          await new Aid(sponsorKeypair, sac, rpc).transfer(
             this._shelter,
             order.merchAddress(),
             new WeiOf(order.amount(), token).value(),
-            new Pass(beneficiaryKeypair, this._shelter.id(), rpc),
+            new Pass(
+              Keypair.fromSecret(
+                await new SecretOf(beneficiary.phoneNumber()).value(),
+              ),
+              this._shelter.id(),
+              rpc,
+            ),
           );
 
           bodyResponse = new OrderCompleteMsg(
