@@ -3,9 +3,6 @@ import { DefaultBeneficiary } from '../beneficiary/default-beneficiary/default-b
 import { NullBeneficiary } from '../beneficiary/null-beneficiary/null-beneficiary';
 import { DefaultBeneficiariesDataRepo } from '../data-repo/beneficiaries-data-repo/default/default-beneficiaries-data-repo';
 import { BeneficiariesDataRepo } from '../data-repo/beneficiaries-data-repo/beneficiaries-data-repo.interface';
-// TODO
-import { SmartAccount } from '../smart-account/smart-account';
-import { PrivateKeySharding } from '../private-key/private-key-sharding/private-key-sharding';
 import { PhoneNumber } from '../../../shared/phone-number-info/phone-number';
 import twilio from 'twilio';
 import dotenv from 'dotenv';

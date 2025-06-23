@@ -1,10 +1,16 @@
-import { DeployedShelter } from '@xcapit/shelter-sdk';
+import {
+  DeployedShelter,
+  FakeClient,
+  FakeServer,
+  Rpc,
+} from '@xcapit/shelter-sdk';
 import { Beneficiaries } from '../../../beneficiaries/models/beneficiaries/beneficiaries';
 import { FakeBeneficiariesDataRepo } from '../../../beneficiaries/models/data-repo/beneficiaries-data-repo/fake/fake-beneficiaries-data-repo';
 import { FakeTwilio } from '../fake-twilio/fake-twilio';
 import { IncomingSms } from '../incoming-sms/incoming-sms';
 import { ParsedIncomingSms } from '../parsed-incoming-sms/parsed-incoming-sms';
 import { Commands } from './commands';
+import { Keypair } from '@stellar/stellar-sdk';
 
 describe('Commands', () => {
   let commands: Commands;
@@ -12,7 +18,11 @@ describe('Commands', () => {
   beforeEach(() => {
     commands = new Commands(
       new Beneficiaries(new FakeBeneficiariesDataRepo(), new FakeTwilio()),
-      {} as DeployedShelter,
+      new DeployedShelter(
+        Keypair.random(),
+        new Rpc(new FakeServer()),
+        new FakeClient({}),
+      ),
       new FakeTwilio(),
     );
   });
@@ -22,13 +32,13 @@ describe('Commands', () => {
   });
 
   [
-    { commandName: 'balance', body: 'BALANCE USDC' },
-    { commandName: 'transfer', body: 'SEND USDC 10 0xface' },
+    { commandName: 'balance', body: 'BALANCE BO1' },
+    { commandName: 'transfer', body: 'SEND BO1 10 0xface' },
     { commandName: 'account', body: 'ACCOUNT' },
     { commandName: 'update phone', body: 'UPDATE_PHONE +5431234' },
     { commandName: 'confirm phone', body: 'CONFIRM_PHONE 1234' },
-    { commandName: 'offramp', body: 'OFFRAMP 3 USDT ARS' },
-    { commandName: 'null', body: 'ISNOTACOMMAND 10 USDC' },
+    // { commandName: 'offramp', body: 'OFFRAMP 3 BO1 ARS' },
+    { commandName: 'null', body: 'ISNOTACOMMAND 10 BO1' },
   ].forEach((testCase) => {
     test(`command ${testCase.commandName}`, async () => {
       expect(

@@ -3,7 +3,7 @@
   "keyinterpolationtest": "bonjour le monde {{fix}}",
   "balanceResponse": "Votre solde est",
   "balanceError": "Erreur de solde.",
-  "transferResponse": "Vos jetons ont été envoyés ! Hash de la transaction : {{aTxHash}}. Votre solde est : {{aBalanceAmount}} {{aToken}}.",
+  "transferResponse": "Vos jetons ont été envoyés ! Votre solde est : {{aBalanceAmount}} {{aToken}}.",
   "transferError": "Échec de la transaction ! Vos tokens n'ont pas été envoyés.",
   "offRampResponse": "Retrait terminé avec succès ! {{anAmount}} {{aCurrencySymbol}} envoyé.",
   "offRampError": "Retrait échoué.",

@@ -8,11 +8,6 @@ import {
   CompleteOrderData,
   completeOrderSerializer,
 } from '../beneficiaries/serializers/complete-order.serializer';
-// TODO
-// import { Orders } from "./models/orders/orders";
-// import {AlchemySmartAccount} from "../beneficiaries/models/smart-account/alchemy-smart-account/alchemy-smart-account";
-// import { PrivateKeyOf } from "../beneficiaries/models/private-key/private-key-of/private-key-of";
-// import { Transfer } from "../beneficiaries/models/transfer/transfer";
 import { OrderOfReqBody } from './models/order-of-req-body/order-of-req-body';
 import { OrderCompleteMsg } from './models/messages/order-complete-msg/order-complete-msg';
 import { DefaultOrder } from './models/order/default-order/default-order';
@@ -21,7 +16,6 @@ import { BeneficiaryOrderResponse } from './models/beneficiary-order-response/be
 import { AuthorizedRequestOf } from '../system/authorized-request/authorized-request-of';
 import { Users } from '../users/models/users/users';
 import { StatusMsg } from '../metrics/models/status-msg/status-msg';
-import { Limit } from '../system/limit/limit';
 import { OnlyRoles } from '../system/only-roles/only-roles';
 import {
   Aid,
@@ -29,7 +23,6 @@ import {
   Pass,
   Rpc,
   SAC,
-  ShelterClient,
 } from '@xcapit/shelter-sdk';
 import { Keypair, rpc as stellarRpc } from '@stellar/stellar-sdk';
 import dotenv from 'dotenv';
@@ -140,7 +133,7 @@ export class OrdersServer extends ServerSystem {
           );
 
           const sponsorKeypair = Keypair.fromSecret(env.SPONSOR_SECRET!);
-          
+
           const rpc = new Rpc(new stellarRpc.Server(env.STELLAR_RPC!));
           const sac = new SAC({
             contractId: token.address(),

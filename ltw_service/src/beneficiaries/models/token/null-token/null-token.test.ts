@@ -21,7 +21,7 @@ describe("NullToken", () => {
   });
 
   test("address", () => {
-    expect(() => token.address()).toThrow();
+    expect(token.address()).toEqual('');
   });
 
 });

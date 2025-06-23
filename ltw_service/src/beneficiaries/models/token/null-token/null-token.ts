@@ -10,6 +10,6 @@ export class NullToken implements Token {
     throw new Error(this._errorMsg);
   }
   address(): string {
-    throw new Error(this._errorMsg);
+    return '';
   }
 }

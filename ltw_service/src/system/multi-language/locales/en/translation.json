@@ -3,7 +3,7 @@
   "keyinterpolationtest": "hello world {{fix}}",
   "balanceResponse": "Your balance is",
   "balanceError": "Balance error.",
-  "transferResponse": "Your tokens have been sent! Transaction hash: {{aTxHash}}. Your balance is: {{aBalanceAmount}} {{aToken}}.",
+  "transferResponse": "Your tokens have been sent! Your balance is: {{aBalanceAmount}} {{aToken}}.",
   "transferError": "Transaction failed! Your tokens have not been sent!",
   "offRampResponse": "Offramp completed successfully! {{anAmount}} {{aCurrencySymbol}} sent.",
   "offRampError": "Offramp failed.",
@@ -13,9 +13,9 @@
   "completeOrderMsg": "Your order has been completed! Your balance is {{aBalanceAmount}} {{aToken}}.",
   "accountCreationMsg": "Smart Account successfully created! Address:",
   "BALANCE": "BALANCE",
-  "SEND":"SEND",
-  "ACCOUNT":"ACCOUNT",
-  "UPDATE_PHONE":"UPDATE_PHONE",
-  "CONFIRM_PHONE":"CONFIRM_PHONE",
+  "SEND": "SEND",
+  "ACCOUNT": "ACCOUNT",
+  "UPDATE_PHONE": "UPDATE_PHONE",
+  "CONFIRM_PHONE": "CONFIRM_PHONE",
   "OFFRAMP": "OFFRAMP"
 }

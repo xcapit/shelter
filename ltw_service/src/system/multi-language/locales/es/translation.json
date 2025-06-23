@@ -3,7 +3,7 @@
   "keyinterpolationtest": "hola mundo {{fix}}",
   "balanceResponse": "Tu saldo es",
   "balanceError": "Error de saldo.",
-  "transferResponse": "¡Tus tokens han sido enviados! Hash de la transacción: {{aTxHash}}. Tu saldo es: {{aBalanceAmount}} {{aToken}}.",
+  "transferResponse": "¡Tus tokens han sido enviados! Tu saldo es: {{aBalanceAmount}} {{aToken}}.",
   "transferError": "¡La transacción falló! Tus tokens no han sido enviados.",
   "offRampResponse": "¡Retiro completado con éxito! {{anAmount}} {{aCurrencySymbol}} enviados.",
   "offRampError": "Retiro fallido.",
