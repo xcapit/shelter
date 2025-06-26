@@ -24,9 +24,9 @@ export class LowTechServer {
   register() {
     new MultiLanguage(i18next).init();
     new MetricsServer(this._aServer).register();
-    new UsersServer(this._aServer, this._users).register(); // TODO: Reviewed!
-    new SMSServer(this._aServer, this._beneficiaries, this._users, this._shelter).register(); // TODO: Reviewed!
-    new OrdersServer(this._aServer, this._orders, this._beneficiaries, this._users, this._shelter).register(); // TODO: Reviewed!
-    new BeneficiariesServer(this._aServer, this._beneficiaries, this._users, this._shelter).register();// TODO: Reviewed!
+    new UsersServer(this._aServer, this._users).register();
+    new SMSServer(this._aServer, this._beneficiaries, this._users, this._shelter).register();
+    new OrdersServer(this._aServer, this._orders, this._beneficiaries, this._users, this._shelter).register();
+    new BeneficiariesServer(this._aServer, this._beneficiaries, this._users, this._shelter).register();
   }
 }

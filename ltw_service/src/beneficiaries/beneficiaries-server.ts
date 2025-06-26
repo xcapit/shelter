@@ -6,19 +6,14 @@ import { SmartAccountCreationMsg } from './models/messages/smart-account-creatio
 import { TwilioSMSClient } from '../sms/models/sms-client/twilio-sms-client/twilio-sms-client';
 import { Users } from '../users/models/users/users';
 import { AuthorizedRequestOf } from '../system/authorized-request/authorized-request-of';
-// TODO:
-// import { AlchemySmartAccount } from './models/smart-account/alchemy-smart-account/alchemy-smart-account';
-// import { GeneratedPrivateKey } from './models/private-key/generated-private-key/generated-private-key';
-// import { BalanceOf } from '../shared/balance-of/balance-of';
 import { Tokens } from './models/tokens/tokens';
 import { OnlyRoles } from '../system/only-roles/only-roles';
 import { Sponsor } from './models/sponsor/sponsor';
 import { env } from 'process';
 import dotenv from 'dotenv';
-import { Keypair, Networks, rpc } from '@stellar/stellar-sdk';
-import { DeployedShelter, Rpc, ShelterClient } from '@xcapit/shelter-sdk';
+import { Keypair } from '@stellar/stellar-sdk';
+import { DeployedShelter } from '@xcapit/shelter-sdk';
 import { PhoneNumber } from '../shared/phone-number-info/phone-number';
-import { AmountOf } from './models/amount-of/amount-of';
 import { AidTTL } from './models/aid-ttl/aid-ttl';
 import { WeiOf } from './models/wei-of/wei-of';
 
