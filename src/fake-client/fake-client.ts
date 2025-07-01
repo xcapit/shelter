@@ -8,10 +8,10 @@ export class FakeClient {
   constructor(
     private readonly _options: any,
     private readonly _steward: Keypair = Keypair.random()
-  ) {}
+  ) { }
   public static deploy() {
     return {
-      built: { sign: () => {} },
+      built: { sign: () => { } },
     } as unknown as AssembledTransaction<Client>;
   }
 
@@ -37,8 +37,24 @@ export class FakeClient {
   }
 
   async bound_aid(options: any) {
+    return this._fakeAssembledTx();
+  }
+
+  async guard(options?: any) {
+    return this._fakeAssembledTx();
+  }
+
+  async open(options?: any) {
+    return this._fakeAssembledTx();
+  }
+
+  async seal(options?: any) {
+    return this._fakeAssembledTx();
+  }
+
+  private _fakeAssembledTx() {
     return {
-      built: { sign: () => {} },
+      built: { sign: () => { } },
     } as unknown as AssembledTransaction<null>;
   }
 }
