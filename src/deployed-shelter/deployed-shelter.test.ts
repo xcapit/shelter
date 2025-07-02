@@ -79,4 +79,35 @@ describe("DeployedShelter", () => {
       )
     ).resolves.toEqual(1);
   });
+
+  test("gate manipulation", async () => {
+    const _pollTransactionReponse = {
+      status: rpc.Api.GetTransactionStatus.SUCCESS,
+    };
+    const shelter = new DeployedShelter(
+      steward,
+      new Rpc(new FakeServer(_pollTransactionReponse)),
+      client
+    );
+
+    await expect(shelter.guard()).resolves.toBeUndefined();
+    await expect(shelter.open()).resolves.toBeUndefined();
+    await expect(shelter.seal()).resolves.toBeUndefined();
+  });
+
+
+  test("gate manipulation failed", async () => {
+    const _pollTransactionReponse = {
+      status: rpc.Api.GetTransactionStatus.NOT_FOUND,
+    };
+    const shelter = new DeployedShelter(
+      steward,
+      new Rpc(new FakeServer(_pollTransactionReponse)),
+      client
+    );
+
+    await expect(shelter.guard()).rejects.toThrow();
+    await expect(shelter.open()).rejects.toThrow();
+    await expect(shelter.seal()).rejects.toThrow();
+  });
 });

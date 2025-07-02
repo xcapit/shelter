@@ -1,15 +1,15 @@
-import { Keypair, rpc as StellarRpc } from "shelter-sdk";
+import { Keypair } from "shelter-sdk";
 import type { Client as SAC } from "sac-sdk";
 import { DeployedShelter } from "../deployed-shelter/deployed-shelter";
 import { Rpc } from "../rpc/rpc";
 import type { Pass } from "../pass/pass.interface";
 import { Transfer } from "../transfer/transfer";
 import { FakeSAC } from "../fake-sac/fake-sac";
-import { SimulatedTransaction } from "../simulated-transaction/simulated-transaction";
+import { Transaction } from "../transaction/transaction";
 
 export class Aid {
   constructor(
-    private readonly _recipient: Keypair,
+    private readonly _sponsor: Keypair,
     private readonly _token: SAC | FakeSAC,
     private readonly _rpc: Rpc
   ) { }
@@ -21,17 +21,14 @@ export class Aid {
     pass: Pass
   ) {
 
-    const resultTx = await new SimulatedTransaction(
+    await new Transaction(
       await new Transfer(deployedShelter.id(), to, amount, this._token).value(
         pass
       ),
-      this._recipient,
-      this._rpc
+      this._sponsor,
+      this._rpc,
+      "Transfer Aid Error",
+      true
     ).result();
-
-    if (resultTx.status !== StellarRpc.Api.GetTransactionStatus.SUCCESS) {
-      console.log("Transfer Aid Error", JSON.stringify(resultTx, null, 2));
-      throw new Error("TRANSFER AID ERROR");
-    }
   }
 }

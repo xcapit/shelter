@@ -1,4 +1,4 @@
-import { xdr } from "@stellar/stellar-sdk";
+import { rpc, xdr } from "@stellar/stellar-sdk";
 
 export const contractAddressTransactionReponse = {
   returnValue: {
@@ -11,6 +11,7 @@ export const contractAddressTransactionReponse = {
       );
     },
   },
+  status: rpc.Api.GetTransactionStatus.SUCCESS,
 };
 
 export class FakeServer {

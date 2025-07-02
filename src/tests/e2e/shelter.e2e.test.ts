@@ -54,6 +54,16 @@ describe("Shelter", () => {
     );
   });
 
+  test("gate manipulation", async () => {
+    const deployedShelter = await shelter.deploy();
+
+    await expect(deployedShelter.guard()).resolves.toBeUndefined();
+    await expect(deployedShelter.open()).resolves.toBeUndefined();
+    await expect(deployedShelter.seal()).resolves.toBeUndefined();
+    await expect(deployedShelter.open()).rejects.toThrow();
+    await expect(deployedShelter.guard()).rejects.toThrow();
+  });
+
   test("bound aid", async () => {
     const sac = _sac(tokenOwnerKeypair.publicKey());
     const deployedShelter = await shelter.deploy();

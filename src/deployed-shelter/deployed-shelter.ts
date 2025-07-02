@@ -1,4 +1,3 @@
-import { rpc } from "@stellar/stellar-sdk";
 import { Client, Keypair } from "shelter-sdk";
 import type { FakeClient } from "../fake-client/fake-client";
 import { Transaction } from "../transaction/transaction";
@@ -9,7 +8,7 @@ export class DeployedShelter {
     private readonly _steward: Keypair,
     private readonly _rpc: Rpc,
     private readonly _client: Client | FakeClient
-  ) {}
+  ) { }
 
   async stewardId(): Promise<string> {
     return (await this._client.steward()).result;
@@ -21,7 +20,7 @@ export class DeployedShelter {
     amount: bigint,
     expiration: bigint
   ): Promise<void> {
-    const resultTx = await new Transaction(
+    await new Transaction(
       await this._client.bound_aid({
         recipient,
         token,
@@ -29,12 +28,9 @@ export class DeployedShelter {
         expiration,
       }),
       this._steward,
-      this._rpc
+      this._rpc,
+      'Bound Aid Error'
     ).result();
-    if (resultTx.status !== rpc.Api.GetTransactionStatus.SUCCESS) {
-      console.log("Bound Aid Error", JSON.stringify(resultTx, null, 2));
-      throw new Error("BOUND AID ERROR");
-    }
   }
 
   id(): string {
@@ -43,5 +39,32 @@ export class DeployedShelter {
 
   async aidOf(recipient: Buffer, token: string): Promise<bigint> {
     return (await this._client.aid_of({ recipient, token })).result.amount;
+  }
+
+  async guard(): Promise<void> {
+    await new Transaction(
+      await this._client.guard(),
+      this._steward,
+      this._rpc,
+      'Guard Gate Error'
+    ).result();
+  }
+
+  async open(): Promise<void> {
+    await new Transaction(
+      await this._client.open(),
+      this._steward,
+      this._rpc,
+      'Open Gate Error'
+    ).result();
+  }
+
+  async seal(): Promise<void> {
+    await new Transaction(
+      await this._client.seal(),
+      this._steward,
+      this._rpc,
+      'Seal Gate Error'
+    ).result();
   }
 }
