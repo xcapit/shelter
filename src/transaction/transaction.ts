@@ -4,6 +4,7 @@ import { rpc } from "@stellar/stellar-sdk";
 import type { Rpc } from "../rpc/rpc";
 import { TxResult } from "../tx-result/tx-result";
 
+
 export class Transaction {
   constructor(
     private readonly _rawTx: any,

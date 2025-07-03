@@ -57,11 +57,20 @@ describe("Shelter", () => {
   test("gate manipulation", async () => {
     const deployedShelter = await shelter.deploy();
 
-    await expect(deployedShelter.guard()).resolves.toBeUndefined();
-    await expect(deployedShelter.open()).resolves.toBeUndefined();
-    await expect(deployedShelter.seal()).resolves.toBeUndefined();
-    await expect(deployedShelter.open()).rejects.toThrow();
-    await expect(deployedShelter.guard()).rejects.toThrow();
+    await expect(deployedShelter.gate().guard()).resolves.toBeUndefined();
+    await expect(deployedShelter.gate().open()).resolves.toBeUndefined();
+    await expect(deployedShelter.gate().seal()).resolves.toBeUndefined();
+    await expect(deployedShelter.gate().open()).rejects.toThrow();
+    await expect(deployedShelter.gate().guard()).rejects.toThrow();
+  });
+
+
+  test("update steward", async () => {
+    const newSteward = Keypair.random();
+    const deployedShelter = await shelter.deploy();
+
+    await expect(deployedShelter.updateSteward(newSteward)).resolves.toBeUndefined();
+    expect(await deployedShelter.stewardId()).toEqual(newSteward.publicKey());
   });
 
   test("bound aid", async () => {
