@@ -40,6 +40,10 @@ export class FakeClient {
     return this._fakeAssembledTx();
   }
 
+  async update_steward(options: any) {
+    return this._fakeAssembledTx();
+  }
+
   async guard(options?: any) {
     return this._fakeAssembledTx();
   }

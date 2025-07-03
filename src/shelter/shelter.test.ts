@@ -2,7 +2,7 @@ import { Keypair } from "shelter-sdk";
 import { Shelter } from "./shelter";
 import { FakeClient } from "../fake-client/fake-client";
 import {
-  contractAddressTransactionReponse,
+  contractAddressTxReponse,
   FakeServer,
 } from "../fixtures/fixtures";
 import { Rpc } from "../rpc/rpc";
@@ -25,7 +25,7 @@ describe("Shelter", () => {
     expect(
       await new Shelter(
         steward,
-        new Rpc(new FakeServer(contractAddressTransactionReponse)),
+        new Rpc(new FakeServer(contractAddressTxReponse)),
         wasmHash,
         FakeClient
       ).deploy()

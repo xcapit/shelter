@@ -1,6 +1,6 @@
 import { rpc, xdr } from "@stellar/stellar-sdk";
 
-export const contractAddressTransactionReponse = {
+export const contractAddressTxReponse = {
   returnValue: {
     address: (): xdr.ScAddress => {
       return xdr.ScAddress.scAddressTypeContract(

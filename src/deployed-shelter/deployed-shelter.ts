@@ -2,6 +2,7 @@ import { Client, Keypair } from "shelter-sdk";
 import type { FakeClient } from "../fake-client/fake-client";
 import { Transaction } from "../transaction/transaction";
 import type { Rpc } from "../rpc/rpc";
+import { Gate } from "../gate/gate";
 
 export class DeployedShelter {
   constructor(
@@ -20,15 +21,13 @@ export class DeployedShelter {
     amount: bigint,
     expiration: bigint
   ): Promise<void> {
-    await new Transaction(
+    await this._txOf(
       await this._client.bound_aid({
         recipient,
         token,
         amount,
         expiration,
       }),
-      this._steward,
-      this._rpc,
       'Bound Aid Error'
     ).result();
   }
@@ -41,30 +40,25 @@ export class DeployedShelter {
     return (await this._client.aid_of({ recipient, token })).result.amount;
   }
 
-  async guard(): Promise<void> {
-    await new Transaction(
-      await this._client.guard(),
-      this._steward,
-      this._rpc,
-      'Guard Gate Error'
+  async updateSteward(newSteward: Keypair): Promise<void> {
+    await this._txOf(
+      await this._client.update_steward({
+        new_steward: newSteward.publicKey(),
+      }),
+      'Update Steward Error'
     ).result();
   }
 
-  async open(): Promise<void> {
-    await new Transaction(
-      await this._client.open(),
-      this._steward,
-      this._rpc,
-      'Open Gate Error'
-    ).result();
+  gate(): Gate {
+    return new Gate(this._client, this._steward, this._rpc);
   }
 
-  async seal(): Promise<void> {
-    await new Transaction(
-      await this._client.seal(),
+  _txOf(aRawTx: any, errorMsg: string): Transaction {
+    return new Transaction(
+      aRawTx,
       this._steward,
       this._rpc,
-      'Seal Gate Error'
-    ).result();
+      errorMsg
+    )
   }
 }
