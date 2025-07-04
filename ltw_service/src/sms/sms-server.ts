@@ -13,7 +13,7 @@ import { SMSWebhookRequestOf } from './models/sms-webhook-request-of/sms-webhook
 import { Users } from '../users/models/users/users';
 import { AuthorizedRequestOf } from '../system/authorized-request/authorized-request-of';
 import { OnlyRoles } from '../system/only-roles/only-roles';
-import { DeployedShelter } from '@xcapit/shelter-sdk';
+import { Shelter } from '@xcapit/shelter-sdk';
 
 dotenv.config();
 
@@ -24,7 +24,7 @@ export class SMSServer extends ServerSystem {
     private _aServer: Express,
     private _beneficiaries: Beneficiaries,
     private _users: Users,
-    private _shelter: DeployedShelter,
+    private _shelter: Shelter,
   ) {
     super();
   }

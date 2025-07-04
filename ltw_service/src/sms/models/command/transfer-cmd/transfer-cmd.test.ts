@@ -7,7 +7,7 @@ import { FakeBeneficiariesDataRepo } from '../../../../beneficiaries/models/data
 import { FakeTwilio } from '../../fake-twilio/fake-twilio';
 import {
   Aid,
-  DeployedShelter,
+  Shelter,
   FakeClient,
   FakeServer,
   Rpc,
@@ -20,7 +20,7 @@ describe('TransferCmd', () => {
   beforeAll(() => {
     new MultiLanguage(i18next).init();
   });
-  const shelter = new DeployedShelter(
+  const shelter = new Shelter(
     Keypair.random(),
     new Rpc(new FakeServer()),
     new FakeClient({}),

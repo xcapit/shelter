@@ -16,12 +16,13 @@ import { DefaultPhoneNumberUpdatesDataRepo } from '../../../beneficiaries/models
 import { BalanceCmd } from '../command/balance-cmd/balance-cmd';
 import {
   Aid,
-  DeployedShelter,
+  Shelter,
   Rpc,
   SAC,
 } from '@xcapit/shelter-sdk';
 import { Keypair, rpc as stellarRpc } from '@stellar/stellar-sdk';
 import { Tokens } from '../../../beneficiaries/models/tokens/tokens';
+import { SecretOf } from '../../../beneficiaries/models/secret-of/secret-of';
 
 dotenv.config();
 
@@ -30,7 +31,7 @@ const { TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, STELLAR_RPC, SPONSOR_SECRET } =
 export class Commands {
   constructor(
     private _beneficiaries: Beneficiaries,
-    private _shelter: DeployedShelter,
+    private _shelter: Shelter,
     private _client: twilio.Twilio | FakeTwilio = twilio(
       TWILIO_ACCOUNT_SID,
       TWILIO_AUTH_TOKEN,
@@ -68,6 +69,9 @@ export class Commands {
           this._beneficiaries,
           this._shelter,
           new Aid(
+            Keypair.fromSecret(
+              await new SecretOf(parsedIncomingSms.phoneNumber(), this._beneficiaries).value(),
+            ),
             Keypair.fromSecret(SPONSOR_SECRET!),
             new SAC({
               contractId: (await new Tokens().oneBy(parsedIncomingSms.commandParams()[0])).address(),
@@ -75,6 +79,7 @@ export class Commands {
               rpcUrl: rpc.url(),
               publicKey: Keypair.fromSecret(SPONSOR_SECRET!).publicKey(),
             }),
+            this._shelter,
             rpc,
           ),
           rpc,

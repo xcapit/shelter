@@ -1,5 +1,5 @@
 import {
-  DeployedShelter,
+  Shelter,
   FakeClient,
   FakeServer,
   Rpc,
@@ -18,7 +18,7 @@ describe('Commands', () => {
   beforeEach(() => {
     commands = new Commands(
       new Beneficiaries(new FakeBeneficiariesDataRepo(), new FakeTwilio()),
-      new DeployedShelter(
+      new Shelter(
         Keypair.random(),
         new Rpc(new FakeServer()),
         new FakeClient({}),

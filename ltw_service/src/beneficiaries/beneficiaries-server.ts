@@ -12,7 +12,7 @@ import { Sponsor } from './models/sponsor/sponsor';
 import { env } from 'process';
 import dotenv from 'dotenv';
 import { Keypair } from '@stellar/stellar-sdk';
-import { DeployedShelter } from '@xcapit/shelter-sdk';
+import { Shelter } from '@xcapit/shelter-sdk';
 import { PhoneNumber } from '../shared/phone-number-info/phone-number';
 import { AidTTL } from './models/aid-ttl/aid-ttl';
 import { WeiOf } from './models/wei-of/wei-of';
@@ -24,7 +24,7 @@ export class BeneficiariesServer extends ServerSystem {
     private _aServer: Express,
     private _beneficiaries: Beneficiaries,
     private _users: Users,
-    private _shelter: DeployedShelter,
+    private _shelter: Shelter,
   ) {
     super();
   }

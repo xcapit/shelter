@@ -7,7 +7,7 @@ import { Users } from './users/models/users/users';
 import { Beneficiaries } from './beneficiaries/models/beneficiaries/beneficiaries';
 import { Orders } from './orders/models/orders/orders';
 import { LowTechServer } from './low-tech-server';
-import { DeployedShelter, Rpc, ShelterClient } from '@xcapit/shelter-sdk';
+import { Shelter, Rpc, ShelterClient } from '@xcapit/shelter-sdk';
 import { Keypair, rpc as stellarRpc } from '@stellar/stellar-sdk';
 
 dotenv.config();
@@ -29,7 +29,7 @@ connectDb().then(async () => {
     new Beneficiaries(),
     new Orders(),
     new Users(),
-    new DeployedShelter(
+    new Shelter(
       stewardKeypair,
       rpc,
       new ShelterClient({
