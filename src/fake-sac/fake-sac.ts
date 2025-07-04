@@ -1,6 +1,9 @@
-import {contract} from "@stellar/stellar-sdk";
+import { contract } from "@stellar/stellar-sdk";
 
 export class FakeSAC {
+  options = {
+    contractId: 'aoeuueoa'
+  };
   async transfer({
     from,
     to,
@@ -11,7 +14,7 @@ export class FakeSAC {
     amount: bigint;
   }): Promise<contract.AssembledTransaction<null>> {
     return {
-      built: { sign: () => {} },
+      built: { sign: () => { } },
     } as unknown as contract.AssembledTransaction<null>;
   }
 }

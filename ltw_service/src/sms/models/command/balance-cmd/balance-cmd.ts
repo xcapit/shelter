@@ -4,7 +4,7 @@ import { Tokens } from '../../../../beneficiaries/models/tokens/tokens';
 import { AmountOf } from '../../../../beneficiaries/models/amount-of/amount-of';
 import { Command } from '../command.interface';
 import { TranslatedKey } from '../../../../system/multi-language/translated-key/translated-key';
-import { DeployedShelter } from '@xcapit/shelter-sdk';
+import { Shelter } from '@xcapit/shelter-sdk';
 
 
 export class BalanceCmd implements Command {
@@ -14,7 +14,7 @@ export class BalanceCmd implements Command {
     private _params: string[],
     private _aPhoneNumber: string,
     private _beneficiaries: Beneficiaries,
-    private _shelter: DeployedShelter,
+    private _shelter: Shelter,
   ) { }
 
   destinationNumber(): string {

@@ -2,7 +2,7 @@ import { Keypair } from '@stellar/stellar-sdk';
 import { Beneficiaries } from '../../../../beneficiaries/models/beneficiaries/beneficiaries';
 import { TranslatedKey } from '../../../../system/multi-language/translated-key/translated-key';
 import { Command } from '../command.interface';
-import { Aid, DeployedShelter, Pass, Rpc } from '@xcapit/shelter-sdk';
+import { Aid, Shelter, Pass, Rpc } from '@xcapit/shelter-sdk';
 import { SecretOf } from '../../../../beneficiaries/models/secret-of/secret-of';
 import { BalanceOf } from '../../../../shared/balance-of/balance-of';
 import { Tokens } from '../../../../beneficiaries/models/tokens/tokens';
@@ -15,10 +15,10 @@ export class TransferCmd implements Command {
     private _phoneNumber: string,
     private _params: string[],
     private _beneficiaries: Beneficiaries,
-    private _shelter: DeployedShelter,
+    private _shelter: Shelter,
     private _aid: Aid,
     private _rpc: Rpc,
-  ) {}
+  ) { }
 
   destinationNumber(): string {
     return this._phoneNumber;
@@ -26,7 +26,6 @@ export class TransferCmd implements Command {
 
   private async _execute(): Promise<void> {
     await this._aid.transfer(
-      this._shelter,
       this._params[2],
       new WeiOf(this._params[1], await this._token()).value(),
       new Pass(

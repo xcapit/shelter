@@ -1,5 +1,5 @@
+export { Foundry } from "./foundry/foundry";
 export { Shelter } from "./shelter/shelter";
-export { DeployedShelter } from "./deployed-shelter/deployed-shelter";
 export { Aid } from "./aid/aid";
 export { Rpc } from "./rpc/rpc";
 export { DefaultPass as Pass } from "./pass/default/default-pass";

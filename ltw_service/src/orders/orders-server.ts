@@ -19,7 +19,7 @@ import { StatusMsg } from '../metrics/models/status-msg/status-msg';
 import { OnlyRoles } from '../system/only-roles/only-roles';
 import {
   Aid,
-  DeployedShelter,
+  Shelter,
   Pass,
   Rpc,
   SAC,
@@ -39,7 +39,7 @@ export class OrdersServer extends ServerSystem {
     private _orders: Orders,
     private _beneficiaries: Beneficiaries,
     private _users: Users,
-    private _shelter: DeployedShelter,
+    private _shelter: Shelter,
   ) {
     super();
   }
@@ -141,9 +141,11 @@ export class OrdersServer extends ServerSystem {
             rpcUrl: rpc.url(),
             publicKey: sponsorKeypair.publicKey(),
           });
+          const recipient = Keypair.fromSecret(
+            await new SecretOf(beneficiary.phoneNumber()).value(),
+          );
 
-          await new Aid(sponsorKeypair, sac, rpc).transfer(
-            this._shelter,
+          await new Aid(recipient, sponsorKeypair, sac, this._shelter, rpc).transfer(
             order.merchAddress(),
             new WeiOf(order.amount(), token).value(),
             new Pass(

@@ -9,7 +9,7 @@ import { OrdersServer } from "./orders/orders-server";
 import { MultiLanguage } from "./system/multi-language/multi-language";
 import i18next from "i18next";
 import { MetricsServer } from "./metrics/metrics-server";
-import { DeployedShelter } from "@xcapit/shelter-sdk";
+import { Shelter } from "@xcapit/shelter-sdk";
 
 export class LowTechServer {
 
@@ -18,7 +18,7 @@ export class LowTechServer {
     private _beneficiaries: Beneficiaries,
     private _orders: Orders,
     private _users: Users,
-    private _shelter: DeployedShelter
+    private _shelter: Shelter
   ) { }
 
   register() {

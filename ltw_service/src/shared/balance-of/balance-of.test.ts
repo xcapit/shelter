@@ -2,13 +2,13 @@ import { rawTokenData } from '../../fixtures/raw-tokens-data';
 import { recipient } from '../../fixtures/raw-wallet-data';
 import { DefaultToken } from '../../beneficiaries/models/token/default-token/default-token';
 import { BalanceOf } from './balance-of';
-import { DeployedShelter, FakeClient, FakeServer, Rpc } from '@xcapit/shelter-sdk';
+import { Shelter, FakeClient, FakeServer, Rpc } from '@xcapit/shelter-sdk';
 import { Keypair } from '@stellar/stellar-sdk';
 
 describe('BalanceOf', () => {
   const aToken = new DefaultToken(rawTokenData);
   let balance: BalanceOf;
-  const shelter = new DeployedShelter(
+  const shelter = new Shelter(
     Keypair.random(),
     new Rpc(new FakeServer()),
     new FakeClient({})

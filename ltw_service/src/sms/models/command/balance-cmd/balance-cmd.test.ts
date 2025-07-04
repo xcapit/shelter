@@ -6,7 +6,7 @@ import { MultiLanguage } from '../../../../system/multi-language/multi-language'
 import i18next from 'i18next';
 import { FakeTwilio } from '../../fake-twilio/fake-twilio';
 import {
-  DeployedShelter,
+  Shelter,
   FakeClient,
   FakeServer,
   Rpc,
@@ -17,12 +17,12 @@ describe('BalanceCmd', () => {
   let balanceCmd: Command;
   const tokenSymbol = 'BO1';
   const aTestPhoneNumber = '1234';
-  const shelter = new DeployedShelter(
+  const shelter = new Shelter(
     Keypair.random(),
     new Rpc(new FakeServer()),
     new FakeClient({}),
   );
-  
+
   beforeAll(() => {
     new MultiLanguage(i18next).init();
   });

@@ -14,6 +14,14 @@ export const contractAddressTxReponse = {
   status: rpc.Api.GetTransactionStatus.SUCCESS,
 };
 
+export const pollTxReponseSuccess = {
+  status: rpc.Api.GetTransactionStatus.SUCCESS,
+};
+
+export const pollTxReponseNotFound = {
+  status: rpc.Api.GetTransactionStatus.NOT_FOUND,
+};
+
 export class FakeServer {
   public serverURL = "aServerUrl";
   constructor(private readonly _pollTransactionReponse: any = {}) { }
