@@ -1,8 +1,12 @@
 import { Client, Keypair } from "shelter-sdk";
+import type { Client as SAC } from "sac-sdk";
 import type { FakeClient } from "../fake-client/fake-client";
 import { Transaction } from "../transaction/transaction";
 import type { Rpc } from "../rpc/rpc";
 import { Gate } from "../gate/gate";
+import { Aid } from "../aid/aid";
+import type { FakeSAC } from "../fake-sac/fake-sac";
+import type { Pass } from "../pass/pass.interface";
 
 export class Shelter {
   constructor(
@@ -53,6 +57,15 @@ export class Shelter {
     return (await this._client.aid_of({ recipient, token })).result.amount;
   }
 
+  async updateReleaseKey(releaseKey: Buffer): Promise<void> {
+    await this._txOf(
+      await this._client.update_release_key({
+        steward_key: releaseKey,
+      }),
+      'Update Release Key Error'
+    ).result();
+  }
+
   async updateSteward(newSteward: Keypair): Promise<void> {
     await this._txOf(
       await this._client.update_steward({
@@ -64,6 +77,20 @@ export class Shelter {
 
   gate(): Gate {
     return new Gate(this._client, this._steward, this._rpc);
+  }
+
+  async withdraw(sac: SAC | FakeSAC, pass: Pass): Promise<void> {
+    await new Aid(
+      this._steward,
+      this._steward,
+      sac,
+      this,
+      this._rpc
+    ).transfer(
+      this._steward.publicKey(),
+      (await sac.balance({ id: this.id() })).result,
+      pass
+    );
   }
 
   _txOf(aRawTx: any, errorMsg: string): Transaction {

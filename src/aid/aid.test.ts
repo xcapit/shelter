@@ -2,7 +2,7 @@ import { Shelter } from "../shelter/shelter";
 import { Keypair } from "shelter-sdk";
 import { FakeClient } from "../fake-client/fake-client";
 import { FakePass } from "../pass/fake/fake-pass";
-import { FakeServer, pollTxReponseNotFound, pollTxReponseSuccess } from "../fixtures/fixtures";
+import { FakeServer, FakeStellarRpc, pollTxReponseNotFound, pollTxReponseSuccess } from "../fixtures/fixtures";
 import { FakeSAC } from "../fake-sac/fake-sac";
 import { Rpc } from "../rpc/rpc";
 import { Aid } from "./aid";
@@ -11,31 +11,24 @@ describe("Aid", () => {
   const amount = BigInt(123);
   const sponsor = Keypair.random();
   const recipient = Keypair.random();
-  const _rpc = {
-    assembleTransaction: (raw: any, simulation: any) => {
-      return {
-        build: () => ({ sign: () => { } }),
-      };
-    },
-  };
-  const rpc = new Rpc(new FakeServer(), _rpc);
-  const shelter = new Shelter(
+  const rpc = new Rpc(new FakeServer(), new FakeStellarRpc());
+  const deployedShelter = new Shelter(
     Keypair.random(),
     rpc,
     new FakeClient({})
   );
-  const _aidWith = (aResponse: any, aShelter: Shelter = shelter) => (
+  const _aidWith = (aResponse: any, aShelter: Shelter = deployedShelter) => (
     new Aid(
       recipient,
       sponsor,
       new FakeSAC(),
       aShelter,
-      new Rpc(new FakeServer(aResponse), _rpc)
+      new Rpc(new FakeServer(aResponse), new FakeStellarRpc())
     )
   );
 
   test("new", () => {
-    expect(new Aid(recipient, sponsor, new FakeSAC(), shelter, rpc)).toBeTruthy();
+    expect(new Aid(recipient, sponsor, new FakeSAC(), deployedShelter, rpc)).toBeTruthy();
   });
 
   test("transfer", async () => {
@@ -51,27 +44,27 @@ describe("Aid", () => {
   });
 
   test("bound", async () => {
-    const shelter = new Shelter(
+    const deployedShelter = new Shelter(
       Keypair.random(),
-      new Rpc(new FakeServer(pollTxReponseSuccess), _rpc),
+      new Rpc(new FakeServer(pollTxReponseSuccess), new FakeStellarRpc()),
       new FakeClient({})
     );
     const expiration = BigInt(Math.floor(Date.now() / 1000) + 7200);
 
     await expect(
-      _aidWith(pollTxReponseSuccess, shelter).bound(amount, expiration)
+      _aidWith(pollTxReponseSuccess, deployedShelter).bound(amount, expiration)
     ).resolves.toBeUndefined();
   });
 
   test("unbound", async () => {
-    const shelter = new Shelter(
+    const deployedShelter = new Shelter(
       Keypair.random(),
-      new Rpc(new FakeServer(pollTxReponseSuccess), _rpc),
+      new Rpc(new FakeServer(pollTxReponseSuccess), new FakeStellarRpc()),
       new FakeClient({})
     );
 
     await expect(
-      _aidWith(pollTxReponseSuccess, shelter).unbound()
+      _aidWith(pollTxReponseSuccess, deployedShelter).unbound()
     ).resolves.toBeUndefined();
   });
 });

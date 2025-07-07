@@ -4,10 +4,13 @@ import { FakeClient } from "../fake-client/fake-client";
 import {
   contractAddressTxReponse,
   FakeServer,
+  FakeStellarRpc,
   pollTxReponseNotFound,
   pollTxReponseSuccess,
 } from "../fixtures/fixtures";
 import { Rpc } from "../rpc/rpc";
+import { FakeSAC } from "../fake-sac/fake-sac";
+import { FakePass } from "../pass/fake/fake-pass";
 
 describe("Shelter", () => {
   const steward = Keypair.random();
@@ -24,7 +27,7 @@ describe("Shelter", () => {
   const _shelter = (aFakeServer: FakeServer = new FakeServer()) => (
     new Shelter(
       steward,
-      new Rpc(aFakeServer),
+      new Rpc(aFakeServer, new FakeStellarRpc()),
       client
     )
   );
@@ -61,6 +64,14 @@ describe("Shelter", () => {
     ).resolves.toBeUndefined();
   });
 
+  test("update release key", async () => {
+    await expect(
+      _shelter(
+        new FakeServer(pollTxReponseSuccess)
+      ).updateReleaseKey(steward.rawPublicKey())
+    ).resolves.toBeUndefined();
+  });
+
   test("failed boundAid", async () => {
     await expect(
       _shelter(
@@ -84,6 +95,13 @@ describe("Shelter", () => {
         new FakeServer(pollTxReponseSuccess)
       ).boundAid(recipient.rawPublicKey(), tokenContractId, amount, expiration)
     ).resolves.toBeUndefined();
+  });
+
+  test("withdraw", async () => {
+    const shelter = _shelter(new FakeServer(pollTxReponseSuccess));
+    shelter.gate().seal();
+
+    await expect(shelter.withdraw(new FakeSAC(), new FakePass())).resolves.toBeUndefined();
   });
 
   test("gate manipulation", async () => {

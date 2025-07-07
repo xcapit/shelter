@@ -22,6 +22,14 @@ export const pollTxReponseNotFound = {
   status: rpc.Api.GetTransactionStatus.NOT_FOUND,
 };
 
+export class FakeStellarRpc {
+  assembleTransaction(raw: any, simulation: any) {
+    return {
+      build: () => ({ sign: () => { } }),
+    };
+  }
+}
+
 export class FakeServer {
   public serverURL = "aServerUrl";
   constructor(private readonly _pollTransactionReponse: any = {}) { }
