@@ -4,15 +4,11 @@ on:
   push:
     branches: [main]
     paths:
-      - "src/**"
-      - "package.json"
-      - "package-lock.json"
+      - "sdk/**"
   pull_request:
     branches: [main]
     paths:
-      - "src/**"
-      - "package.json"
-      - "package-lock.json"
+      - "sdk/**"
   workflow_dispatch:
 
 concurrency:
@@ -32,13 +28,17 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "23.11.0"
-          cache: 'npm'
+          cache: "npm"
+          cache-dependency-path: "./sdk/package-lock.json"
 
       - name: Install dependencies
+        working-directory: ./sdk
         run: npm ci
 
       - name: Build
+        working-directory: ./sdk
         run: npm run build
 
       - name: Run tests
+        working-directory: ./sdk
         run: npm run test
