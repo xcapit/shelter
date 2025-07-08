@@ -20,8 +20,8 @@ describe("Shelter", () => {
   const recipient = Keypair.fromPublicKey(
     "GASL6XDOK2TO6SCFTXFN2HQDAONLBID2GKX5TYBTHOWA7ZU7VRFZNHGM"
   );
-  const tokenContractId =
-    "CCQK3OJ5T4A5B4SDKQWH7PQKC5HMUZHIGUWF2INTKDQB32F3YPEW7L27";
+  const shelterId = "CCQK3OJ5T4A5B4SDKQWH7PQKC5HMUZHIGUWF2INTKDQB32F3YPEW7L27";
+  const tokenContractId = "CCQK3OJ5T4A5B4SDKQWH7PQKC5HMUZHIGUWF2INTKDQB32F3YPEW7L27";
   const expiration = BigInt(Math.floor(Date.now() / 1000) + 7200);
   const amount = BigInt(1);
   const _shelter = (aFakeServer: FakeServer = new FakeServer()) => (
@@ -34,6 +34,10 @@ describe("Shelter", () => {
 
   test("new", () => {
     expect(new Shelter(steward, fakeRpc, client)).toBeTruthy();
+  });
+
+  test("new connected", () => {
+    expect(Shelter.connected(steward, fakeRpc, shelterId)).toBeTruthy();
   });
 
   test("id", () => {
