@@ -15,6 +15,19 @@ export class Shelter {
     private readonly _client: Client | FakeClient
   ) { }
 
+  static async connected(aSteward: Keypair, aRpc: Rpc, aShelterId: string) {
+    return new this(
+      aSteward,
+      aRpc,
+      new Client({
+        contractId: aShelterId,
+        networkPassphrase: await aRpc.network(),
+        rpcUrl: aRpc.url(),
+        publicKey: aSteward.publicKey(),
+      })
+    );
+  }
+
   async stewardId(): Promise<string> {
     return (await this._client.steward()).result;
   }
