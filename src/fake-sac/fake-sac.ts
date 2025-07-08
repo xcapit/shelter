@@ -4,6 +4,7 @@ export class FakeSAC {
   options = {
     contractId: 'aoeuueoa'
   };
+
   async transfer({
     from,
     to,
@@ -16,5 +17,9 @@ export class FakeSAC {
     return {
       built: { sign: () => { } },
     } as unknown as contract.AssembledTransaction<null>;
+  }
+
+  async balance(options: any): Promise<any> {
+    return { result: BigInt(1) };
   }
 }

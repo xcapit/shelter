@@ -1,4 +1,4 @@
-import { Keypair, Networks, rpc } from "@stellar/stellar-sdk";
+import { Asset, Keypair, Networks, Operation, rpc, TransactionBuilder } from "@stellar/stellar-sdk";
 import { DefaultPass } from "../../pass/default/default-pass";
 import { Transaction } from "../../transaction/transaction";
 import { walletSdk } from "@stellar/typescript-wallet-sdk";
@@ -18,6 +18,7 @@ describe("Shelter", () => {
     "CBN2MBW4AFEHXMLE5ADTAWFOQKEHBYTVO62AZ7DTQONACYE26VFPHKVA";
   const expiration = BigInt(Math.floor(Date.now() / 1000) + 7200);
   const amount = BigInt(1);
+  const amountToFund = BigInt(1000);
   const tokenOwnerSecret =
     "SACQ5FHZMXD67HMT43HIYDSYQN7R3J7SXGOSBQ53EJ3WMH5DVHVRIPWC";
   const tokenOwnerKeypair = Keypair.fromSecret(tokenOwnerSecret);
@@ -25,13 +26,19 @@ describe("Shelter", () => {
     "SAG4OTVSVXNJH3BY2CMQSG25W2X7UGJWUYGELVHC3KEKXDZWSZRZEZDR"
   );
   const merch = "GDJ3AUXRFGZCPQVDSP67XZFFOXK4I36LDYEC4GRGFADDXKO6AFHQEJK7";
+  const asset = new Asset(
+    'BO1',
+    tokenOwnerKeypair.publicKey()
+  );
   let steward: Keypair;
   let foundry: Foundry;
   let shelter: Shelter;
   let sac: SAC;
 
+  const _stellar = () => walletSdk.Wallet.TestNet().stellar();
+
   const _randomKeyPair = async (): Promise<Keypair> => {
-    const stellar = walletSdk.Wallet.TestNet().stellar();
+    const stellar = _stellar();
     const account = stellar.account().createKeypair();
     await stellar.fundTestnetAccount(account.publicKey);
     return Keypair.fromSecret(account.secretKey);
@@ -50,7 +57,7 @@ describe("Shelter", () => {
     const mintTx = new Transaction(
       await sac.mint({
         to: aShelter.id(),
-        amount: BigInt(1000),
+        amount: amountToFund,
       }),
       tokenOwnerKeypair,
       defaultRpc
@@ -77,7 +84,6 @@ describe("Shelter", () => {
     await expect(shelter.gate().open()).rejects.toThrow();
     await expect(shelter.gate().guard()).rejects.toThrow();
   });
-
 
   test("update steward", async () => {
     const newSteward = Keypair.random();
@@ -122,6 +128,33 @@ describe("Shelter", () => {
       await expect(shelter.aidOf(
         recipientKeypair.rawPublicKey(), sac.options.contractId)
       ).resolves.toEqual(BigInt(0));
+    });
+
+    test("steward withdraw", async () => {
+      await shelter.updateReleaseKey(steward.rawPublicKey());
+      await shelter.gate().seal();
+      const account = await _stellar().server.loadAccount(steward.publicKey());
+      let transaction = new TransactionBuilder(account, {
+        networkPassphrase: Networks.TESTNET,
+        fee: '100000',
+      }).addOperation(
+        Operation.changeTrust({
+          asset: asset,
+        })
+      ).setTimeout(180).build();
+      transaction.sign(steward);
+      await _stellar().server.submitTransaction(transaction);
+
+      expect((await sac.balance({ id: shelter.id() })).result).toEqual(amountToFund);
+      expect((await sac.balance({ id: steward.publicKey() })).result).toEqual(BigInt(0));
+      await expect(
+        shelter.withdraw(
+          _sac(steward.publicKey()),
+          new DefaultPass(steward, shelter.id(), defaultRpc)
+        )
+      ).resolves.toBeUndefined();
+      expect((await sac.balance({ id: shelter.id() })).result).toEqual(BigInt(0));
+      expect((await sac.balance({ id: steward.publicKey() })).result).toEqual(amountToFund);
     });
 
     test("recipient transfer from shelter", async () => {

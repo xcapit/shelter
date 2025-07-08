@@ -51,6 +51,10 @@ export class FakeClient {
     return this._fakeAssembledTx();
   }
 
+  async update_release_key(options: any) {
+    return this._fakeAssembledTx();
+  }
+
   async guard(options?: any) {
     return this._fakeAssembledTx();
   }
