@@ -1,0 +1,52 @@
+name: LTW Service Tests
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "ltw_service/**"
+  pull_request:
+    branches: [main]
+    paths:
+      - "ltw_service/**"
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Run LTW Service Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "23.11.0"
+          cache: "npm"
+          cache-dependency-path: "./ltw_service/package-lock.json"
+
+      - name: Install SDK dependencies
+        working-directory: ./sdk
+        run: npm ci
+
+      - name: Build SDK
+        working-directory: ./sdk
+        run: npm run build
+
+      - name: Install dependencies
+        working-directory: ./ltw_service
+        run: npm ci
+
+      - name: Build
+        working-directory: ./ltw_service
+        run: npm run build
+
+      - name: Run tests
+        working-directory: ./ltw_service
+        run: npm run test:ci
