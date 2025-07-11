@@ -7,8 +7,17 @@ WORKDIR /usr/src/app
 # Deps to support multiple architectures (x86_64/arm64)
 RUN apk add --no-cache python3 make g++
 
-COPY . .
+# Copy both sdk and ltw_service from parent context
+COPY ../sdk ./sdk
+COPY ../ltw_service ./ltw_service
 
+# Build SDK first
+WORKDIR /usr/src/app/sdk
+RUN npm ci
+RUN npm run build
+
+# Then install and build the service
+WORKDIR /usr/src/app/ltw_service
 RUN npm install
 
 EXPOSE 3000

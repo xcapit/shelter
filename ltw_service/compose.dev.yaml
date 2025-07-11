@@ -1,12 +1,12 @@
 services:
   app:
     build:
-      context: .
-      dockerfile: Dockerfile.dev
+      context: ..
+      dockerfile: ltw_service/Dockerfile.dev
     environment:
       - DEBUG=app:*
     volumes:
-      - .:/usr/src/app
+      - .:/usr/src/app/ltw_service
     ports:
       - ${APP_PORT}:3000
     depends_on:
