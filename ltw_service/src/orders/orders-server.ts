@@ -30,6 +30,7 @@ import { env } from 'process';
 import { WeiOf } from '../beneficiaries/models/wei-of/wei-of';
 import { SecretOf } from '../beneficiaries/models/secret-of/secret-of';
 import { Orders } from './models/orders/orders';
+import { Limit } from '../system/limit/limit';
 
 dotenv.config();
 
@@ -189,16 +190,15 @@ export class OrdersServer extends ServerSystem {
   ): Promise<void> {
     await this.executeAction(
       async () => {
-        // TODO:
-        // return await (await this._users.findOneBy(req.username())).ifActiveDo<void>(async () => {
-        //   const orders = await this._orders.findLatestBy(
-        //     (await this._beneficiaries.findOneBy(
-        //       req.params().phoneNumber,
-        //     )).phoneNumber(),
-        //     new Limit(req).toInt()
-        //   );
-        //   res.send(orders.map(order => new BeneficiaryOrderResponse(order).toJSON()));
-        // });
+        return await (await this._users.findOneBy(req.username())).ifActiveDo<void>(async () => {
+          const orders = await this._orders.findLatestBy(
+            (await this._beneficiaries.findOneBy(
+              req.params().phoneNumber,
+            )).phoneNumber(),
+            new Limit(req).toInt()
+          );
+          res.send(orders.map(order => new BeneficiaryOrderResponse(order).toJSON()));
+        });
       },
       res,
       next,
