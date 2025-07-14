@@ -2,7 +2,7 @@ import { Beneficiaries } from "../../../../beneficiaries/models/beneficiaries/be
 import { PhoneNumberUpdate } from "../../../../beneficiaries/models/phone-number-update/phone-number-update.interface";
 import { PhoneNumberUpdates } from "../../../../beneficiaries/models/phone-number-updates/phone-number-updates";
 import { Command } from "../command.interface";
-import {TranslatedKey} from "../../../../system/multi-language/translated-key/translated-key";
+import { TranslatedKey } from "../../../../system/multi-language/translated-key/translated-key";
 
 export class UpdatePhoneNumberConfirmationCmd implements Command {
   private _newPhoneNumber: string;
@@ -12,7 +12,7 @@ export class UpdatePhoneNumberConfirmationCmd implements Command {
     private _params: string[],
     private _beneficiaries: Beneficiaries,
     private _phoneNumberUpdates: PhoneNumberUpdates = new PhoneNumberUpdates()
-  ) {}
+  ) { }
 
   private async _execute() {
     const phoneNumberUpdate: PhoneNumberUpdate =
@@ -22,11 +22,10 @@ export class UpdatePhoneNumberConfirmationCmd implements Command {
       );
     this._newPhoneNumber = phoneNumberUpdate.newPhoneNumber()
 
-    // TODO:
-    // await this._beneficiaries.updatePhoneNumber(
-    //   await this._beneficiaries.findOneBy(this._aPhoneNumber),
-    //   this._newPhoneNumber
-    // );
+    await this._beneficiaries.updatePhoneNumber(
+      await this._beneficiaries.findOneBy(this._aPhoneNumber),
+      this._newPhoneNumber
+    );
 
     await this._phoneNumberUpdates.clearOtp(phoneNumberUpdate);
   }

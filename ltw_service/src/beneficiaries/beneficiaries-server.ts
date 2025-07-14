@@ -16,6 +16,7 @@ import { Shelter } from '@xcapit/shelter-sdk';
 import { PhoneNumber } from '../shared/phone-number-info/phone-number';
 import { AidTTL } from './models/aid-ttl/aid-ttl';
 import { WeiOf } from './models/wei-of/wei-of';
+import { BalanceOf } from '../shared/balance-of/balance-of';
 
 dotenv.config();
 
@@ -99,15 +100,14 @@ export class BeneficiariesServer extends ServerSystem {
   ): Promise<void> {
     await this.executeAction(
       async () => {
-        // TODO:
-        // return await (
-        //   await this._users.findOneBy(req.username())
-        // ).ifActiveDo<string>(async () => {
-        //   await this._beneficiaries.deactivate(
-        //     await this._beneficiaries.findOneBy(req.body().phoneNumber),
-        //   );
-        //   return 'Smart Account deactivate successfully!';
-        // });
+        return await (
+          await this._users.findOneBy(req.username())
+        ).ifActiveDo<string>(async () => {
+          await this._beneficiaries.deactivate(
+            await this._beneficiaries.findOneBy(req.body().phoneNumber),
+          );
+          return 'Smart Account deactivate successfully!';
+        });
       },
       res,
       next,
@@ -121,19 +121,18 @@ export class BeneficiariesServer extends ServerSystem {
   ): Promise<void> {
     await this.executeAction(
       async () => {
-        // TODO:
-        // await (
-        //   await this._users.findOneBy(req.username())
-        // ).ifActiveDo<string>(async () => {
-        //   const beneficiaryBalance = await new BalanceOf(
-        //     await new Tokens().oneBy(req.params().token),
-        //     (
-        //       await this._beneficiaries.findOneBy(req.params().phoneNumber)
-        //     ).address(),
-        //   ).toJson()
-        //   res.json(beneficiaryBalance);
-        //   return 'Balance retrieved successfully'
-        // });
+        await (
+          await this._users.findOneBy(req.username())
+        ).ifActiveDo<string>(async () => {
+          res.json(await new BalanceOf(
+            await new Tokens().oneBy(req.params().token),
+            (
+              await this._beneficiaries.findOneBy(req.params().phoneNumber)
+            ).keypair(),
+            this._shelter
+          ).toJson());
+          return 'Balance retrieved successfully'
+        });
       },
       res,
       next,

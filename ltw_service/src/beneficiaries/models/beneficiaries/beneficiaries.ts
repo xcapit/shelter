@@ -14,77 +14,6 @@ dotenv.config();
 
 const { TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN } = process.env;
 
-// TODO
-// export class Beneficiaries {
-//   constructor(
-//     private _aDataRepo: BeneficiariesDataRepo = new DefaultBeneficiariesDataRepo(),
-//     private _client: twilio.Twilio | FakeTwilio = twilio(
-//       TWILIO_ACCOUNT_SID,
-//       TWILIO_AUTH_TOKEN,
-//     ),
-//     private _privateKeySharding = new PrivateKeySharding(),
-//   ) {}
-//
-//   async save(
-//     rawBeneficiaryData: any,
-//     aSmartAccount: SmartAccount,
-//   ): Promise<void> {
-//     await this._aDataRepo.save({
-//       phoneNumber: await new PhoneNumber(
-//         rawBeneficiaryData.phoneNumber,
-//         this._client,
-//       ).value(),
-//       address: await aSmartAccount.address(),
-//       ownerAddress: await aSmartAccount.ownerAddress(),
-//       ownerSecrets: await this._privateKeySharding.split(
-//         await aSmartAccount.ownerPrivateKey(),
-//       ),
-//     });
-//   }
-//
-//   async findOneBy(aPhoneNumber: string): Promise<Beneficiary> {
-//     const rawBeneficiaryData = await this._aDataRepo.findOneBy(aPhoneNumber);
-//     return rawBeneficiaryData
-//       ? new DefaultBeneficiary(rawBeneficiaryData)
-//       : new NullBeneficiary();
-//   }
-//
-//   async findPrivateKeyBy(aPhoneNumber: string): Promise<string> {
-//     return await this._privateKeySharding.combine(
-//       (await this._aDataRepo.findSecretsBy(aPhoneNumber)).ownerSecrets,
-//     );
-//   }
-//
-//   async updatePhoneNumber(
-//     beneficiary: Beneficiary,
-//     aPhoneNumber: string,
-//   ): Promise<any> {
-//     return this._aDataRepo.updatePhoneNumber(beneficiary, aPhoneNumber);
-//   }
-//
-//   async ensurePhoneInfo(beneficiary: Beneficiary): Promise<Beneficiary> {
-//     if (beneficiary.countryCode() && beneficiary.networkProvider()) {
-//       return beneficiary;
-//     }
-//     const phoneNumber = new PhoneNumber(
-//       beneficiary.phoneNumber(),
-//       this._client,
-//       beneficiary.countryCode(),
-//       beneficiary.networkProvider(),
-//     );
-//     return new DefaultBeneficiary(
-//       await this._aDataRepo.update(beneficiary, {
-//         countryCode: await phoneNumber.countryCode(),
-//         networkProvider: await phoneNumber.networkProvider(),
-//       }),
-//     );
-//   }
-//
-//   async deactivate(aBeneficiary: Beneficiary): Promise<any> {
-//     return this._aDataRepo.update(aBeneficiary, { active: false });
-//   }
-// }
-//
 export class Beneficiaries {
   constructor(
     private _aDataRepo: BeneficiariesDataRepo = new DefaultBeneficiariesDataRepo(),
@@ -117,5 +46,16 @@ export class Beneficiaries {
 
   async findPrivateKeyBy(aPhoneNumber: string): Promise<string> {
     return (await this._aDataRepo.findSecretBy(aPhoneNumber)).secret;
+  }
+
+  async updatePhoneNumber(
+    beneficiary: Beneficiary,
+    aPhoneNumber: string,
+  ): Promise<any> {
+    return this._aDataRepo.updatePhoneNumber(beneficiary, aPhoneNumber);
+  }
+
+  async deactivate(aBeneficiary: Beneficiary): Promise<any> {
+    return this._aDataRepo.update(aBeneficiary, { active: false });
   }
 }
