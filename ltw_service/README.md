@@ -1,17 +1,78 @@
-[![Coverage Status](https://coveralls.io/repos/gitlab/xcapit-foss/low-tech-wallet/backend-api/badge.svg?branch=develop)](https://coveralls.io/gitlab/xcapit-foss/low-tech-wallet/backend-api?branch=develop)
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/106d85468cd0410eb25212c810112bf6)](https://app.codacy.com/gl/xcapit-foss/backend-api/dashboard?utm_source=gl&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
+# LTW Service
 
-# Humanitarian SMS Wallet
+SMS backend service for managing bound aids in Shelter smart contracts.
 
-Welcome to our Humanitarian SMS Wallet application! This project empowers charitable organizations to send funds using only the phone numbers of refugees or individuals in extreme need. Developed in collaboration with UNICEF, this wallet provides a lifeline for beneficiaries to access essential merchandise using cryptocurrencies.
+## Quick Start
 
-## Community
+### Development
 
-- [Discord](https://discord.gg/AnGXcZ8P)
-- [Project Charter](https://xcapit-foss.gitlab.io/low-tech-wallet/docs/docs/project_charter)
-- [Code of Conduct](https://xcapit-foss.gitlab.io/low-tech-wallet/docs/docs/CODE_OF_CONDUCT)
-- [Contribution Guideline](https://xcapit-foss.gitlab.io/low-tech-wallet/docs/docs/contributions_guidelines)
+```bash
+make devup
+```
 
-## Getting Started
+### Production
 
-[Getting started](https://xcapit-foss.gitlab.io/low-tech-wallet/docs/docs/backend-api/getting_started/)
+```bash
+make produp
+```
+
+## Environment Setup
+
+Create a `.env` file with:
+
+```env
+# APP
+JWT_SECRET=your_jwt_secret_key
+JWT_EXPIRATION_TIME=24h
+APP_PORT=3000
+PRODUCTION=0
+TTL_AS_MINUTES=60
+ENABLE_BACKDOOR_CMD=0
+
+# MULTILANGUAGE
+LANGUAGE=en
+PRELOAD_LANGUAGES=en,es,fr
+
+# Twilio
+TWILIO_ACCOUNT_SID=your_twilio_sid
+TWILIO_AUTH_TOKEN=your_twilio_token
+TWILIO_WEBHOOK_URL=https://your-domain.com/sms/webhook
+MESSAGING_SERVICE_SID=your_messaging_service_sid
+
+# Database
+DB_USER=your_db_user
+DB_PASS=your_db_password
+DB_NAME=ltw_db
+DB_PORT=27017
+
+MONGO_EXPRESS_USER=admin
+MONGO_EXPRESS_PASS=your_mongo_express_password
+
+# Stellar
+SPONSOR_SECRET=your_sponsor_stellar_keypair_secret
+STEWARD_SECRET=your_steward_stellar_keypair_secret
+SHELTER_ID=your_shelter_contract_id
+STELLAR_RPC=https://soroban-testnet.stellar.org
+```
+
+## API Endpoints
+
+- `/api/users/*` - User management
+- `/api/beneficiaries/*` - Beneficiary operations
+- `/api/orders/*` - Aid order processing
+- `/sms/*` - SMS handling for aid requests
+- `/status` - Health check
+
+## Tech Stack
+
+- Node.js + Express + TypeScript
+- MongoDB (via FerretDB)
+- Stellar Soroban (Shelter contracts)
+- Twilio SMS service
+
+## Commands
+
+- `make devup` - Start development environment
+- `make produp` - Start production environment
+- `make stopall` - Stop all services
+- `make logsapp` - View application logs
