@@ -8,8 +8,8 @@ WORKDIR /usr/src/app
 RUN apk add --no-cache python3 make g++
 
 # Copy both sdk and ltw_service from parent context
-COPY ../sdk ./sdk
-COPY ../ltw_service ./ltw_service
+COPY sdk ./sdk
+COPY ltw_service ./ltw_service
 
 # Build SDK first
 WORKDIR /usr/src/app/sdk

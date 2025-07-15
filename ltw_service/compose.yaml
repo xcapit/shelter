@@ -1,7 +1,8 @@
 services:
   app:
     build:
-      context: .
+      context: ..
+      dockerfile: ltw_service/Dockerfile
     volumes:
       - ./.env:/usr/src/app/.env
     environment:
