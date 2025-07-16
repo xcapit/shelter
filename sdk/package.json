@@ -1,7 +1,7 @@
 {
   "name": "@xcapit/shelter-sdk",
   "version": "1.0.0",
-  "description": "",
+  "description": "SDK for Shelter smart contracts on Stellar",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "type": "module",
@@ -15,13 +15,28 @@
     "coverage": "npm run test:base -- --coverage",
     "coverage:all": "npm run test:base -- --config jest.config.all.js --coverage"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "stellar",
+    "soroban",
+    "smart-contracts",
+    "shelter",
+    "xcapit"
+  ],
+  "author": "Xcapit Team",
   "license": "AGPL-3.0",
   "dependencies": {
     "@stellar/stellar-sdk": "13.0.0",
     "sac-sdk": "./packages/sac-sdk",
     "shelter-sdk": "./packages/shelter-sdk"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/xcapit/shelter.git",
+    "directory": "sdk"
+  },
+  "homepage": "https://github.com/xcapit/shelter",
+  "bugs": {
+    "url": "https://github.com/xcapit/shelter/issues"
   },
   "devDependencies": {
     "@stellar/typescript-wallet-sdk": "^1.9.0",
