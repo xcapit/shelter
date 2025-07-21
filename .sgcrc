@@ -1,6 +1,6 @@
 {
   "body": false,
-  "scope": false,
+  "scope": true,
   "emoji": false,
   "lowercaseTypes": true,
   "addScopeSpace": false,
