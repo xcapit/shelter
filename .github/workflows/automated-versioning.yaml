@@ -1,0 +1,187 @@
+name: Automated Versioning with Semantic Release
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  detect-changes:
+    name: Detect Component Changes
+    runs-on: ubuntu-latest
+    outputs:
+      components: ${{ steps.changes.outputs.components }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Detect changes per component
+        id: changes
+        run: |
+          components=()
+
+          # Get the last tag for each component or use initial commit if no tags exist
+          get_last_tag() {
+            local pattern=$1
+            git describe --tags --abbrev=0 --match="$pattern" 2>/dev/null || git rev-list --max-parents=0 HEAD
+          }
+
+          # Check contracts
+          last_contracts_tag=$(get_last_tag "contracts-v*")
+          if git log --oneline --grep="^feat(contracts)" --grep="^fix(contracts)" --grep="^perf(contracts)" --grep="BREAKING CHANGE.*contracts" "$last_contracts_tag..HEAD" | grep -q .; then
+            components+=("contracts")
+          fi
+
+          # Check SDK
+          last_sdk_tag=$(get_last_tag "sdk-v*")
+          if git log --oneline --grep="^feat(sdk)" --grep="^fix(sdk)" --grep="^perf(sdk)" --grep="BREAKING CHANGE.*sdk" "$last_sdk_tag..HEAD" | grep -q .; then
+            components+=("sdk")
+          fi
+
+          # Check LTW Service
+          last_ltw_tag=$(get_last_tag "ltw_service-v*")
+          if git log --oneline --grep="^feat(ltw_service)" --grep="^fix(ltw_service)" --grep="^perf(ltw_service)" --grep="BREAKING CHANGE.*ltw_service" "$last_ltw_tag..HEAD" | grep -q .; then
+            components+=("ltw_service")
+          fi
+
+          # Convert to JSON array
+          if [ ${#components[@]} -eq 0 ]; then
+            echo "components=[]" >> $GITHUB_OUTPUT
+          else
+            printf -v joined '"%s",' "${components[@]}"
+            echo "components=[${joined%,}]" >> $GITHUB_OUTPUT
+          fi
+
+          echo "Detected components for release: ${components[*]}"
+
+  release:
+    name: Release Components
+    runs-on: ubuntu-latest
+    needs: detect-changes
+    if: needs.detect-changes.outputs.components != '[]'
+    timeout-minutes: 15
+    strategy:
+      matrix:
+        component: ${{ fromJson(needs.detect-changes.outputs.components) }}
+      # Run sequentially to avoid git conflicts
+      max-parallel: 1
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          # Use a PAT with appropriate permissions if needed
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "23.11.0"
+          cache: 'npm'
+
+      - name: Install semantic-release and plugins
+        run: |
+          npm install --no-save \
+            semantic-release \
+            @semantic-release/changelog \
+            @semantic-release/git \
+            @semantic-release/exec \
+            conventional-changelog-conventionalcommits
+
+      - name: Configure Git
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+
+      - name: Set component configuration
+        id: config
+        run: |
+          case "${{ matrix.component }}" in
+            "contracts")
+              echo "tag_format=contracts-v\${version}" >> $GITHUB_OUTPUT
+              echo "version_file=contracts/shelter/Cargo.toml" >> $GITHUB_OUTPUT
+              echo "changelog_file=contracts/CHANGELOG.md" >> $GITHUB_OUTPUT
+              echo "version_pattern=s/^version = \"[^\"]*\"/version = \"\${nextRelease.version}\"/" >> $GITHUB_OUTPUT
+              ;;
+            "sdk")
+              echo "tag_format=sdk-v\${version}" >> $GITHUB_OUTPUT
+              echo "version_file=sdk/package.json" >> $GITHUB_OUTPUT
+              echo "changelog_file=sdk/CHANGELOG.md" >> $GITHUB_OUTPUT
+              echo "version_pattern=s/\"version\": \"[^\"]*\"/\"version\": \"\${nextRelease.version}\"/" >> $GITHUB_OUTPUT
+              ;;
+            "ltw_service")
+              echo "tag_format=ltw_service-v\${version}" >> $GITHUB_OUTPUT
+              echo "version_file=ltw_service/package.json" >> $GITHUB_OUTPUT
+              echo "changelog_file=ltw_service/CHANGELOG.md" >> $GITHUB_OUTPUT
+              echo "version_pattern=s/\"version\": \"[^\"]*\"/\"version\": \"\${nextRelease.version}\"/" >> $GITHUB_OUTPUT
+              ;;
+          esac
+
+      - name: Verify version file exists
+        run: |
+          if [ ! -f "${{ steps.config.outputs.version_file }}" ]; then
+            echo "Error: Version file ${{ steps.config.outputs.version_file }} not found"
+            exit 1
+          fi
+
+      - name: Create semantic-release config
+        run: |
+          cat > .releaserc.json << 'EOF'
+          {
+            "tagFormat": "${{ steps.config.outputs.tag_format }}",
+            "branches": ["main"],
+            "plugins": [
+              ["@semantic-release/commit-analyzer", {
+                "preset": "conventionalcommits",
+                "releaseRules": [
+                  {"type": "feat", "scope": "${{ matrix.component }}", "release": "minor"},
+                  {"type": "fix", "scope": "${{ matrix.component }}", "release": "patch"},
+                  {"type": "perf", "scope": "${{ matrix.component }}", "release": "patch"},
+                  {"breaking": true, "scope": "${{ matrix.component }}", "release": "major"}
+                ],
+                "parserOpts": {
+                  "noteKeywords": ["BREAKING CHANGE", "BREAKING CHANGES"]
+                }
+              }],
+              ["@semantic-release/release-notes-generator", {
+                "preset": "conventionalcommits",
+                "presetConfig": {
+                  "types": [
+                    {"type": "feat", "scope": "${{ matrix.component }}", "section": "Features"},
+                    {"type": "fix", "scope": "${{ matrix.component }}", "section": "Bug Fixes"},
+                    {"type": "perf", "scope": "${{ matrix.component }}", "section": "Performance Improvements"}
+                  ]
+                }
+              }],
+              ["@semantic-release/changelog", {
+                "changelogFile": "${{ steps.config.outputs.changelog_file }}"
+              }],
+              ["@semantic-release/exec", {
+                "prepareCmd": "sed -i '${{ steps.config.outputs.version_pattern }}' ${{ steps.config.outputs.version_file }}"
+              }],
+              ["@semantic-release/git", {
+                "assets": ["${{ steps.config.outputs.version_file }}", "${{ steps.config.outputs.changelog_file }}"],
+                "message": "chore(${{ matrix.component }}): release v${nextRelease.version}\n\n${nextRelease.notes}"
+              }],
+              "@semantic-release/github"
+            ]
+          }
+          EOF
+
+      - name: Debug configuration
+        run: |
+          echo "Component: ${{ matrix.component }}"
+          echo "Tag format: ${{ steps.config.outputs.tag_format }}"
+          echo "Version file: ${{ steps.config.outputs.version_file }}"
+          echo "Changelog file: ${{ steps.config.outputs.changelog_file }}"
+          cat .releaserc.json
+
+      - name: Run semantic-release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npx semantic-release

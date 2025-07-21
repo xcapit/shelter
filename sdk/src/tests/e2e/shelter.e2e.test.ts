@@ -143,7 +143,7 @@ describe("Shelter", () => {
         })
       ).setTimeout(180).build();
       transaction.sign(steward);
-      await _stellar().server.submitTransaction(transaction);
+      await _stellar().server.submitTransaction(transaction as any);
 
       expect((await sac.balance({ id: shelter.id() })).result).toEqual(amountToFund);
       expect((await sac.balance({ id: steward.publicKey() })).result).toEqual(BigInt(0));

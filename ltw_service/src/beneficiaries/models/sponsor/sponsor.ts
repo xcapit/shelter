@@ -9,7 +9,7 @@ dotenv.config();
 
 export class Sponsor {
   constructor(
-    private readonly _signingKeypair: SigningKeypair,
+    private readonly _signingKeypair: SigningKeypair | any,
     private readonly _stellar = new StellarNetwork(env.PRODUCTION!).value(),
   ) { }
 
@@ -18,12 +18,14 @@ export class Sponsor {
   }
 
   async createAccount() {
-    const sponsoredKeypair = this._stellar.account().createKeypair();
+    const sponsoredKeypair: any = this._stellar.account().createKeypair();
 
     this._validate(
       await this._stellar.submitTransaction(
         sponsoredKeypair.sign(
-          this._signingKeypair.sign(await this._accountCreationTx(sponsoredKeypair)),
+          this._signingKeypair.sign(
+            await this._accountCreationTx(sponsoredKeypair)
+          ),
         ),
       ),
     );
@@ -31,7 +33,7 @@ export class Sponsor {
     return new SponsoredAccount(sponsoredKeypair.keypair);
   }
 
-  private async _accountCreationTx(sponsoredKeypair: SigningKeypair) {
+  private async _accountCreationTx(sponsoredKeypair: SigningKeypair): Promise<any> {
     return (
       await this._stellar.transaction({
         sourceAddress: this._signingKeypair,
