@@ -1,6 +1,7 @@
 import { contract } from "@stellar/stellar-sdk";
 
 export class FakeSAC {
+
   options = {
     contractId: 'aoeuueoa'
   };
