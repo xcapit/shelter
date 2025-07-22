@@ -75,14 +75,12 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          # Use a PAT with appropriate permissions if needed
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "23.11.0"
-          cache: 'npm'
 
       - name: Install semantic-release and plugins
         run: |
@@ -98,87 +96,104 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
 
-      - name: Set component configuration
-        id: config
-        run: |
-          case "${{ matrix.component }}" in
-            "contracts")
-              echo "tag_format=contracts-v\${version}" >> $GITHUB_OUTPUT
-              echo "version_file=contracts/shelter/Cargo.toml" >> $GITHUB_OUTPUT
-              echo "changelog_file=contracts/CHANGELOG.md" >> $GITHUB_OUTPUT
-              echo "version_pattern=s/^version = \"[^\"]*\"/version = \"\${nextRelease.version}\"/" >> $GITHUB_OUTPUT
-              ;;
-            "sdk")
-              echo "tag_format=sdk-v\${version}" >> $GITHUB_OUTPUT
-              echo "version_file=sdk/package.json" >> $GITHUB_OUTPUT
-              echo "changelog_file=sdk/CHANGELOG.md" >> $GITHUB_OUTPUT
-              echo "version_pattern=s/\"version\": \"[^\"]*\"/\"version\": \"\${nextRelease.version}\"/" >> $GITHUB_OUTPUT
-              ;;
-            "ltw_service")
-              echo "tag_format=ltw_service-v\${version}" >> $GITHUB_OUTPUT
-              echo "version_file=ltw_service/package.json" >> $GITHUB_OUTPUT
-              echo "changelog_file=ltw_service/CHANGELOG.md" >> $GITHUB_OUTPUT
-              echo "version_pattern=s/\"version\": \"[^\"]*\"/\"version\": \"\${nextRelease.version}\"/" >> $GITHUB_OUTPUT
-              ;;
-          esac
-
-      - name: Verify version file exists
-        run: |
-          if [ ! -f "${{ steps.config.outputs.version_file }}" ]; then
-            echo "Error: Version file ${{ steps.config.outputs.version_file }} not found"
-            exit 1
-          fi
-
       - name: Create semantic-release config
         run: |
-          cat > .releaserc.json << 'EOF'
-          {
-            "tagFormat": "${{ steps.config.outputs.tag_format }}",
-            "branches": ["main"],
-            "plugins": [
-              ["@semantic-release/commit-analyzer", {
-                "preset": "conventionalcommits",
-                "releaseRules": [
-                  {"type": "feat", "scope": "${{ matrix.component }}", "release": "minor"},
-                  {"type": "fix", "scope": "${{ matrix.component }}", "release": "patch"},
-                  {"type": "perf", "scope": "${{ matrix.component }}", "release": "patch"},
-                  {"breaking": true, "scope": "${{ matrix.component }}", "release": "major"}
+          node -e "
+          const component = '${{ matrix.component }}';
+          
+          const configs = {
+            contracts: {
+              tagFormat: 'contracts-v\${version}',
+              versionFile: 'contracts/shelter/Cargo.toml',
+              changelogFile: 'contracts/CHANGELOG.md',
+              versionPattern: 's/^version = \"[^\"]*\"/version = \"\${nextRelease.version}\"/'
+            },
+            sdk: {
+              tagFormat: 'sdk-v\${version}',
+              versionFile: 'sdk/package.json',
+              changelogFile: 'sdk/CHANGELOG.md',
+              versionPattern: 's/\"version\": \"[^\"]*\"/\"version\": \"\${nextRelease.version}\"/'
+            },
+            ltw_service: {
+              tagFormat: 'ltw_service-v\${version}',
+              versionFile: 'ltw_service/package.json',
+              changelogFile: 'ltw_service/CHANGELOG.md',
+              versionPattern: 's/\"version\": \"[^\"]*\"/\"version\": \"\${nextRelease.version}\"/'
+            }
+          };
+          
+          const config = configs[component];
+          
+          const releaseConfig = {
+            tagFormat: config.tagFormat,
+            branches: ['main'],
+            plugins: [
+              ['@semantic-release/commit-analyzer', {
+                preset: 'conventionalcommits',
+                releaseRules: [
+                  {type: 'feat', scope: component, release: 'minor'},
+                  {type: 'fix', scope: component, release: 'patch'},
+                  {type: 'perf', scope: component, release: 'patch'},
+                  {breaking: true, scope: component, release: 'major'}
                 ],
-                "parserOpts": {
-                  "noteKeywords": ["BREAKING CHANGE", "BREAKING CHANGES"]
+                parserOpts: {
+                  noteKeywords: ['BREAKING CHANGE', 'BREAKING CHANGES']
                 }
               }],
-              ["@semantic-release/release-notes-generator", {
-                "preset": "conventionalcommits",
-                "presetConfig": {
-                  "types": [
-                    {"type": "feat", "scope": "${{ matrix.component }}", "section": "Features"},
-                    {"type": "fix", "scope": "${{ matrix.component }}", "section": "Bug Fixes"},
-                    {"type": "perf", "scope": "${{ matrix.component }}", "section": "Performance Improvements"}
+              ['@semantic-release/release-notes-generator', {
+                preset: 'conventionalcommits',
+                presetConfig: {
+                  types: [
+                    {type: 'feat', scope: component, section: 'Features'},
+                    {type: 'fix', scope: component, section: 'Bug Fixes'},
+                    {type: 'perf', scope: component, section: 'Performance Improvements'}
                   ]
                 }
               }],
-              ["@semantic-release/changelog", {
-                "changelogFile": "${{ steps.config.outputs.changelog_file }}"
+              ['@semantic-release/changelog', {
+                changelogFile: config.changelogFile
               }],
-              ["@semantic-release/exec", {
-                "prepareCmd": "sed -i '${{ steps.config.outputs.version_pattern }}' ${{ steps.config.outputs.version_file }}"
+              ['@semantic-release/exec', {
+                prepareCmd: \`sed -i '\${config.versionPattern}' \${config.versionFile}\`
               }],
-              ["@semantic-release/git", {
-                "assets": ["${{ steps.config.outputs.version_file }}", "${{ steps.config.outputs.changelog_file }}"],
-                "message": "chore(${{ matrix.component }}): release v${nextRelease.version}\n\n${nextRelease.notes}"
+              ['@semantic-release/git', {
+                assets: [config.versionFile, config.changelogFile],
+                message: \`chore(\${component}): release v\\\${nextRelease.version}\\n\\n\\\${nextRelease.notes}\`
               }],
-              "@semantic-release/github"
+              '@semantic-release/github'
             ]
-          }
-          EOF
+          };
+          
+          require('fs').writeFileSync('.releaserc.json', JSON.stringify(releaseConfig, null, 2));
+          console.log('Generated config for component:', component);
+          console.log('Version file:', config.versionFile);
+          console.log('Changelog file:', config.changelogFile);
+          "
+
+      - name: Verify version file exists
+        run: |
+          COMPONENT="${{ matrix.component }}"
+          case "$COMPONENT" in
+            "contracts")
+              VERSION_FILE="contracts/shelter/Cargo.toml"
+              ;;
+            "sdk")
+              VERSION_FILE="sdk/package.json"
+              ;;
+            "ltw_service")
+              VERSION_FILE="ltw_service/package.json"
+              ;;
+          esac
+          
+          if [ ! -f "$VERSION_FILE" ]; then
+            echo "Error: Version file $VERSION_FILE not found"
+            exit 1
+          fi
 
       - name: Debug configuration
         run: |
           echo "Component: ${{ matrix.component }}"
-          echo "Tag format: ${{ steps.config.outputs.tag_format }}"
-          echo "Version file: ${{ steps.config.outputs.version_file }}"
-          echo "Changelog file: ${{ steps.config.outputs.changelog_file }}"
+          echo "Generated .releaserc.json:"
           cat .releaserc.json
 
       - name: Run semantic-release
