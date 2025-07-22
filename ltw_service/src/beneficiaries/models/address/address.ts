@@ -1,6 +1,7 @@
 import { StrKey } from "@stellar/stellar-sdk";
 
 export class Address {
+
   constructor(
     private _anAddressValue: string,
   ) { }
