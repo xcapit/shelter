@@ -196,6 +196,10 @@ jobs:
           echo "Generated .releaserc.json:"
           cat .releaserc.json
 
+      - name: Pull latest changes
+        run: |
+          git pull origin main
+
       - name: Run semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
