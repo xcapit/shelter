@@ -1,6 +1,6 @@
 {
   "name": "@xcapit/shelter-sdk",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "SDK for Shelter smart contracts on Stellar",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

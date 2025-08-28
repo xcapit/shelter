@@ -1,3 +1,9 @@
+## [1.2.0](https://github.com/xcapit/shelter/compare/sdk-v1.1.0...sdk-v1.2.0) (2025-08-28)
+
+### Features
+
+* **sdk:** Update deps and e2e tests ([fc3a93d](https://github.com/xcapit/shelter/commit/fc3a93d98a1523a4a3168dea74792a3a9a6bdc2b))
+
 ## [1.1.0](https://github.com/xcapit/shelter/compare/sdk-v1.0.0...sdk-v1.1.0) (2025-07-22)
 
 ### Features
