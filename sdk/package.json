@@ -25,7 +25,7 @@
   "author": "Xcapit Team",
   "license": "AGPL-3.0",
   "dependencies": {
-    "@stellar/stellar-sdk": "v14.0.0-rc.3",
+    "@stellar/stellar-sdk": "^14.1.0",
     "sac-sdk": "./packages/sac-sdk",
     "shelter-sdk": "./packages/shelter-sdk"
   },

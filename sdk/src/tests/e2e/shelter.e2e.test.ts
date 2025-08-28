@@ -13,19 +13,19 @@ describe("Shelter", () => {
     new rpc.Server("https://soroban-rpc.testnet.stellar.gateway.fm")
   );
   const wasmHash =
-    "50d8a2d89cb783d34c5400a4548b0335f97c3be58aac7ea3b0f8c4b60b001f4a";
+    "0cb9fd56dc35f16f1ffb1f7d82b9e5dd00696c01db48bf8cfcb0fb9c6054bd7a";
   const tokenContractId =
-    "CBN2MBW4AFEHXMLE5ADTAWFOQKEHBYTVO62AZ7DTQONACYE26VFPHKVA";
+    "CBZOEAU4OS7IC3QANZ4KKSMITOJB5U6Z5PUMZBN6VL5IFVDY63KXRKG3";
   const expiration = BigInt(Math.floor(Date.now() / 1000) + 7200);
   const amount = BigInt(1);
   const amountToFund = BigInt(1000);
   const tokenOwnerSecret =
-    "SACQ5FHZMXD67HMT43HIYDSYQN7R3J7SXGOSBQ53EJ3WMH5DVHVRIPWC";
+    "SDFA4RDR443J62KUZMMT5MPNJSFTRPD4EIJY5P6KQ2Q5QOJ6U6P5HUVD";
   const tokenOwnerKeypair = Keypair.fromSecret(tokenOwnerSecret);
   const recipientKeypair = Keypair.fromSecret(
-    "SAG4OTVSVXNJH3BY2CMQSG25W2X7UGJWUYGELVHC3KEKXDZWSZRZEZDR"
+    "SAYRFDQ2RG4C4RPJMDPNHPM7M6P5JZNMSRWHSCTHKIJV2FIBMNW52CZN"
   );
-  const merch = "GDJ3AUXRFGZCPQVDSP67XZFFOXK4I36LDYEC4GRGFADDXKO6AFHQEJK7";
+  const merch = "GDPHJX5IDMYPKCOUGTLA56GGAJWEVGIOO55ATXRUFUSLJTOM4U3TS2NS";
   const asset = new Asset(
     'BO1',
     tokenOwnerKeypair.publicKey()
