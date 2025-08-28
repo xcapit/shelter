@@ -3,7 +3,7 @@ resolver = "2"
 members = ["shelter"]
 
 [workspace.dependencies]
-soroban-sdk = "22.0.7"
+soroban-sdk = "22.0.8"
 
 [profile.release]
 opt-level = "z"
