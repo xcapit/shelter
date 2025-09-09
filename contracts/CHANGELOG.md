@@ -1,3 +1,9 @@
+## [1.0.2](https://github.com/xcapit/shelter/compare/contracts-v1.0.1...contracts-v1.0.2) (2025-09-09)
+
+### Bug Fixes
+
+* **contracts:** Resolve security findings ([96aabae](https://github.com/xcapit/shelter/commit/96aabae5de8bae75dec913cd9f72f2e2e05fa6fb))
+
 ## [1.0.1](https://github.com/xcapit/shelter/compare/contracts-v1.0.0...contracts-v1.0.1) (2025-09-09)
 
 ### Bug Fixes
