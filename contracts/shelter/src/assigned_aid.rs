@@ -21,7 +21,7 @@ impl AssignedAid {
     pub fn add(self, amount: i128) -> Self {
         AssignedAid {
             token: self.token,
-            amount: self.amount + amount,
+            amount: self.amount.checked_add(amount).unwrap(),
         }
     }
 

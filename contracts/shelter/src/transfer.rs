@@ -23,7 +23,7 @@ impl Transfer {
             Ok(_) => {
                 self.aid = self
                     .aid
-                    .bound(-self._amount_to_transfer(), self.aid.expiration());
+                    .bound(-self._safe_amount_to_transfer()?, self.aid.expiration());
                 self.aid.expect_update_on(env);
                 result
             }
@@ -50,5 +50,13 @@ impl Transfer {
             .unwrap()
             .try_into_val(self.contract_context.contract.env())
             .unwrap()
+    }
+
+    fn _safe_amount_to_transfer(&self) -> Result<i128, Error> {
+        let amount = self._amount_to_transfer();
+        match amount > 0 {
+            true => Ok(amount),
+            false => Err(Error::NegativeValueOnTransfer),
+        }
     }
 }
