@@ -121,6 +121,34 @@ fn test_bound_aid() {
 }
 
 #[test]
+fn test_negative_bound_aid() {
+    let env = env_with_mock_auths();
+    let tb = TestBucket::default(env.clone());
+    tb.token.mint(&tb.shelter.address, &tb.amount);
+
+    tb.shelter.bound_aid(
+        &tb.recipient.public_key(),
+        &tb.token.address(),
+        &tb.amount,
+        &tb.expiration,
+    );
+
+    assert_eq!(
+        tb.shelter
+            .try_bound_aid(
+                &tb.recipient.public_key(),
+                &tb.token.address(),
+                &(-tb.amount * 2),
+                &tb.expiration,
+            )
+            .err()
+            .unwrap()
+            .unwrap(),
+        Error::NotEnoughAid.into()
+    )
+}
+
+#[test]
 fn test_bound_multiple_tokens_aid() {
     let test_amount_2 = 130;
     let env = env_with_mock_auths();
