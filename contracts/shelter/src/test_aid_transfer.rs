@@ -32,6 +32,28 @@ fn test_total_aid_transfer() {
 }
 
 #[test]
+fn test_negative_amount() {
+    let a_negative_amount = -3;
+    let env = env_with_mock_auths();
+    let tb = TestBucket::default(env.clone());
+    tb.token.mint(&tb.shelter.address, &tb.amount);
+    tb.shelter.bound_aid(
+        &tb.recipient.public_key(),
+        &tb.token.address(),
+        &tb.amount,
+        &tb.expiration,
+    );
+
+    assert_eq!(
+        tb.try_check_auth(a_negative_amount, &env)
+            .err()
+            .unwrap()
+            .unwrap(),
+        Error::NegativeValueOnTransfer
+    );
+}
+
+#[test]
 fn test_partial_aid_transfer() {
     let env = env_with_mock_auths();
     let tb = TestBucket::default(env.clone());
