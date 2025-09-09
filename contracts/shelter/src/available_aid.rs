@@ -19,7 +19,9 @@ impl AvailableAid<'_> {
     }
 
     pub fn amount(&self) -> i128 {
-        self._balance() - AssignedAid::from(&self.token.env, self.token.address.clone()).amount()
+        self._balance()
+            .checked_sub(AssignedAid::from(&self.token.env, self.token.address.clone()).amount())
+            .unwrap()
     }
 
     fn _balance(&self) -> i128 {

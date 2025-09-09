@@ -1,5 +1,8 @@
+export STELLAR_FEE?=100
 export STELLAR_NETWORK?=testnet
 export STELLAR_ACCOUNT?=steward
+export STELLAR_RPC?=https://soroban-testnet.stellar.org
+export STELLAR_NETWORK_PASSPHRASE?="Test SDF Network ; September 2015"
 
 default: build
 
@@ -18,7 +21,7 @@ build:
 	stellar contract optimize --wasm target/wasm32v1-none/release/shelter.wasm
 
 upload:
-	stellar contract upload --wasm target/wasm32v1-none/release/shelter.optimized.wasm --source $(STELLAR_ACCOUNT)
+	stellar contract upload --source $(STELLAR_ACCOUNT) --network $(STELLAR_NETWORK) --rpc-url $(STELLAR_RPC) --network-passphrase "$(STELLAR_NETWORK_PASSPHRASE)" --fee $(STELLAR_FEE) --wasm target/wasm32v1-none/release/shelter.optimized.wasm
 
 fmt:
 	cargo fmt --all
