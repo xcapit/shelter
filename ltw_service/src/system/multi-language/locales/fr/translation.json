@@ -11,7 +11,7 @@
   "updatePhoneNumberConfirmationResponse": "Numéro de téléphone mis à jour en :",
   "otpMsg": "Votre OTP est {{anOTP}}. Achat: {{anAmount}} {{aTokenSymbol}}",
   "completeOrderMsg": "Votre ordre a été complétée ! Votre solde est de {{aBalanceAmount}} {{aToken}}.",
-  "accountCreationMsg": "Smart Account créé avec succès ! Adresse:",
+  "accountCreationMsg": "Bienvenue au Shelter !",
   "BALANCE": "SOLDE",
   "SEND": "ENVOYER",
   "ACCOUNT": "COMPTE",
