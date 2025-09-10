@@ -11,7 +11,7 @@
   "updatePhoneNumberConfirmationResponse": "Número telefónico actualizado a:",
   "otpMsg": "Tu código es {{anOTP}}. Orden: {{anAmount}} {{aTokenSymbol}}",
   "completeOrderMsg": "¡Tu orden ha sido completada! Tu saldo es {{aBalanceAmount}} {{aToken}}.",
-  "accountCreationMsg": "¡Cuenta creada con éxito! Address:",
+  "accountCreationMsg": "¡Bienvenido a Shelter!",
   "BALANCE": "SALDO",
   "SEND": "ENVIAR",
   "ACCOUNT": "CUENTA",

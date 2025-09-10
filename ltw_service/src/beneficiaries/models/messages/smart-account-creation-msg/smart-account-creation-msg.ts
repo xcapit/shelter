@@ -5,6 +5,6 @@ export class SmartAccountCreationMsg implements SmsMsg {
   constructor(private _aSmartAccountAddress: string) {}
 
   toString(): string {
-    return `${new TranslatedKey('accountCreationMsg').toString()} ${this._aSmartAccountAddress}`;
+    return `${new TranslatedKey('accountCreationMsg').toString()}`;
   }
 }
