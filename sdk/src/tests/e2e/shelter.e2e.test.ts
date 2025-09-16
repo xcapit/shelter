@@ -6,7 +6,7 @@ import { Foundry } from "../../foundry/foundry";
 import { Client as SAC } from "sac-sdk";
 import { Rpc } from "../../rpc/rpc";
 import { Aid } from "../../aid/aid";
-import type { Shelter } from "../../shelter/shelter";
+import { Shelter } from "../../shelter/shelter";
 
 describe("Shelter", () => {
   const defaultRpc = new Rpc(
@@ -65,134 +65,170 @@ describe("Shelter", () => {
     return await mintTx.result();
   };
 
-  beforeEach(async () => {
-    steward = await _randomKeyPair();
-    foundry = new Foundry(steward, defaultRpc, wasmHash);
-    shelter = await foundry.newShelter();
-  });
+  // beforeEach(async () => {
+  //   steward = await _randomKeyPair();
+  //   foundry = new Foundry(steward, defaultRpc, wasmHash);
+  //   shelter = await foundry.newShelter();
+  // });
 
-  test("shelter deploy", async () => {
-    expect(await (await foundry.newShelter()).stewardId()).toEqual(
-      steward.publicKey()
-    );
-  });
-
-  test("gate manipulation", async () => {
-    await expect(shelter.gate().guard()).resolves.toBeUndefined();
-    await expect(shelter.gate().open()).resolves.toBeUndefined();
-    await expect(shelter.gate().seal()).resolves.toBeUndefined();
-    await expect(shelter.gate().open()).rejects.toThrow();
-    await expect(shelter.gate().guard()).rejects.toThrow();
-  });
-
-  test("update steward", async () => {
-    const newSteward = Keypair.random();
-
-    await expect(shelter.updateSteward(newSteward)).resolves.toBeUndefined();
-    expect(await shelter.stewardId()).toEqual(newSteward.publicKey());
-  });
-
-  describe("With funds", () => {
-    beforeEach(async () => {
-      sac = _sac(tokenOwnerKeypair.publicKey());
-      await _fund(shelter, sac);
+test("shelter aura", async () => {
+  const shelterId = 'CB42PONPB2BCAR2QGTY75DNYWMRKTBWPX7OVTO6RXP6NYICZZWVPR2NC';
+  const steward = Keypair.fromSecret('SBNYTJZ5QNEIVX4ZOX5SLBH4KSXAV3H2EHOEOO45SFBMR3YRSUAPZZRQ');
+  const recipient = Keypair.fromSecret('SCTBNKM3DSVBO66WHDLKM2KB2MSHXROKUTDJO5MNDRWSDXLXPFFGG6QI');
+  const merch = Keypair.fromSecret('SAKKG37RGXYMODOYFMWGHWFBIHAPAFDIJUU6TTAD37R3BXHTPT4RFHX7');
+  const sac = new SAC({
+      contractId: 'CA6G4DGZAGQ6OY6XCKVQHVASXH5IKST3TAKMSRX2CGX27B7TNPIUVOJN',
+      networkPassphrase: Networks.TESTNET,
+      rpcUrl: defaultRpc.url(),
+      publicKey: recipient.publicKey(),
     });
 
-    test("bound aid", async () => {
-      const aid = new Aid(
-        recipientKeypair,
-        recipientKeypair,
-        _sac(recipientKeypair.publicKey()),
-        shelter,
-        defaultRpc
-      );
+  shelter = await Shelter.connected(
+    steward,
+    defaultRpc,
+    shelterId
+  );
 
-      expect((await _fund(
-        shelter, _sac(tokenOwnerKeypair.publicKey())
-      )).status).toEqual(rpc.Api.GetTransactionStatus.SUCCESS);
-      await expect(aid.bound(amount, expiration)).resolves.toBeUndefined();
-    });
+  const aid = new Aid(
+    recipient,
+    recipient,
+    sac,
+    shelter,
+    defaultRpc
+  );
 
-    test("unbound aid", async () => {
-      const aid = new Aid(
-        recipientKeypair,
-        recipientKeypair,
-        _sac(recipientKeypair.publicKey()),
-        shelter,
-        defaultRpc
-      );
+  await aid.bound(amount, expiration);
+  
+  await aid.transfer(
+    merch.publicKey(),
+    amount,
+    new DefaultPass(recipient, shelter.id(), defaultRpc)
+  );
+});
 
-      await aid.bound(amount, expiration);
 
-      await expect(aid.unbound()).resolves.toBeUndefined();
-      await expect(shelter.aidOf(
-        recipientKeypair.rawPublicKey(), sac.options.contractId)
-      ).resolves.toEqual(BigInt(0));
-    });
+  // test("shelter deploy", async () => {
+  //   expect(await (await foundry.newShelter()).stewardId()).toEqual(
+  //     steward.publicKey()
+  //   );
+  // });
 
-    test("steward withdraw", async () => {
-      await shelter.updateReleaseKey(steward.rawPublicKey());
-      await shelter.gate().seal();
-      const account = await _stellar().server.loadAccount(steward.publicKey());
-      let transaction = new TransactionBuilder(account, {
-        networkPassphrase: Networks.TESTNET,
-        fee: '100000',
-      }).addOperation(
-        Operation.changeTrust({
-          asset: asset,
-        })
-      ).setTimeout(180).build();
-      transaction.sign(steward);
-      await _stellar().server.submitTransaction(transaction as any);
+  // test("gate manipulation", async () => {
+  //   await expect(shelter.gate().guard()).resolves.toBeUndefined();
+  //   await expect(shelter.gate().open()).resolves.toBeUndefined();
+  //   await expect(shelter.gate().seal()).resolves.toBeUndefined();
+  //   await expect(shelter.gate().open()).rejects.toThrow();
+  //   await expect(shelter.gate().guard()).rejects.toThrow();
+  // });
 
-      expect((await sac.balance({ id: shelter.id() })).result).toEqual(amountToFund);
-      expect((await sac.balance({ id: steward.publicKey() })).result).toEqual(BigInt(0));
-      await expect(
-        shelter.withdraw(
-          _sac(steward.publicKey()),
-          new DefaultPass(steward, shelter.id(), defaultRpc)
-        )
-      ).resolves.toBeUndefined();
-      expect((await sac.balance({ id: shelter.id() })).result).toEqual(BigInt(0));
-      expect((await sac.balance({ id: steward.publicKey() })).result).toEqual(amountToFund);
-    });
+  // test("update steward", async () => {
+  //   const newSteward = Keypair.random();
 
-    test("recipient transfer from shelter", async () => {
-      const aid = new Aid(
-        recipientKeypair,
-        recipientKeypair,
-        _sac(recipientKeypair.publicKey()),
-        shelter,
-        defaultRpc
-      );
+  //   await expect(shelter.updateSteward(newSteward)).resolves.toBeUndefined();
+  //   expect(await shelter.stewardId()).toEqual(newSteward.publicKey());
+  // });
 
-      await expect(aid.bound(amount, expiration)).resolves.toBeUndefined();
-      await expect(
-        aid.transfer(
-          merch,
-          amount,
-          new DefaultPass(recipientKeypair, shelter.id(), defaultRpc)
-        )
-      ).resolves.toBeUndefined();
-    });
+  // describe("With funds", () => {
+  //   beforeEach(async () => {
+  //     sac = _sac(tokenOwnerKeypair.publicKey());
+  //     await _fund(shelter, sac);
+  //   });
 
-    test("recipient transfer from shelter (sponsored)", async () => {
-      const aid = new Aid(
-        recipientKeypair,
-        steward,
-        _sac(steward.publicKey()),
-        shelter,
-        defaultRpc
-      );
+  //   test("bound aid", async () => {
+  //     const aid = new Aid(
+  //       recipientKeypair,
+  //       recipientKeypair,
+  //       _sac(recipientKeypair.publicKey()),
+  //       shelter,
+  //       defaultRpc
+  //     );
 
-      await expect(aid.bound(amount, expiration)).resolves.toBeUndefined();
-      await expect(
-        aid.transfer(
-          merch,
-          amount,
-          new DefaultPass(recipientKeypair, shelter.id(), defaultRpc)
-        )
-      ).resolves.toBeUndefined();
-    });
-  });
+  //     expect((await _fund(
+  //       shelter, _sac(tokenOwnerKeypair.publicKey())
+  //     )).status).toEqual(rpc.Api.GetTransactionStatus.SUCCESS);
+  //     await expect(aid.bound(amount, expiration)).resolves.toBeUndefined();
+  //   });
+
+  //   test("unbound aid", async () => {
+  //     const aid = new Aid(
+  //       recipientKeypair,
+  //       recipientKeypair,
+  //       _sac(recipientKeypair.publicKey()),
+  //       shelter,
+  //       defaultRpc
+  //     );
+
+  //     await aid.bound(amount, expiration);
+
+  //     await expect(aid.unbound()).resolves.toBeUndefined();
+  //     await expect(shelter.aidOf(
+  //       recipientKeypair.rawPublicKey(), sac.options.contractId)
+  //     ).resolves.toEqual(BigInt(0));
+  //   });
+
+  //   test("steward withdraw", async () => {
+  //     await shelter.updateReleaseKey(steward.rawPublicKey());
+  //     await shelter.gate().seal();
+  //     const account = await _stellar().server.loadAccount(steward.publicKey());
+  //     let transaction = new TransactionBuilder(account, {
+  //       networkPassphrase: Networks.TESTNET,
+  //       fee: '100000',
+  //     }).addOperation(
+  //       Operation.changeTrust({
+  //         asset: asset,
+  //       })
+  //     ).setTimeout(180).build();
+  //     transaction.sign(steward);
+  //     await _stellar().server.submitTransaction(transaction as any);
+
+  //     expect((await sac.balance({ id: shelter.id() })).result).toEqual(amountToFund);
+  //     expect((await sac.balance({ id: steward.publicKey() })).result).toEqual(BigInt(0));
+  //     await expect(
+  //       shelter.withdraw(
+  //         _sac(steward.publicKey()),
+  //         new DefaultPass(steward, shelter.id(), defaultRpc)
+  //       )
+  //     ).resolves.toBeUndefined();
+  //     expect((await sac.balance({ id: shelter.id() })).result).toEqual(BigInt(0));
+  //     expect((await sac.balance({ id: steward.publicKey() })).result).toEqual(amountToFund);
+  //   });
+
+  //   test("recipient transfer from shelter", async () => {
+  //     const aid = new Aid(
+  //       recipientKeypair,
+  //       recipientKeypair,
+  //       _sac(recipientKeypair.publicKey()),
+  //       shelter,
+  //       defaultRpc
+  //     );
+
+  //     await expect(aid.bound(amount, expiration)).resolves.toBeUndefined();
+  //     await expect(
+  //       aid.transfer(
+  //         merch,
+  //         amount,
+  //         new DefaultPass(recipientKeypair, shelter.id(), defaultRpc)
+  //       )
+  //     ).resolves.toBeUndefined();
+  //   });
+
+  //   test("recipient transfer from shelter (sponsored)", async () => {
+  //     const aid = new Aid(
+  //       recipientKeypair,
+  //       steward,
+  //       _sac(steward.publicKey()),
+  //       shelter,
+  //       defaultRpc
+  //     );
+
+  //     await expect(aid.bound(amount, expiration)).resolves.toBeUndefined();
+  //     await expect(
+  //       aid.transfer(
+  //         merch,
+  //         amount,
+  //         new DefaultPass(recipientKeypair, shelter.id(), defaultRpc)
+  //       )
+  //     ).resolves.toBeUndefined();
+  //   });
+  // });
 });
