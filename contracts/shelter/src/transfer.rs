@@ -1,6 +1,11 @@
 use soroban_sdk::{auth::ContractContext, symbol_short, Env, Symbol, TryIntoVal};
 
-use crate::{aid::Aid, storage_types::Error};
+use crate::{
+    aid::Aid,
+    shelter::aura,
+    steward::Steward,
+    storage_types::{DataKey, Error},
+};
 
 pub struct Transfer {
     aid: Aid,
@@ -21,10 +26,12 @@ impl Transfer {
         let result: Result<(), Error> = self._validate(env);
         match result {
             Ok(_) => {
-                self.aid = self
-                    .aid
-                    .bound(-self._safe_amount_to_transfer()?, self.aid.expiration());
+                let safe_amount = self._safe_amount_to_transfer()?;
+                self.aid = self.aid.bound(-safe_amount, self.aid.expiration());
                 self.aid.expect_update_on(env);
+                aura::Client::new(env, &env.storage().instance().get(&DataKey::Aura).unwrap())
+                    .mint(&safe_amount, &Steward::from(env).address());
+
                 result
             }
             Err(_) => result,

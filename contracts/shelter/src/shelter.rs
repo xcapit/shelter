@@ -6,7 +6,7 @@ use crate::{
     pass::Pass,
     steward::Steward,
     steward_key::ReleaseKey,
-    storage_types::{AidValue, Error, INSTANCE_BUMP_AMOUNT, INSTANCE_LIFETIME_THRESHOLD},
+    storage_types::{AidValue, DataKey, Error, INSTANCE_BUMP_AMOUNT, INSTANCE_LIFETIME_THRESHOLD},
     transfer::Transfer,
 };
 use soroban_sdk::{
@@ -16,14 +16,20 @@ use soroban_sdk::{
     Address, BytesN, Env, Vec,
 };
 
+pub mod aura {
+    soroban_sdk::contractimport!(file = "../target/wasm32v1-none/release/aura.wasm");
+}
+
 #[contract]
 pub struct Shelter;
 
 #[contractimpl]
 impl Shelter {
-    pub fn __constructor(env: Env, steward: Address) {
+    pub fn __constructor(env: Env, steward: Address, aura: Address) {
         Steward::new(steward).save_on(&env);
         Gate::from(&env).open(&env);
+        // TODO:
+        env.storage().instance().set(&DataKey::Aura, &aura);
     }
 
     pub fn update_release_key(env: Env, steward_key: BytesN<32>) {

@@ -18,6 +18,7 @@ use soroban_sdk::{
 };
 
 use crate::pass::Pass;
+use crate::shelter::aura;
 use crate::storage_types::Error;
 use crate::{shelter::Shelter, storage_types::INSTANCE_BUMP_AMOUNT, ShelterClient};
 
@@ -53,8 +54,8 @@ pub fn env_with_mock_auths() -> Env {
     env
 }
 
-pub fn shelter_id(env: &Env, steward: &Address) -> Address {
-    env.register(Shelter, (steward,))
+pub fn shelter_id(env: &Env, steward: &Address, aura: &Address) -> Address {
+    env.register(Shelter, (steward, aura))
 }
 
 pub struct RandomKeypair {
@@ -154,6 +155,7 @@ pub fn address_from_signing_key(env: &Env, signing_key: &SigningKey) -> Address 
     let sc_address = ScAddress::Account(account_id);
     Address::try_from_val(env, &sc_address).unwrap()
 }
+
 pub struct TestBucket<'a> {
     pub amount: i128,
     pub token: TestToken<'a>,
@@ -164,22 +166,29 @@ pub struct TestBucket<'a> {
     pub steward_signing_key: SigningKey,
     pub steward: Address,
     pub expiration: u64,
+    pub aura: aura::Client<'a>,
 }
 
 impl TestBucket<'_> {
     pub fn new(env: Env, amount: i128) -> Self {
         let steward = RandomKeypair::new(env.clone());
         let steward_address = address_from_signing_key(&env, &steward.signing_key());
+        let aura_client = aura::Client::new(&env, &env.register(aura::WASM, (&steward_address,)));
+
         Self {
             amount,
             token: TestToken::new(&env),
-            shelter: ShelterClient::new(&env, &shelter_id(&env, &steward_address)),
+            shelter: ShelterClient::new(
+                &env,
+                &shelter_id(&env, &steward_address, &aura_client.address),
+            ),
             recipient: RandomKeypair::new(env.clone()),
             payload: BytesN::random(&env),
-            steward: steward_address,
             steward_key: steward.public_key(),
             steward_signing_key: steward.signing_key(),
             expiration: 100,
+            steward: steward_address,
+            aura: aura_client,
         }
     }
 

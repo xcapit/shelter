@@ -25,6 +25,8 @@ pub enum DataKey {
     Steward,
     ReleaseKey,
     GateState,
+    Score,
+    Aura,
 }
 
 #[contracterror]

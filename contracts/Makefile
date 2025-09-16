@@ -18,7 +18,8 @@ build:
 	rm -rf target/wasm32v1-none/
 	stellar contract build
 	@ls -l target/wasm32v1-none/release/*.wasm
-	stellar contract optimize --wasm target/wasm32v1-none/release/shelter.wasm
+	stellar contract optimize --wasm target/wasm32v1-none/release/aura.wasm
+	# stellar contract optimize --wasm target/wasm32v1-none/release/shelter.wasm
 
 upload:
 	stellar contract upload --source $(STELLAR_ACCOUNT) --network $(STELLAR_NETWORK) --rpc-url $(STELLAR_RPC) --network-passphrase "$(STELLAR_NETWORK_PASSPHRASE)" --fee $(STELLAR_FEE) --wasm target/wasm32v1-none/release/shelter.optimized.wasm

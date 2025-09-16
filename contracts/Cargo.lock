@@ -157,6 +157,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "aura"
+version = "0.0.0"
+dependencies = [
+ "soroban-sdk",
+]
+
+[[package]]
 name = "autocfg"
 version = "1.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1039,7 +1046,7 @@ dependencies = [
 
 [[package]]
 name = "shelter"
-version = "1.0.0"
+version = "1.0.2"
 dependencies = [
  "ed25519-dalek",
  "rand",

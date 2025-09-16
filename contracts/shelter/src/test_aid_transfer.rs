@@ -29,6 +29,7 @@ fn test_total_aid_transfer() {
             .amount,
         0
     );
+    assert_eq!(tb.aura.balance(&tb.steward), tb.amount);
 }
 
 #[test]
@@ -80,6 +81,7 @@ fn test_partial_aid_transfer() {
             .amount,
         amount_after_transfer
     );
+    assert_eq!(tb.aura.balance(&tb.steward), amount_to_transfer);
 }
 
 #[test]
@@ -103,6 +105,7 @@ fn test_not_enough_aid_transfer() {
         &tb.shelter.assigned_aid_of(&tb.token.address()),
         &amount_to_bound
     );
+    assert_eq!(tb.aura.balance(&tb.steward), 0);
 }
 
 #[test]
