@@ -51,7 +51,8 @@ impl Aura {
         );
         Aura::_extend_instance_ttl(&env);
         //         // TODO:
-        // match Aura::is_minter(env.clone(), to.clone()) {
+        // pub fn mint(env: Env, minter: Address, amount: i128, to: Address) {
+        // match Aura::is_minter(env.clone(), minter) {
         //     true => {
         //         // to.require_auth();
         //         env.storage().persistent().set(
